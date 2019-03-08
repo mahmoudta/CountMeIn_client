@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
+import './Navbar.css';
 
 class Navbar extends Component {
 	render() {
 		return (
-			<div className="wrapper">
-				<h1>test</h1>
-			</div>
+			<nav className="side-nav">
+				<div className="container">
+					<div className="row">
+						<a href="#">test</a>
+					</div>
+				</div>
+			</nav>
 		);
 	}
 }

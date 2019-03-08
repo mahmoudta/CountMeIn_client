@@ -1,0 +1,10 @@
+nav {
+	background-color: #000;
+
+	min-width: 250px;
+	max-width: 250px;
+}
+
+nav.active {
+	margin-left: -250px;
+}
