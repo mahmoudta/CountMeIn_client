@@ -1,17 +1,109 @@
-.wrapper {
-	display: flex;
-	max-height: 100vh;
+html,
+body {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
 }
-#sidebar {
-	width: 200px;
-	background-color: #38354a;
-	height: 100vh;
+body {
+	color: #495057;
+	background-color: #f5f7fb;
+	font-family: 'Roboto';
+	-webkit-font-smoothing: antialiased;
+}
+a,
+a:hover {
+	text-decoration: none;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+	display: block;
 }
 
-#content {
-	flex-grow: 1;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	margin-bottom: 0.66em;
+	font-family: inherit;
+	font-weight: 600;
+	line-height: 1.1;
+	color: inherit;
+}
+
+/* .wrapper {
 	display: flex;
-	flex-direction: column;
+	max-height: 100vh;
+	overflow: hidden;
+} */
+
+@media (min-width: 768px) {
+	.wrapper {
+		display: table;
+		border-spacing: 0;
+		position: relative;
+		height: 100%;
+		width: 100%;
+	}
+	#main {
+		display: table;
+		table-layout: fixed;
+		border-spacing: 0;
+		width: 100%;
+		height: calc(100vh - 50px);
+	}
+
+	#main > #sidebar,
+	#main > section {
+		display: table-cell;
+		vertical-align: top;
+		height: 100%;
+		padding: 0;
+		float: none;
+	}
+	.aside-md {
+		width: 220px;
+		-webkit-transition: width 0.3s;
+		transition: width 0.3s;
+	}
+}
+/* #sidebar {
+	background-color: #38354a;
+} */
+#sidebar {
+	background-color: #38354a;
+	height: 100%;
+	position: relative;
+}
+.nav-xs {
+	width: 57px;
+	-webkit-transition: width 0.3s;
+	transition: width 0.3s;
+}
+.nav-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	top: auto;
+	z-index: 1000;
+	border-top: 1px solid #374b5e;
 }
 
 .btn-custom {
@@ -23,3 +115,153 @@
 	opacity: 0.95;
 	color: #f4f4f4;
 }
+
+/* Global form styles */
+.form-label {
+	display: block;
+	margin-bottom: .375rem;
+	font-weight: 600;
+	font-size: 0.875rem;
+}
+.form-required {
+	color: #cd201f;
+}
+.form-required:after {
+	content: '*';
+	margin: 0 5px;
+}
+
+.form-control::placeholder {
+	font-weight: 300;
+	color: #9aa0ac;
+}
+
+/*end of form style*/
+
+/*global card style */
+.card {
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+	/* position: relative; */
+	margin-bottom: 1.5rem;
+	/* width: 100%; */
+}
+.card-header {
+	background: none;
+	padding: 0.5rem 1.5rem;
+	display: -ms-flexbox;
+	display: flex;
+	min-height: 3.5rem;
+	-ms-flex-align: center;
+	align-items: center;
+}
+
+.card-title {
+	font-size: 1.125rem;
+	line-height: 1.2;
+	font-weight: 400;
+	margin-bottom: 1.5rem;
+}
+
+.card-header .card-title {
+	margin-bottom: 0;
+}
+
+.card-options {
+	margin-left: auto;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-order: 100;
+	order: 100;
+	margin-right: -.5rem;
+	color: #9aa0ac;
+	-ms-flex-item-align: center;
+	align-self: center;
+}
+
+/* buttons colors*/
+/* a.btn:hover {
+	text-decoration: none;
+} */
+.btn {
+	cursor: pointer;
+	letter-spacing: .03em;
+	font-size: 0.8125rem;
+	min-width: 2.375rem;
+	line-height: 1.84615385;
+}
+.btn-primary {
+	color: #fff;
+	background-color: #467fcf;
+	border-color: #467fcf;
+}
+.btn-primary:hover {
+	color: #fff;
+	background-color: #316cbe;
+	border-color: #2f66b3;
+}
+
+.btn-success {
+	color: #fff;
+	background-color: #5eba00;
+	border-color: #5eba00;
+}
+
+.btn-success:hover {
+	color: #fff;
+	background-color: #4b9400;
+	border-color: #448700;
+}
+
+.btn-secondary {
+	color: #495057;
+	background-color: #fff;
+	border-color: rgba(0, 40, 100, 0.12);
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+}
+.btn-secondary:hover {
+	color: #495057;
+	background-color: #f6f6f6;
+	border-color: rgba(0, 20, 49, 0.12);
+}
+
+/* table main styles*/
+
+.table,
+.text-wrap table {
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 1rem;
+	background-color: transparent;
+	color: inherit;
+	font-weight: 300;
+}
+
+.table thead th,
+.text-wrap table thead th {
+	border-top: 0;
+	border-bottom-width: 1px;
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+}
+.table th,
+.text-wrap table th {
+	color: #9aa0ac;
+	text-transform: uppercase;
+	font-size: 0.875rem;
+	font-weight: 400;
+}
+
+.card-table tr td:first-child,
+.card-table tr th:first-child {
+	padding-left: 1.5rem;
+}
+.card-table tr:first-child td,
+.card-table tr:first-child th {
+	border-top: 0;
+}
+.table-vcenter td,
+.table-vcenter th {
+	vertical-align: middle;
+}
+
+/* styles*/

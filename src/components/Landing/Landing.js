@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './landing.css';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+
 import logo from '../../images/logo.png';
 
 import LoginForm from './LoginForm';
@@ -11,7 +10,6 @@ class Landing extends Component {
 		super(props);
 		this.state = {};
 	}
-
 	render() {
 		return (
 			<section className="landing">
@@ -38,12 +36,4 @@ class Landing extends Component {
 		);
 	}
 }
-LoginForm.propTypes = {
-	user: PropTypes.object
-};
-const mapStatetoProps = (state) => ({
-	user: state.user.user,
-	token: state.user.token,
-	loading: state.user.loading
-});
-export default connect(mapStatetoProps, {})(Landing);
+export default Landing;

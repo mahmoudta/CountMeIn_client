@@ -8,10 +8,10 @@ export function setAuthorizationToken(token) {
 	}
 }
 
-export function isAuthenticate() {
-	if (localStorage.jwtToken) {
-		return true;
-	} else {
-		return false;
-	}
-}
+// export function isAuthenticate() {
+// 	if (localStorage.jwtToken) {
+// 		return true;
+// 	} else {
+// 		return false;
+// 	}
+// }

@@ -2,18 +2,28 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import store from './store.js';
+import jwtDecode from 'jwt-decode';
+import { BrowserRouter as Router } from 'react-router-dom';
+import ReactRouter from './Router/router';
 import { setAuthorizationToken } from './utils/setAuthorizationToken';
+import { setCurrentUser } from './actions/authActions';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
-import App from './App';
+// import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-setAuthorizationToken(localStorage.jwtToken);
+if (localStorage.jwtToken) {
+	setAuthorizationToken(localStorage.jwtToken);
+	store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)));
+}
+
 ReactDOM.render(
-	<Provider store={store}>
-		<App />
-	</Provider>,
+	<Router>
+		<Provider store={store}>
+			<ReactRouter />
+		</Provider>
+	</Router>,
 	document.getElementById('root')
 );
 

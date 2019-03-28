@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { localSignIn } from '../../actions/userActions';
-import { isAuthenticate } from '../../utils/setAuthorizationToken';
 import { Redirect } from 'react-router-dom';
+
+import { localSignIn } from '../../actions/authActions';
 
 class LoginForm extends Component {
 	constructor(props) {
@@ -12,27 +12,33 @@ class LoginForm extends Component {
 			email: '',
 			password: '',
 			loading: false,
-			message: ''
+			error: ''
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
+	componentDidMount() {}
+
 	handleChange = (e) => {
-		console.log(e.target.name);
 		this.setState({ [e.target.name]: e.target.value });
 	};
 	handleSubmit = (e) => {
 		e.preventDefault();
 		const { email, password } = this.state;
-		console.log(email, password);
-		this.props.localSignIn({ email, password });
+		this.props.localSignIn({ email, password }).then((result) => {
+			const { error } = this.props;
+			if (error === '') {
+				// return <Redirect to="/dashboard" />;
+				this.context.router.history.push('/dashboard');
+			} else {
+				this.setState({ error });
+			}
+		});
 	};
 	render() {
-		if (isAuthenticate()) {
-			return <Redirect to="/dashboard" />;
-		}
 		return (
 			<form className="border-right p-lg-2" onSubmit={(e) => this.handleSubmit(e)}>
+				<div className="alert alert-danger">{this.props.error}</div>
 				<div className="form-group">
 					<label htmlFor="email">Email address</label>
 					<input
@@ -63,11 +69,12 @@ class LoginForm extends Component {
 }
 LoginForm.propTypes = {
 	localSignIn: PropTypes.func.isRequired
-	// user: PropTypes.object.isRequired
+};
+LoginForm.contextTypes = {
+	router: PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	// user: state.user.user,
-	// token: state.user.token,
-	loading: state.user.loading
+	error: state.auth.error
 });
+
 export default connect(mapStatetoProps, { localSignIn })(LoginForm);
