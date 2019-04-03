@@ -48,7 +48,7 @@ class Navbar extends Component {
 									</NavLink>
 								</li>
 								<li className="nav-item text-uppercase">
-									<NavLink to="`/Business/view`">
+									<NavLink to="/Business/view">
 										<FaPalette /> Page View
 									</NavLink>
 								</li>

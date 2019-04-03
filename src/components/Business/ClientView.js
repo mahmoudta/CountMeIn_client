@@ -12,7 +12,9 @@ export default class ClientView extends Component {
 			}
 		};
 	}
-
+	componentDidMount() {
+		console.log(this.props.match.params.name);
+	}
 	render() {
 		// var stringStyle = '';
 		// for (let key in this.state.style) {

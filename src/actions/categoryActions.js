@@ -2,7 +2,6 @@ import axios from 'axios';
 import { API } from '../consts';
 
 import { CREATE_CATEGORY, GET_ALL_CATEGORIES, CATEGORY_LOADING, CREATE_CATEGORY_ERROR } from './types';
-import { stringify } from 'querystring';
 
 export const createCategory = (name) => (dispatch) => {
 	dispatch(setCategoryLoading());
@@ -42,16 +41,16 @@ export const addSubCategory = (subCat) => (dispatch) => {
 
 export const getAllCategories = () => (dispatch) => {
 	dispatch(setCategoryLoading());
-	axios
+	return axios
 		.get(`${API}/category/`)
 		.then((result) => {
-			dispatch({
+			return dispatch({
 				type: GET_ALL_CATEGORIES,
 				payload: result.data.categories
 			});
 		})
 		.catch((err) => {
-			dispatch({
+			return dispatch({
 				type: GET_ALL_CATEGORIES,
 				payload: { message: 'caant get the categories' }
 			});
