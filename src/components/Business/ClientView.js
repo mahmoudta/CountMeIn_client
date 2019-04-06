@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
+import { NavLink } from 'react-router-dom';
 import { getBusinessById } from '../../actions/businessActions';
 
 class ClientView extends Component {
@@ -18,7 +18,6 @@ class ClientView extends Component {
 		};
 	}
 	componentDidMount() {
-		console.log(this.props.match.params.id);
 		const id = this.props.match.params.id;
 		this.props.getBusinessById(id).then((result) => {
 			if (!result.payload.error) this.setState({ business: true });
@@ -84,7 +83,12 @@ class ClientView extends Component {
 											consequatur, dicta quibusdam nesciunt explicabo porro similique sunt
 											architecto reprehenderit.
 										</p>
-										<button className="btn btn-sm btn-primary">new appointment</button>
+										<NavLink
+											to={'/business/new-appointment/' + this.props.business._id}
+											className="btn btn-sm btn-primary"
+										>
+											new appointment
+										</NavLink>
 									</div>
 								</div>
 							</div>
