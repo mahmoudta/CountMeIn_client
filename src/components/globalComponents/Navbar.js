@@ -6,12 +6,17 @@ import './global.css';
 import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } from 'react-icons/fa';
 
 import { MdDashboard } from 'react-icons/md';
+import isEmpty from 'lodash/isEmpty';
+
+import { getBusinessByOwner } from '../../actions/businessActions';
 
 class Navbar extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			width: 'aside-md'
+			width: 'aside-md',
+			loading: false,
+			business_id: ''
 		};
 		this.renderNav = this.renderNav.bind(this);
 		this.menuToggler = this.menuToggler.bind(this);
@@ -24,7 +29,15 @@ class Navbar extends Component {
 			this.setState({ width: 'aside-md' });
 		}
 	};
-	componentDidMount() {}
+	componentDidMount() {
+		const id = this.props.auth.user.sub;
+		if (isEmpty(this.props.myBusiness))
+			this.props.getBusinessByOwner(id).then((result) => {
+				if (!result.payload.error) {
+					this.setState({ business_id: result.payload._id });
+				}
+			});
+	}
 	renderNav = () => {
 		return (
 			<div>
@@ -48,7 +61,7 @@ class Navbar extends Component {
 									</NavLink>
 								</li>
 								<li className="nav-item text-uppercase">
-									<NavLink to="/Business/view">
+									<NavLink to={'/Business/' + this.state.business_id}>
 										<FaPalette /> Page View
 									</NavLink>
 								</li>
@@ -75,18 +88,27 @@ class Navbar extends Component {
 		);
 	};
 	render() {
+		// const { _id } = this.props.myBusiness;
+		// console.log(_id);
 		return (
-			<div id="sidebar" className={this.state.width}>
-				{this.props.auth.isAuthenticated ? this.renderNav() : ''}
+			<div
+				id="sidebar"
+				className={this.state.width}
+				style={{ display: this.props.auth.isAuthenticated ? 'table-cell' : 'none' }}
+			>
+				{this.props.auth.isAuthenticated ? this.renderNav(111) : ''}
 			</div>
 		);
 	}
 }
 
 Navbar.propTypes = {
-	auth: PropTypes.object.isRequired
+	auth: PropTypes.object.isRequired,
+	myBusiness: PropTypes.object.isRequired,
+	getBusinessByOwner: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth
+	auth: state.auth,
+	myBusiness: state.business.myBusiness
 });
-export default connect(mapStatetoProps, {})(Navbar);
+export default connect(mapStatetoProps, { getBusinessByOwner })(Navbar);

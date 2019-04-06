@@ -16,11 +16,17 @@ class CategoryList extends Component {
 		this.state = {};
 		this.eachCategory = this.eachCategory.bind(this);
 		this.eachSubCategory = this.eachSubCategory.bind(this);
+		this.handleDeleteCategory = this.handleDeleteCategory.bind(this);
 	}
 
 	componentDidMount() {
 		this.props.getAllCategories();
 	}
+
+	handleDeleteCategory = (e) => {
+		console.log(e.target.name);
+		console.log('deleteClicked');
+	};
 	eachSubCategory(parent, category, i) {
 		return (
 			<tr>
@@ -41,6 +47,7 @@ class CategoryList extends Component {
 			</tr>
 		);
 	}
+
 	eachCategory(category, i) {
 		return (
 			<tr key={i + category._id}>
@@ -52,10 +59,10 @@ class CategoryList extends Component {
 				</td>
 
 				<td>
-					<button value={category._id} className="btn btn-sm btn-danger">
+					<button name={`category._id`} className="btn btn-sm btn-danger" onClick={this.handleDeleteCategory}>
 						<FaTrashAlt />
 					</button>
-					<button value={category._id} className="btn btn-sm btn-primary mx-2">
+					<button name={category._id} className="btn btn-sm btn-primary mx-2">
 						<FaEdit />
 					</button>
 				</td>
@@ -79,8 +86,8 @@ class CategoryList extends Component {
 					<table className="table card-table mb-0 table-vcenter text-nowrap listTable">
 						<thead>
 							<tr>
-								<th>category name</th>
-								<th># subcategory</th>
+								<th>name</th>
+								<th>parent</th>
 								<th>managment</th>
 							</tr>
 						</thead>

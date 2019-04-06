@@ -1,9 +1,16 @@
-import { CREATE_CATEGORY, CATEGORY_LOADING, GET_ALL_CATEGORIES, CREATE_CATEGORY_ERROR } from '../actions/types';
+import {
+	CREATE_CATEGORY,
+	CATEGORY_LOADING,
+	GET_ALL_CATEGORIES,
+	CREATE_CATEGORY_ERROR,
+	DELETE_CATEGORY
+} from '../actions/types';
 
 const initialState = {
 	category: {},
 	categories: [],
-	loading: false
+	loading: false,
+	message: {}
 };
 
 export default function(state = initialState, action) {
@@ -18,6 +25,12 @@ export default function(state = initialState, action) {
 			return {
 				...state,
 				error: action.payload,
+				loading: false
+			};
+		}
+		case DELETE_CATEGORY: {
+			return {
+				...state,
 				loading: false
 			};
 		}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API } from '../consts';
 
-import { CREATE_CATEGORY, GET_ALL_CATEGORIES, CATEGORY_LOADING, CREATE_CATEGORY_ERROR } from './types';
+import { CREATE_CATEGORY, GET_ALL_CATEGORIES, CATEGORY_LOADING, CREATE_CATEGORY_ERROR, DELETE_CATEGORY } from './types';
 
 export const createCategory = (name) => (dispatch) => {
 	dispatch(setCategoryLoading());
@@ -54,6 +54,22 @@ export const getAllCategories = () => (dispatch) => {
 				type: GET_ALL_CATEGORIES,
 				payload: { message: 'caant get the categories' }
 			});
+		});
+};
+
+export const deleteCategory = (id) => (dispatch) => {
+	dispatch(setCategoryLoading());
+	return axios
+		.delete(`${API}/category/${id}`)
+		.then((result) => {
+			return dispatch({
+				type: DELETE_CATEGORY,
+				payload: result.data.success
+			});
+		})
+		.catch((err) => {
+			console.log(err);
+			//TODO
 		});
 };
 

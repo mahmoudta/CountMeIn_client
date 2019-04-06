@@ -111,14 +111,26 @@ class CreateBusiness extends Component {
 		this.setState({ purposes });
 	};
 
-	handleSubmit = (e) => {
+	handleSubmit = async (e) => {
 		e.preventDefault();
+
 		const { name, img, breakTime, category, working, purposes } = this.state;
-		console.log(this.state);
+		const splitPurposes = async () => {
+			var services = [];
+			for (const element of purposes) {
+				await services.push({
+					purpose_id: element.value,
+					time: element.time
+				});
+				return await services;
+			}
+		};
+		const services = await splitPurposes();
 		this.props
-			.createNewBusiness({ name, img, breakTime, category, working, purposes })
+			.createNewBusiness({ name, img, breakTime, category, working, services })
 			.then((res) => console.log(res));
 	};
+
 	render() {
 		const { step } = this.state;
 		switch (step) {

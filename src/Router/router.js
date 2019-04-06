@@ -27,8 +27,8 @@ const ReactRouter = () => {
 								<Route exact path="/" component={Landing} />
 								<Route path="/dashboard" component={requireAuth(Dashboard)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
-								<Route exact path="/business/create/" component={requireAuth(CreateBusiness)} />
-								<Route path="/business/pages/:name" component={requireAuth(ClientView)} />
+								<Route exact path="/business/create" component={requireAuth(CreateBusiness)} />
+								<Route path="/business/:id" component={requireAuth(ClientView)} />
 							</section>
 						</section>
 					</section>
