@@ -2,30 +2,52 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getAllCategories } from '../../../actions/categoryActions';
+import { getAllCategories, deleteCategory } from '../../../actions/categoryActions';
 
 /* Icons */
 import { FaPlusCircle } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 class CategoryList extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			loading: false
+		};
 		this.eachCategory = this.eachCategory.bind(this);
 		this.eachSubCategory = this.eachSubCategory.bind(this);
 		this.handleDeleteCategory = this.handleDeleteCategory.bind(this);
 	}
-
+	Alert = async (redirect, text) => {
+		Swal.fire({
+			title: redirect ? 'Success' : 'Error!',
+			text: text,
+			type: redirect ? 'success' : 'error',
+			focusConfirm: false,
+			confirmButtonText: redirect ? 'done' : 'back',
+			confirmButtonColor: redirect ? '#5eba00' : '#495057'
+		}).then((res) => {
+			if (redirect) this.context.router.history.push('/dashboard');
+		});
+	};
 	componentDidMount() {
 		this.props.getAllCategories();
 	}
 
 	handleDeleteCategory = (e) => {
-		console.log(e.target.name);
-		console.log('deleteClicked');
+		console.log(e.target);
+		this.props.deleteCategory(e.target.name).then((res) => {
+			console.log(res);
+			if (!res.payload.error) {
+				this.Alert(true, res.payload.success);
+			} else {
+				this.Alert(false, res.payload.error);
+			}
+			this.setState({ loading: false });
+		});
 	};
 	eachSubCategory(parent, category, i) {
 		return (
@@ -59,8 +81,8 @@ class CategoryList extends Component {
 				</td>
 
 				<td>
-					<button name={`category._id`} className="btn btn-sm btn-danger" onClick={this.handleDeleteCategory}>
-						<FaTrashAlt />
+					<button name={category._id} className="btn btn-sm btn-danger" onClick={this.handleDeleteCategory}>
+						<FaTrashAlt onClick={(e) => e.preventDefault()} />
 					</button>
 					<button name={category._id} className="btn btn-sm btn-primary mx-2">
 						<FaEdit />
@@ -109,10 +131,14 @@ class CategoryList extends Component {
 
 CategoryList.propTypes = {
 	getAllCategories: PropTypes.func.isRequired,
+	deleteCategory: PropTypes.func.isRequired,
 	categories: PropTypes.array.isRequired
+};
+CategoryList.contextTypes = {
+	router: PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
 	categories: state.category.categories,
 	loading: state.category.loading
 });
-export default connect(mapStatetoProps, { getAllCategories })(CategoryList);
+export default connect(mapStatetoProps, { getAllCategories, deleteCategory })(CategoryList);

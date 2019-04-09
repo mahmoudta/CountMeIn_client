@@ -11,6 +11,7 @@ import requireAuth from '../utils/requireAuth';
 import CreateCategory from '../components/Dashboard/AdminView/CreateCategory';
 import CreateBusiness from '../components/Business/CreateBusiness';
 import ClientView from '../components/Business/ClientView';
+import Schedule from '../components/Business/Schedule/Schedule';
 
 const ReactRouter = () => {
 	return (
@@ -27,9 +28,10 @@ const ReactRouter = () => {
 								<Route exact path="/" component={Landing} />
 								<Route path="/dashboard" component={requireAuth(Dashboard)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
-								<Route exact path="/business/create" component={requireAuth(CreateBusiness)} />
+								<Route exact path="/business/pages/create" component={requireAuth(CreateBusiness)} />
 								<Route exact path="/business/:id" component={requireAuth(ClientView)} />
 								<Route path="/business/new-appointment/:id" component={requireAuth(ClientView)} />
+								<Route excat path="/business/pages/mySchedule" component={requireAuth(Schedule)} />
 							</section>
 						</section>
 					</section>

@@ -40,6 +40,7 @@ class Header extends Component {
 		e.preventDefault();
 		this.props.logout();
 	};
+
 	componentDidMount() {}
 	renderHeader = () => {
 		return (
@@ -59,7 +60,8 @@ class Header extends Component {
 										className="rounded-circle"
 									/>
 								</span>
-								Adham Khalilieh <b className="caret" />
+								{this.props.user.profile.name.first + this.props.user.profile.name.last}{' '}
+								<b className="caret" />
 							</a>
 							<ul className="dropdown-menu animated fadeInRight">
 								<li className=" text-white arrow top" />

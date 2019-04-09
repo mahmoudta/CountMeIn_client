@@ -64,11 +64,14 @@ export const deleteCategory = (id) => (dispatch) => {
 		.then((result) => {
 			return dispatch({
 				type: DELETE_CATEGORY,
-				payload: result.data.success
+				payload: result.data
 			});
 		})
 		.catch((err) => {
-			console.log(err);
+			return dispatch({
+				type: DELETE_CATEGORY,
+				payload: { error: 'An Error Occurred' }
+			});
 			//TODO
 		});
 };

@@ -56,17 +56,17 @@ class Navbar extends Component {
 							</NavLink>
 							<ul className="nav flex-column">
 								<li className="nav-item text-uppercase">
-									<NavLink to="#">
+									<NavLink to="/business/pages/mySchedule">
 										<FaCalendarAlt /> my schedule
 									</NavLink>
 								</li>
 								<li className="nav-item text-uppercase">
-									<NavLink to={'/Business/' + this.state.business_id}>
+									<NavLink to={'/business/' + this.state.business_id}>
 										<FaPalette /> Page View
 									</NavLink>
 								</li>
 								<li className="nav-item text-uppercase">
-									<NavLink to="/business/create">
+									<NavLink to="/business/pages/create">
 										<FaAddressCard /> Create
 									</NavLink>
 								</li>
