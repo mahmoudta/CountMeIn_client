@@ -1,8 +1,16 @@
-import { CREATE_BUSINESS, GET_BUSINESS_BY_OWNER, GET_BUSINESS_BY_ID } from '../actions/types';
+import {
+	CREATE_BUSINESS,
+	GET_BUSINESS_BY_OWNER,
+	GET_BUSINESS_BY_ID,
+	GET_CUREENT_BUSINESS_FOLLOWERS,
+	GET_CUREENT_BUSINESS_SERVICES
+} from '../actions/types';
 // import isEmpty from 'lodash/isEmpty';
 
 const initialState = {
 	myBusiness: {},
+	businessFollowers: [],
+	businessServices: [],
 	business: {},
 	loading: false,
 	success: ''
@@ -32,6 +40,18 @@ export default function(state = initialState, action) {
 			return {
 				...state,
 				business: action.payload,
+				loading: false
+			};
+		case GET_CUREENT_BUSINESS_FOLLOWERS:
+			return {
+				...state,
+				businessFollowers: action.payload,
+				loading: false
+			};
+		case GET_CUREENT_BUSINESS_SERVICES:
+			return {
+				...state,
+				businessServices: action.payload,
 				loading: false
 			};
 		default:

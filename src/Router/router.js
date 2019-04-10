@@ -14,6 +14,8 @@ import ClientView from '../components/Business/ClientView';
 import Schedule from '../components/Business/Schedule/Schedule';
 import NewAppointment from '../components/Business/NewAppointment';
 
+import BnewAppointment from '../components/Business/Schedule/BnewAppointment';
+
 const ReactRouter = () => {
 	return (
 		<React.Fragment>
@@ -33,6 +35,13 @@ const ReactRouter = () => {
 								<Route exact path="/business/:id" component={requireAuth(ClientView)} />
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
 								<Route excat path="/business/pages/mySchedule" component={requireAuth(Schedule)} />
+								<Route
+									path="/business/mySchedule/new-appointment"
+									component={requireAuth(BnewAppointment)}
+								/>
+
+								{/* route related to new appointment button on client view */}
+								<Route path="/business/new-appointment/:id" component={requireAuth(ClientView)} />
 							</section>
 						</section>
 					</section>
