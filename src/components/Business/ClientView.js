@@ -86,6 +86,7 @@ class ClientView extends Component {
 										<NavLink
 											to={'/business/new-appointment/' + this.props.business._id}
 											className="btn btn-sm btn-primary"
+											businessValues={this.state}
 										>
 											new appointment
 										</NavLink>
