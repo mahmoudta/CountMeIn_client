@@ -9,6 +9,8 @@ class ClientView extends Component {
 		super(props);
 		this.state = {
 			business: false,
+			loading: false,
+			followed: false,
 			style: {
 				'.header': {
 					background: 'green',
@@ -17,12 +19,19 @@ class ClientView extends Component {
 			}
 		};
 	}
-	componentDidMount() {
+
+	async componentDidMount() {
 		const id = this.props.match.params.id;
-		this.props.getBusinessById(id).then((result) => {
-			if (!result.payload.error) this.setState({ business: true });
-		});
+		if (!this.state.business || id !== this.props.business.id) {
+			this.setState({ loading: true });
+			this.props.getBusinessById(id).then((result) => {
+				this.setState({ loading: false });
+
+				if (!result.payload.error) this.setState({ business: true });
+			});
+		}
 	}
+	handleFollow = () => {};
 	render() {
 		// var stringStyle = '';
 		// for (let key in this.state.style) {
@@ -42,7 +51,7 @@ class ClientView extends Component {
 		return (
 			<section className="mt-5">
 				{/* <style>{stringStyle}</style> */}
-				{this.state.business && (
+				{!this.state.loading && this.state.business ? (
 					<div className="container">
 						<div className="row">
 							<div className="col-12 header">
@@ -57,7 +66,18 @@ class ClientView extends Component {
 									<div className="col-8 offset-md-1">
 										<h1 className="h3 title">
 											{business.profile.name}
-											<button className=" mx-2 btn btn-sm btn-secondary">follow</button>
+											{!this.state.followed ? (
+												<button
+													className=" mx-md-3 btn btn-sm btn-secondary"
+													onClick={this.handleFollow()}
+												>
+													follow
+												</button>
+											) : (
+												<button className=" mx-2 btn btn-sm btn-secondary" disabled>
+													following
+												</button>
+											)}
 										</h1>
 										<p>
 											<span className="mr-2 follower">
@@ -86,7 +106,7 @@ class ClientView extends Component {
 										<NavLink
 											to={'/business/new-appointment/' + this.props.business._id}
 											className="btn btn-sm btn-primary"
-											businessValues={this.state}
+											// businessValues={this.state}
 										>
 											new appointment
 										</NavLink>
@@ -95,6 +115,8 @@ class ClientView extends Component {
 							</div>
 						</div>
 					</div>
+				) : (
+					<p className="display-3 text-muted">Loading busines...</p>
 				)}
 			</section>
 		);
