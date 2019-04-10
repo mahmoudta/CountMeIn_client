@@ -13,7 +13,7 @@ export default class Schedule extends Component {
 		return (
 			<section className="my-5">
 				<div className="container">
-					<NavLink to="#" className="btn btn-sm btn-success">
+					<NavLink to="/business/mySchedule/new-appointment" className="btn btn-sm btn-success">
 						new appointment
 					</NavLink>
 				</div>
