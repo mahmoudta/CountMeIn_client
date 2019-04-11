@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FaTimes } from 'react-icons/fa';
+import axios from 'axios';
+import { API } from '../../../consts';
+import Swal from 'sweetalert2';
 
 class BnewAppointment extends Component {
 	constructor(props) {
@@ -15,7 +18,8 @@ class BnewAppointment extends Component {
 			date_from: '',
 			date_until: '',
 			time: '',
-			loading_freetime: false
+			loading_freetime: false,
+			dates: []
 		};
 	}
 	componentDidMount() {
@@ -34,7 +38,6 @@ class BnewAppointment extends Component {
 	}
 
 	handleChange = (e) => {
-		console.log(e.target.value);
 		if (e.target.name === 'services') {
 			const { services } = this.state;
 			if (!services.includes(e.target.value) && e.target.value != -1) {
@@ -53,8 +56,51 @@ class BnewAppointment extends Component {
 			})
 		});
 	};
+	Alert = async (redirect, text) => {
+		Swal.fire({
+			title: redirect ? 'Success' : 'Error!',
+			text: text,
+			type: redirect ? 'success' : 'error',
+			focusConfirm: false,
+			confirmButtonText: redirect ? 'done' : 'back',
+			confirmButtonColor: redirect ? '#5eba00' : '#495057'
+		}).then((res) => {
+			if (redirect) this.context.router.history.push('/business/mySchedule');
+		});
+	};
 	fetchFreeTime = (e) => {
 		e.preventDefault();
+		axios
+			.post(`${API}/algorithms/freetime`, {
+				business: this.props.myBusiness._id,
+				services: this.state.services,
+				date_from: this.state.date_from,
+				date_until: this.state.date_until
+			})
+			.then((response) => {
+				console.log(response.data);
+				axios
+					.post(`${API}/appointments/business/setAppointmnet`, {
+						business: this.props.myBusiness._id,
+						client: this.state.client,
+						services: this.state.services,
+						date: response.data.dates[0].Date,
+						start: response.data.dates[0].Free[0]._start,
+						end: response.data.dates[0].Free[0]._end
+					})
+					.then((res) => {
+						console.log(res);
+						const text = `your appointment added at :  ${res.data.appointment.time.date}`;
+						this.Alert(true, text);
+					})
+					.catch((err) => {
+						const text = `error : try another date`;
+						this.Alert(false, text);
+					});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 	render() {
 		const { authirized } = this.state;
@@ -116,7 +162,7 @@ class BnewAppointment extends Component {
 										<div className="col-md-4">
 											<div className="form-group">
 												<label className="form-label" htmlFor="">
-													date from
+													date until
 													<span className="form-required" />
 												</label>
 												<input
@@ -157,6 +203,7 @@ class BnewAppointment extends Component {
 										</div>
 
 										<div className="col-12 my-3">
+											{this.state.services.length > 0 && <h6>selected services:</h6>}
 											<div className="col-md-4">
 												<div className="row">
 													{this.state.services.map((service, i) => {
@@ -176,9 +223,15 @@ class BnewAppointment extends Component {
 												</div>
 											</div>
 										</div>
-										<button onClick={this.fetchFreeTime} className="btn btn-sm btn-primary">
-											Search
-										</button>
+										<div className="col-12">
+											<button
+												type="submit"
+												onClick={this.fetchFreeTime}
+												className="btn btn-sm btn-primary"
+											>
+												save
+											</button>
+										</div>
 									</div>
 								</form>
 							</div>
@@ -196,6 +249,9 @@ BnewAppointment.propTypes = {
 	myBusiness: PropTypes.object.isRequired,
 	customers: PropTypes.array.isRequired,
 	services: PropTypes.array.isRequired
+};
+BnewAppointment.contextTypes = {
+	router: PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
 	auth: state.auth,
