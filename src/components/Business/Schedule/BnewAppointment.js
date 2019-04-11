@@ -65,7 +65,7 @@ class BnewAppointment extends Component {
 			confirmButtonText: redirect ? 'done' : 'back',
 			confirmButtonColor: redirect ? '#5eba00' : '#495057'
 		}).then((res) => {
-			if (redirect) this.context.router.history.push('/business/mySchedule');
+			if (redirect) this.context.router.history.push('/business/pages/mySchedule');
 		});
 	};
 	fetchFreeTime = (e) => {
