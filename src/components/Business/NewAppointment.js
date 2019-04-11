@@ -7,7 +7,11 @@ import isEmpty from 'lodash/isEmpty';
 import SetFStep from './SetFStep';
 import SetSecStep from './SetSecStep';
 import SetThirdStep from './SetThirdStep';
+
+import axios from 'axios';
+import { API } from '../../consts';
 import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from 'constants';
+import { FaDivide } from 'react-icons/fa';
 
 class NewAppointment extends Component {
 	constructor(props) {
@@ -15,8 +19,16 @@ class NewAppointment extends Component {
 		this.state = {
 			step: 1,
 			pickedPurpose: 'NULL',
+			date_from: '',
+			date_until: '',
 			purposes: [],
-			onBusiness: { profile: { purposes: [] } }
+			onBusiness: { profile: { purposes: [] } },
+			Dates: '',
+			date: '',
+			shour: '',
+			sminute: '',
+			ehour: '', //{free._start}
+			eminute: '' //{free._end}
 		};
 		this.nextStep = this.nextStep.bind(this);
 		this.prevStep = this.prevStep.bind(this);
@@ -26,7 +38,6 @@ class NewAppointment extends Component {
 
 	componentDidMount() {
 		const id = this.props.match.params.id;
-
 		if (isEmpty(this.props.purposes)) {
 			this.props.getBusinessById(id).then((result) => {
 				if (!result.payload.error) this.setState({ business: true });
@@ -47,11 +58,65 @@ class NewAppointment extends Component {
 	handleChange = (e) => {
 		this.setState({ [e.target.name]: e.target.value });
 	};
-
+	preSetAppointment = (e) => {
+		console.log('here');
+	};
 	handlePickedPurpose = (e) => {
 		//	var pickedPurpose = this.state.pickedPurpose;
 		console.log('pick purpose handler called');
 		this.setState({ pickedPurpose: e.target.value });
+	};
+	setAppointment = (e) => {
+		console.log('set appointment');
+		const { step } = this.state;
+		//request
+		const shour = e.target.getAttribute('shour');
+		const date = e.target.getAttribute('date');
+		const sminute = e.target.getAttribute('sminute');
+		const ehour = e.target.getAttribute('ehour');
+		const eminute = e.target.getAttribute('emminute');
+		console.log(shour, date, sminute, ehour, eminute);
+		axios
+			.post(`${API}/appointments/setAppointment/`, {
+				businessId: this.state.onBusiness._id,
+				costumerId: this.props.auth.user.sub,
+				purpose: [ this.state.pickedPurpose ],
+				date: date,
+				shour: shour, //need,
+				sminute: sminute, //need,
+				ehour: ehour,
+				eminute: eminute
+			})
+			.then((response) => {
+				//	this.setState({ dates: response.data });
+				console.log(response);
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+			.then(() => {
+				this.setState({ step: step + 1 });
+			});
+	};
+	getFreeTime = (e) => {
+		const { step } = this.state;
+		axios
+			.post(`${API}/algorithms/freetime`, {
+				business: this.state.onBusiness._id,
+				services: [ this.state.pickedPurpose ],
+				date_from: this.state.date_from,
+				date_until: this.state.date_until
+			})
+			.then((response) => {
+				this.setState({ dates: response.data });
+				//console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+			.then(() => {
+				this.setState({ step: step + 1 });
+			});
 	};
 
 	handleSubmit = async (e) => {
@@ -61,6 +126,7 @@ class NewAppointment extends Component {
 
 	render() {
 		const { step } = this.state;
+
 		switch (step) {
 			case 1:
 				return (
@@ -77,8 +143,7 @@ class NewAppointment extends Component {
 						nextStep={this.nextStep}
 						prevStep={this.prevStep}
 						handleChange={this.handleChange}
-						handleWork={this.handleWork}
-						handleTime={this.handleTime}
+						freeTime={this.getFreeTime}
 						values={this.state}
 					/>
 				);
@@ -88,9 +153,12 @@ class NewAppointment extends Component {
 						values={this.state}
 						handleSubmit={this.handleSubmit}
 						prevStep={this.prevStep}
-						handleChange={this.handlePurpose}
+						setAppointment={this.setAppointment}
+						preSetAppointment={this.preSetAppointment}
 					/>
 				);
+			case 4:
+				return <div>hey</div>;
 		}
 	}
 }
@@ -101,7 +169,7 @@ NewAppointment.propTypes = {
 };
 
 const mapStatetoProps = (state) => ({
-	//auth: state.auth,
+	auth: state.auth,
 	business: state.business.business
 });
 

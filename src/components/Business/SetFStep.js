@@ -29,7 +29,7 @@ export default class SetFStep extends Component {
 											{values.onBusiness.profile.purposes.map((purpose) => {
 												return (
 													<option key={purpose.purpose_id} value={purpose.purpose_id}>
-														Purpose {purpose.time}
+														{purpose.time} Minutes
 													</option>
 												);
 											})}
