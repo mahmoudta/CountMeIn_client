@@ -3,9 +3,11 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
+import '../Business.css';
 
 import axios from 'axios';
 import { API } from '../../../consts';
+import TimeLine from './TimeLine';
 
 class Schedule extends Component {
 	constructor(props) {
@@ -33,51 +35,10 @@ class Schedule extends Component {
 		return (
 			<section className="my-5">
 				<div className="container">
-					<div className="card">
-						<div className="card-header">
-							<h3 className="card-title">apoointments list</h3>
-							<div className="card-options">
-								<NavLink to="/business/mySchedule/new-appointment" className="btn btn-sm btn-success">
-									new appointment
-								</NavLink>
-							</div>
-						</div>
-						<div className="table-responsive">
-							<table className="table card-table mb-0 table-vcenter text-nowrap listTable">
-								<thead>
-									<tr>
-										<th>date</th>
-										<th>start</th>
-										<th>length</th>
-										<th>user</th>
-									</tr>
-								</thead>
-								<tbody>
-									{this.state.appointments.map((appointment) => {
-										return (
-											<tr key={appointment.date}>
-												<td key={appointment.time.date.slice(0, 10)}>
-													{appointment.time.date.slice(0, 10)}
-												</td>
-												<td key={appointment.time.date.slice(12, 16)}>
-													{appointment.time.date.slice(12, 16) + 'GMT'}
-												</td>
-												<td key={appointment.time.hours + appointment.client_id}>
-													{appointment.time.hours +
-														' hours :' +
-														appointment.time.minutes +
-														' minutes'}
-												</td>
-												<td key={appointment.client_id + appointment.time.minutes}>
-													{appointment.client_id}
-												</td>
-											</tr>
-										);
-									})}
-								</tbody>
-							</table>
-						</div>
-					</div>
+					<NavLink to="/business/mySchedule/new-appointment" className="btn btn-sm btn-success">
+						new appointment
+					</NavLink>
+					<TimeLine />
 				</div>
 			</section>
 		);
@@ -94,7 +55,58 @@ Schedule.propTypes = {
 const mapStatetoProps = (state) => ({
 	// auth: state.auth,
 	myBusiness: state.business.myBusiness,
-	customers: state.business.businessFollowers,
+	customers: state.business.customers,
 	services: state.business.businessServices
 });
 export default connect(mapStatetoProps, {})(Schedule);
+
+// Garbage
+{
+	/* <div className="container">
+<div className="card">
+	<div className="card-header">
+		<h3 className="card-title">apoointments list</h3>
+		<div className="card-options">
+			<NavLink to="/business/mySchedule/new-appointment" className="btn btn-sm btn-success">
+				new appointment
+			</NavLink>
+		</div>
+	</div>
+	<div className="table-responsive">
+		<table className="table card-table mb-0 table-vcenter text-nowrap listTable">
+			<thead>
+				<tr>
+					<th>date</th>
+					<th>start</th>
+					<th>length</th>
+					<th>user</th>
+				</tr>
+			</thead>
+			<tbody>
+				{this.state.appointments.map((appointment) => {
+					return (
+						<tr key={appointment.date}>
+							<td key={appointment.time.date.slice(0, 10)}>
+								{appointment.time.date.slice(0, 10)}
+							</td>
+							<td key={appointment.time.date.slice(12, 16)}>
+								{appointment.time.date.slice(12, 16) + 'GMT'}
+							</td>
+							<td key={appointment.time.hours + appointment.client_id}>
+								{appointment.time.hours +
+									' hours :' +
+									appointment.time.minutes +
+									' minutes'}
+							</td>
+							<td key={appointment.client_id + appointment.time.minutes}>
+								{appointment.client_id}
+							</td>
+						</tr>
+					);
+				})}
+			</tbody>
+		</table>
+	</div>
+</div>
+</div> */
+}

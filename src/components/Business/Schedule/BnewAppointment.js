@@ -256,7 +256,7 @@ BnewAppointment.contextTypes = {
 const mapStatetoProps = (state) => ({
 	auth: state.auth,
 	myBusiness: state.business.myBusiness,
-	customers: state.business.businessFollowers,
+	customers: state.business.customers,
 	services: state.business.businessServices
 });
 export default connect(mapStatetoProps, {})(BnewAppointment);
