@@ -1,28 +1,30 @@
 import axios from 'axios';
 import { API } from '../consts';
 
-import { PICK_BUSINESS, PICK_PURPOSE, PICK_METHOD, PICK_DATE, PICK_TIME, SET_APPOINTMENT } from './types';
+// // import { PICK_BUSINESS, PICK_PURPOSE, PICK_METHOD, PICK_DATE, PICK_TIME, SET_APPOINTMENT } from './types';
 
-export const getBusinessPurpose = (id) => (dispatch) => {
-	dispatch(setPurposeNull());
-	axios
-		.get(`${API}/appointments/getSubCategories/${id}`)
+import { GET_BUSINESS_APPOINTMENTS, APPOINTMENT_LOADING } from './types';
+
+export const getBusinessAppointmentsByDate = (business_id, date) => (dispatch) => {
+	dispatch(setAppointmentLoading());
+	return axios
+		.get(`${API}/appointments/getBusinessAppointmentsByDate/${business_id}/${date}`)
 		.then((result) => {
-			dispatch({
-				type: PICK_PURPOSE,
-				payload: result.data.Purposes
+			return dispatch({
+				type: GET_BUSINESS_APPOINTMENTS,
+				payload: result.data.data
 			});
 		})
 		.catch((err) => {
-			dispatch({
-				type: PICK_PURPOSE,
-				payload: { message: 'cant get the purposes' }
+			return dispatch({
+				type: GET_BUSINESS_APPOINTMENTS,
+				payload: []
 			});
 		});
 };
 
-export const setPurposeNull = () => {
+export const setAppointmentLoading = () => (dispatch) => {
 	return {
-		type: 'Null'
+		type: APPOINTMENT_LOADING
 	};
 };

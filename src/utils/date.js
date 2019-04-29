@@ -17,3 +17,27 @@ export function getDay(date) {
 		return '';
 	}
 }
+
+export function getTime(date) {
+	if (date) {
+		const Ndate = new Date(date);
+		return {
+			hour: Number(Ndate.getUTCHours()) + 3,
+			minute: Ndate.getUTCMinutes() < '10' ? `0${Ndate.getUTCMinutes()}` : Ndate.getUTCMinutes()
+		};
+	}
+}
+
+export function getTimeDifference(from, until) {
+	var diff = new Date(new Date(until) - new Date(from));
+	return Number(diff.getUTCHours() + '.' + diff.getUTCMinutes());
+}
+
+export function getWorkDay(days, day) {
+	for (let Nday in days) {
+		if (days[Nday].day === day) {
+			return days[Nday];
+		}
+	}
+	return {};
+}

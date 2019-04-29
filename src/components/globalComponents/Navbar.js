@@ -58,7 +58,7 @@ class Navbar extends Component {
 							</NavLink>
 							<ul className="nav flex-column">
 								<li className="nav-item text-uppercase">
-									<NavLink to="/business/pages/mySchedule">
+									<NavLink to={'/business/pages/mySchedule/' + this.state.business_id}>
 										<FaCalendarAlt /> my schedule
 									</NavLink>
 								</li>
@@ -98,7 +98,7 @@ class Navbar extends Component {
 				className={this.state.width}
 				style={{ display: this.props.auth.isAuthenticated ? 'table-cell' : 'none' }}
 			>
-				{this.props.auth.isAuthenticated ? this.renderNav(111) : ''}
+				{this.props.auth.isAuthenticated ? this.renderNav() : ''}
 			</div>
 		);
 	}

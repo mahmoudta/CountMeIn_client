@@ -3,6 +3,10 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
+
+import { getBusinessAppointmentsByDate } from '../../../actions/appointmentsAction';
+import { getCurrentDate, getDay, getTimeDifference, getTime, getWorkDay } from '../../../utils/date';
+
 import '../Business.css';
 
 import axios from 'axios';
@@ -16,29 +20,64 @@ class Schedule extends Component {
 			authorized: false,
 			loading: false,
 			business_id: '',
-			appointments: []
+			appointments: [],
+			/* TimeLine */
+			date: '',
+			day: '',
+			working: {}
 		};
+		this.pickDate = this.pickDate.bind(this);
 	}
 	componentDidMount() {
-		if (!isEmpty(this.props.myBusiness._id)) {
-			this.setState({ loading: true });
-			axios
-				.get(`${API}/appointments/getBusinessAppointments/${this.props.myBusiness._id}`)
-				.then((response) => {
-					this.setState({ appointments: response.data.appointments, loading: false });
-				})
-				.catch((err) => console.log(err));
+		const id = this.props.match.params.id;
+		const date = getCurrentDate('-');
+		const day = getDay(date);
+
+		this.setState({ business_id: id, date, day, loading: true });
+		this.props.getBusinessAppointmentsByDate(id, date).then((res) => {
 			this.setState({ loading: false });
-		}
+		});
 	}
+
+	pickDate = (date) => {
+		console.log(date);
+		this.setState({ date, day: getDay(date) });
+		this.props.getBusinessAppointmentsByDate(this.state.business_id, date);
+	};
+
 	render() {
+		const { myBusiness } = this.props;
+		var opened = true;
+		var working;
+		if (!isEmpty(myBusiness)) {
+			working = getWorkDay(myBusiness.profile.working_hours, this.state.day);
+			if (!isEmpty(working)) {
+				opened = working.opened;
+			} else {
+				opened = false;
+			}
+		}
+
 		return (
 			<section className="my-5">
 				<div className="container">
-					<NavLink to="/business/mySchedule/new-appointment" className="btn btn-sm btn-success">
-						new appointment
-					</NavLink>
-					<TimeLine />
+					{!this.state.loading ? (
+						<section>
+							<NavLink to="/business/mySchedule/new-appointment" className="btn btn-sm btn-success">
+								new appointment
+							</NavLink>
+							<TimeLine
+								working={working}
+								date={this.state.date}
+								opened={opened}
+								pickDate={this.pickDate}
+							/>
+						</section>
+					) : (
+						<div className="mx-auto spinner-border" role="status">
+							<span className="sr-only">Loading...</span>
+						</div>
+					)}
 				</div>
 			</section>
 		);
@@ -47,18 +86,20 @@ class Schedule extends Component {
 Schedule.propTypes = {
 	myBusiness: PropTypes.object.isRequired,
 	customers: PropTypes.array.isRequired,
-	services: PropTypes.array.isRequired
+	getBusinessAppointmentsByDate: PropTypes.func.isRequired
+
+	// services: PropTypes.array.isRequired
 };
-// Schedule.contextTypes = {
-// 	router: PropTypes.object.isRequired
-// };
+Schedule.contextTypes = {
+	router: PropTypes.object.isRequired
+};
 const mapStatetoProps = (state) => ({
-	// auth: state.auth,
+	auth: state.auth,
 	myBusiness: state.business.myBusiness,
-	customers: state.business.customers,
-	services: state.business.businessServices
+	customers: state.business.customers
+	// services: state.business.businessServices
 });
-export default connect(mapStatetoProps, {})(Schedule);
+export default connect(mapStatetoProps, { getBusinessAppointmentsByDate })(Schedule);
 
 // Garbage
 {

@@ -45,9 +45,10 @@ export const getBusinessByOwner = (id) => (dispatch) => {
 };
 
 export const getBusinessCustomers = () => (dispatch) => {
-	axios
+	return axios
 		.get(`${API}/business/getAllCustomers`)
 		.then((result) => {
+			console.log(result);
 			return dispatch({
 				type: GET_CUREENT_BUSINESS_CUSTOMERS,
 				payload: result.data.customers
