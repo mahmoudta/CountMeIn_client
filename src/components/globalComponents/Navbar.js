@@ -8,7 +8,7 @@ import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } fro
 import { MdDashboard } from 'react-icons/md';
 import isEmpty from 'lodash/isEmpty';
 
-import { getBusinessByOwner, getFollowersDetails, getBusinessServices } from '../../actions/businessActions';
+import { getBusinessByOwner, getBusinessCustomers, getBusinessServices } from '../../actions/businessActions';
 
 class Navbar extends Component {
 	constructor(props) {
@@ -35,7 +35,7 @@ class Navbar extends Component {
 			this.props.getBusinessByOwner(id).then((result) => {
 				if (!result.payload.error) {
 					this.setState({ business_id: result.payload._id });
-					this.props.getFollowersDetails();
+					this.props.getBusinessCustomers();
 					this.props.getBusinessServices(result.payload._id);
 				}
 			});
@@ -58,7 +58,7 @@ class Navbar extends Component {
 							</NavLink>
 							<ul className="nav flex-column">
 								<li className="nav-item text-uppercase">
-									<NavLink to="/business/pages/mySchedule">
+									<NavLink to={'/business/pages/mySchedule/' + this.state.business_id}>
 										<FaCalendarAlt /> my schedule
 									</NavLink>
 								</li>
@@ -98,7 +98,7 @@ class Navbar extends Component {
 				className={this.state.width}
 				style={{ display: this.props.auth.isAuthenticated ? 'table-cell' : 'none' }}
 			>
-				{this.props.auth.isAuthenticated ? this.renderNav(111) : ''}
+				{this.props.auth.isAuthenticated ? this.renderNav() : ''}
 			</div>
 		);
 	}
@@ -108,11 +108,11 @@ Navbar.propTypes = {
 	auth: PropTypes.object.isRequired,
 	myBusiness: PropTypes.object.isRequired,
 	getBusinessByOwner: PropTypes.func.isRequired,
-	getFollowersDetails: PropTypes.func.isRequired,
+	getBusinessCustomers: PropTypes.func.isRequired,
 	getBusinessServices: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
 	auth: state.auth,
 	myBusiness: state.business.myBusiness
 });
-export default connect(mapStatetoProps, { getBusinessByOwner, getFollowersDetails, getBusinessServices })(Navbar);
+export default connect(mapStatetoProps, { getBusinessByOwner, getBusinessCustomers, getBusinessServices })(Navbar);

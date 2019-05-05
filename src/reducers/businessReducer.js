@@ -2,14 +2,14 @@ import {
 	CREATE_BUSINESS,
 	GET_BUSINESS_BY_OWNER,
 	GET_BUSINESS_BY_ID,
-	GET_CUREENT_BUSINESS_FOLLOWERS,
+	GET_CUREENT_BUSINESS_CUSTOMERS,
 	GET_CUREENT_BUSINESS_SERVICES
 } from '../actions/types';
 // import isEmpty from 'lodash/isEmpty';
 
 const initialState = {
 	myBusiness: {},
-	businessFollowers: [],
+	customers: [],
 	businessServices: [],
 	business: {},
 	loading: false,
@@ -42,10 +42,10 @@ export default function(state = initialState, action) {
 				business: action.payload,
 				loading: false
 			};
-		case GET_CUREENT_BUSINESS_FOLLOWERS:
+		case GET_CUREENT_BUSINESS_CUSTOMERS:
 			return {
 				...state,
-				businessFollowers: action.payload,
+				customers: action.payload,
 				loading: false
 			};
 		case GET_CUREENT_BUSINESS_SERVICES:

@@ -33,7 +33,7 @@ const ReactRouter = () => {
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
 								<Route exact path="/business/pages/create" component={requireAuth(CreateBusiness)} />
 								<Route exact path="/business/:id" component={requireAuth(ClientView)} />
-								<Route excat path="/business/pages/mySchedule" component={requireAuth(Schedule)} />
+								<Route excat path="/business/pages/mySchedule/:id" component={requireAuth(Schedule)} />
 								<Route
 									path="/business/mySchedule/new-appointment"
 									component={requireAuth(BnewAppointment)}

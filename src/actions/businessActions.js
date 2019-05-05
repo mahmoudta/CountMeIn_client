@@ -5,7 +5,7 @@ import {
 	CREATE_BUSINESS,
 	GET_BUSINESS_BY_OWNER,
 	GET_BUSINESS_BY_ID,
-	GET_CUREENT_BUSINESS_FOLLOWERS,
+	GET_CUREENT_BUSINESS_CUSTOMERS,
 	GET_CUREENT_BUSINESS_SERVICES
 } from './types';
 
@@ -44,18 +44,19 @@ export const getBusinessByOwner = (id) => (dispatch) => {
 		});
 };
 
-export const getFollowersDetails = () => (dispatch) => {
-	axios
-		.get(`${API}/business/getAllFollowers`)
+export const getBusinessCustomers = () => (dispatch) => {
+	return axios
+		.get(`${API}/business/getAllCustomers`)
 		.then((result) => {
+			console.log(result);
 			return dispatch({
-				type: GET_CUREENT_BUSINESS_FOLLOWERS,
-				payload: result.data.followers
+				type: GET_CUREENT_BUSINESS_CUSTOMERS,
+				payload: result.data.customers
 			});
 		})
 		.catch((err) => {
 			return dispatch({
-				type: GET_CUREENT_BUSINESS_FOLLOWERS,
+				type: GET_CUREENT_BUSINESS_CUSTOMERS,
 				payload: err.response.data
 			});
 		});

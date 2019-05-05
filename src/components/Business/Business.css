@@ -1,0 +1,21 @@
+.event {
+	height: 200px;
+	background-color: aquamarine;
+	padding: .5rem;
+	width: 14.2857%;
+}
+.timeLine-header {
+	padding: .5rem 0;
+	border-bottom: 1px solid #eeeeee;
+}
+.timeLine-events {
+	margin-top: 0.5rem;
+}
+.timeLine .icon {
+	font-size: 1.125rem;
+	cursor: pointer;
+	color: #495057;
+}
+.timeLine .icon:hover {
+	filter: opacity(85%);
+}
