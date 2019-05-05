@@ -1,0 +1,17 @@
+import axios from 'axios';
+
+export function setAuthorizationToken(token) {
+	if (token) {
+		axios.defaults.headers.common['Authorization'] = token;
+	} else {
+		delete axios.defaults.headers.common['Authorization'];
+	}
+}
+
+// export function isAuthenticate() {
+// 	if (localStorage.jwtToken) {
+// 		return true;
+// 	} else {
+// 		return false;
+// 	}
+// }
