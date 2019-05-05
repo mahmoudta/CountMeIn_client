@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import AdminDashboard from './AdminView/AdminDashboard';
+import ClientDashboard from './ClientView/ClientDashboard';
 
 class Dashboard extends Component {
 	constructor(props) {
@@ -16,11 +17,7 @@ class Dashboard extends Component {
 		if (this.state.userType === 'admin') {
 			return <AdminDashboard />;
 		} else {
-			return (
-				<div className="col-12">
-					<p className="text-muted display-4">NULL PAGE</p>
-				</div>
-			);
+			return <ClientDashboard />;
 		}
 	};
 	componentDidMount = () => {

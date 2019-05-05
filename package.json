@@ -3,6 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@material-ui/core": "^3.9.3",
+		"@material-ui/icons": "^3.0.2",
 		"aws-s3": "^2.0.5",
 		"axios": "^0.18.0",
 		"bootstrap": "^4.3.1",
@@ -10,6 +12,7 @@
 		"lodash.isempty": "^4.4.0",
 		"prop-types": "^15.7.2",
 		"react": "^16.8.6",
+		"react-bootstrap-sweetalert": "^4.4.1",
 		"react-dom": "^16.8.6",
 		"react-icons": "^3.5.0",
 		"react-redux": "^6.0.1",
