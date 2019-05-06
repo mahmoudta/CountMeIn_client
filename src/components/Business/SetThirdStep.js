@@ -10,7 +10,7 @@ export default class SetThirdStep extends Component {
 		//console.log(this.props);
 
 		const { values } = this.props;
-		console.log(values.dates.dates[0]);
+		console.log('values ', values);
 		return (
 			<section className="mt-5">
 				<div className="container">
@@ -33,9 +33,9 @@ export default class SetThirdStep extends Component {
 														shour={free._start._hour}
 														sminute={free._start._minute}
 														ehour={free._end._hour}
-														emminute={free._end.minute}
+														emminute={free._end._minute}
 													>
-														{free._start._hour}:{free._start._minute}0
+														{free._start._hour}:{free._start._minute}
 													</button>
 												);
 											})}

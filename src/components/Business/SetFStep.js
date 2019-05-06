@@ -4,7 +4,7 @@ export default class SetFStep extends Component {
 	render() {
 		//console.log(this.props);
 		const { values } = this.props;
-		console.log(values.pickedPurpose);
+		console.log(values.onBusiness);
 		return (
 			<section className="mt-5">
 				<div className="container">
@@ -15,21 +15,21 @@ export default class SetFStep extends Component {
 								<form>
 									<small className="mb-2">What is the purpose of the appointment ?</small>
 									<div className="form-group">
-										<label className="text-uppercase" htmlFor="purposes">
-											purposes
+										<label className="text-uppercase" htmlFor="services">
+											Services
 											<span className="form-required" />
 										</label>
 										<select
 											className="form-control"
 											name="subCategory"
-											onChange={this.props.handlePickedPurpose}
-											value={values.purpose}
+											onChange={this.props.handlePickedService}
+											value={values.service}
 										>
 											<option>choose one</option>
-											{values.onBusiness.profile.purposes.map((purpose) => {
+											{values.onBusiness.profile.services.map((service) => {
 												return (
-													<option key={purpose.purpose_id} value={purpose.purpose_id}>
-														{purpose.time} Minutes
+													<option key={service.service_id} value={service.service_id}>
+														{service.time} Minutes
 													</option>
 												);
 											})}

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { API } from '../../../consts';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import PropTypes from 'prop-types';
 
 // core components
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -18,6 +19,9 @@ import CardIcon from '../../Interface/Card/CardIcon.jsx';
 import CardHeader from '../../Interface/Card/CardHeader.jsx';
 import extendedTablesStyle from '../../Interface/Assets/extendedTablesStyle';
 import sweetAlertStyle from '../../Interface/Assets/sweetAlertStyle.jsx';
+import userProfileStyles from '../../Interface/Assets/userProfileStyles';
+import CardAvatar from '../../Interface/Card/CardAvatar.jsx';
+import avatar from '../../Interface/marc.jpg';
 
 // icons
 import Assignment from '@material-ui/icons/Assignment';
@@ -50,18 +54,42 @@ class Upcomming extends React.Component {
 		});
 	}
 
-	showbusiness(id) {
+	showbusiness(id, name) {
+		const { classes } = this.props;
+
 		this.setState({
 			alert: (
-				<SweetAlert
-					style={{ display: 'block', marginTop: '-100px' }}
-					title="Business Profile"
-					onConfirm={() => this.hideAlert()}
-					onCancel={() => this.hideAlert()}
-					confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
-				>
-					Business Id: <b>{id}</b>
-				</SweetAlert>
+				<GridContainer>
+					<SweetAlert
+						style={{ display: 'block', marginTop: '-230px', paddingTop: ' 30px' }}
+						title=""
+						onConfirm={() => this.hideAlert()}
+						onCancel={() => this.hideAlert()}
+						confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
+					>
+						<GridItem xs={12} sm={12} md={12}>
+							<Card profile>
+								<CardAvatar profile>
+									<a href="#pablo" onClick={(e) => e.preventDefault()}>
+										<img src={avatar} alt="..." />
+									</a>
+								</CardAvatar>
+								<CardBody profile>
+									<Button color="secondary" round>
+										Follow
+									</Button>
+									<h4 className={classes.cardTitle}>{name}</h4>
+									<p>
+										Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio sunt veniam
+										libero ut iste? Inventore, aspernatur aut repellendus corporis voluptas
+										consequatur,
+									</p>
+								</CardBody>
+								<h6 className={classes.cardCategory}>{id}</h6>
+							</Card>
+						</GridItem>
+					</SweetAlert>
+				</GridContainer>
 			)
 		});
 	}
@@ -80,11 +108,11 @@ class Upcomming extends React.Component {
 					onCancel={() => this.cancelDetele()}
 					confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
 					cancelBtnCssClass={this.props.classes.button + ' ' + this.props.classes.danger}
-					confirmBtnText="Yes, delete it!"
+					confirmBtnText="Yes, Delete it!"
 					cancelBtnText="Cancel"
 					showCancel
 				>
-					This will delete your appointment!
+					This will Delete your appointment!
 				</SweetAlert>
 			)
 		});
@@ -127,16 +155,22 @@ class Upcomming extends React.Component {
 		const { classes } = this.props;
 		const id = this.props.Id;
 
-		axios.get(`${API}/appointments/getClientsAppointments/${id}`).then((response) => {
-			console.log(response.data.QueryRes);
+		axios.get(`${API}/users/getUpcommingAppointments/${id}`).then((response) => {
+			//console.log(response.data.QueryRes);
 			// this.setState({ appointments: response.data.QueryRes });
 			// this.setState({Appointments : dsa});
-			console.log(response.data.QueryRes);
-			response.data.QueryRes.map((appointment, i) => {
+
+			console.log(response);
+
+			response.data.map((appointment) => {
 				const fillButtons = [
-					{ color: 'info', icon: Person, function: this.showbusiness.bind(this, appointment.business_id) },
-					{ color: 'success', icon: Edit, function: this.editAppointment.bind(this, appointment._id) },
-					{ color: 'danger', icon: Close, function: this.deleteAppointment.bind(this, appointment._id) }
+					{
+						color: 'info',
+						icon: Person,
+						function: this.showbusiness.bind(this, appointment[0], appointment[3])
+					},
+					{ color: 'success', icon: Edit, function: this.editAppointment.bind(this, appointment[1]) },
+					{ color: 'danger', icon: Close, function: this.deleteAppointment.bind(this, appointment[1]) }
 				].map((prop, key) => {
 					return (
 						<Button color={prop.color} className={classes.actionButton} key={key} onClick={prop.function}>
@@ -144,21 +178,38 @@ class Upcomming extends React.Component {
 						</Button>
 					);
 				});
-
+				appointment.push(fillButtons);
+				//this.setState({tableContent : response});
 				this.setState((prevState) => ({
 					tableContent: [
 						...prevState.tableContent,
 						[
-							i + 1,
-							appointment.business_id,
-							appointment.time.date,
-							appointment.time.date,
-							appointment.porpouses,
-							fillButtons
+							appointment[2],
+							appointment[3],
+							appointment[4],
+							appointment[5],
+							appointment[6],
+							appointment[7]
 						]
 					]
 				}));
 			});
+
+			// -----------------------------
+			// console.log(response.data.QueryRes);
+			// response.data.QueryRes.map((appointment, i) => {
+			// 	const fillButtons = [
+			// 		{ color: 'info', icon: Person, function: this.showbusiness.bind(this, appointment.business_id) },
+			// 		{ color: 'success', icon: Edit, function: this.editAppointment.bind(this, appointment._id) },
+			// 		{ color: 'danger', icon: Close, function: this.deleteAppointment.bind(this, appointment._id) }
+			// 	].map((prop, key) => {
+			// 		return (
+			// 			<Button color={prop.color} className={classes.actionButton} key={key} onClick={prop.function}>
+			// 				<prop.icon className={classes.icon} />
+			// 			</Button>
+			// 		);
+			// 	});
+			// });
 		});
 	}
 
@@ -201,4 +252,8 @@ const mapStateToProps = (state) => ({
 	Id: state.auth.user.sub
 });
 
-export default connect(mapStateToProps)(withStyles(extendedTablesStyle, sweetAlertStyle)(Upcomming));
+Upcomming.propTypes = {
+	classes: PropTypes.object.isRequired
+};
+
+export default connect(mapStateToProps)(withStyles(extendedTablesStyle, sweetAlertStyle, userProfileStyles)(Upcomming));

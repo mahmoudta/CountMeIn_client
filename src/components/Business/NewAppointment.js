@@ -18,11 +18,11 @@ class NewAppointment extends Component {
 		super(props);
 		this.state = {
 			step: 1,
-			pickedPurpose: 'NULL',
+			pickedService: 'NULL',
 			date_from: '',
 			date_until: '',
-			purposes: [],
-			onBusiness: { profile: { purposes: [] } },
+			services: [],
+			onBusiness: { profile: { services: [] } },
 			Dates: '',
 			date: '',
 			shour: '',
@@ -33,12 +33,12 @@ class NewAppointment extends Component {
 		this.nextStep = this.nextStep.bind(this);
 		this.prevStep = this.prevStep.bind(this);
 		this.handleChange = this.handleChange.bind(this);
-		this.handlePickedPurpose = this.handlePickedPurpose.bind(this);
+		this.handlePickedService = this.handlePickedService.bind(this);
 	}
 
 	componentDidMount() {
 		const id = this.props.match.params.id;
-		if (isEmpty(this.props.purposes)) {
+		if (isEmpty(this.props.services)) {
 			this.props.getBusinessById(id).then((result) => {
 				if (!result.payload.error) this.setState({ business: true });
 				this.setState({ onBusiness: result.payload });
@@ -61,10 +61,10 @@ class NewAppointment extends Component {
 	preSetAppointment = (e) => {
 		console.log('here');
 	};
-	handlePickedPurpose = (e) => {
-		//	var pickedPurpose = this.state.pickedPurpose;
-		console.log('pick purpose handler called');
-		this.setState({ pickedPurpose: e.target.value });
+	handlePickedService = (e) => {
+		//	var pickedService = this.state.pickedService;
+		console.log('pick Service handler called');
+		this.setState({ pickedService: e.target.value });
 	};
 	setAppointment = (e) => {
 		console.log('set appointment');
@@ -80,7 +80,7 @@ class NewAppointment extends Component {
 			.post(`${API}/appointments/setAppointment/`, {
 				businessId: this.state.onBusiness._id,
 				costumerId: this.props.auth.user.sub,
-				purpose: [ this.state.pickedPurpose ],
+				service: [ this.state.pickedService ],
 				date: date,
 				shour: shour, //need,
 				sminute: sminute, //need,
@@ -103,13 +103,13 @@ class NewAppointment extends Component {
 		axios
 			.post(`${API}/algorithms/freetime`, {
 				business: this.state.onBusiness._id,
-				services: [ this.state.pickedPurpose ],
+				services: [ this.state.pickedService ],
 				date_from: this.state.date_from,
 				date_until: this.state.date_until
 			})
 			.then((response) => {
 				this.setState({ dates: response.data });
-				//console.log(response.data);
+				console.log(this.state);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -126,14 +126,13 @@ class NewAppointment extends Component {
 
 	render() {
 		const { step } = this.state;
-
 		switch (step) {
 			case 1:
 				return (
 					<SetFStep
 						nextStep={this.nextStep}
 						handleChange={this.handleChange}
-						handlePickedPurpose={this.handlePickedPurpose}
+						handlePickedService={this.handlePickedService}
 						values={this.state}
 					/>
 				);
