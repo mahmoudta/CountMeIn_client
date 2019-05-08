@@ -33,7 +33,7 @@ class Schedule extends Component {
 		const date = getCurrentDate('-');
 		const day = getDay(date);
 
-		this.setState({ business_id: id, date, day, loading: true });
+		this.setState({ business_id: id, date: date, day: day, loading: true });
 		this.props.getBusinessAppointmentsByDate(id, date).then((res) => {
 			this.setState({ loading: false });
 		});

@@ -18,12 +18,17 @@ export function getDay(date) {
 	}
 }
 
+export function convertToUtcTime(date) {
+	let splitter = date.split('-');
+	return new Date(Date.UTC(splitter[2], splitter[1], splitter[0], 0, 0, 0));
+}
+
 export function getTime(date) {
 	if (date) {
 		const Ndate = new Date(date);
 		return {
 			hour: Number(Ndate.getUTCHours()) + 3,
-			minute: Ndate.getUTCMinutes() < '10' ? `0${Ndate.getUTCMinutes()}` : Ndate.getUTCMinutes()
+			minute: Number(Ndate.getUTCMinutes()) < 10 ? `0${Ndate.getUTCMinutes()}` : Ndate.getUTCMinutes()
 		};
 	}
 }

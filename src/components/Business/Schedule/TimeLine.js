@@ -34,17 +34,31 @@ class TimeLine extends Component {
 	};
 	eachAppointment = (element) => {
 		const { appointment, user } = element;
+
 		return (
 			<div key={appointment._id} className="event">
 				<span className="d-block text-center">{`${user.profile.name.first} ${user.profile.name.last}`}</span>
 				<hr />
-				<span className="d-block text-center">{`${appointment.time.start._hour}:${appointment.time.start
-					._minute}
-					-${appointment.time.end._hour}:${appointment.time.end._minute}`}</span>
+				<span className="d-block text-center">{`${appointment.time.start._hour}:${Number(
+					appointment.time.start._minute
+				) < 10
+					? `0${appointment.time.start._minute}`
+					: appointment.time.start._minute._minute}
+					-${appointment.time.end._hour}:${Number(appointment.time.end._minute) < 10
+					? `0${appointment.time.end._minute}`
+					: appointment.time.end._minute}`}</span>
 
 				{/* <span className="d-block text-center">haircut</span> */}
 			</div>
 		);
+	};
+
+	switchTimeLineStatus = (opened, appointments) => {
+		if (!opened) return <p className="text-center w-100 display-4 text-danger">STORE CLOSED</p>;
+		if (!isEmpty(appointments)) {
+			return appointments.map(this.eachAppointment);
+		}
+		return <p className="text-center w-100 display-4 ">NO APPOINTMENTS</p>;
 	};
 	// getTimeLineHeader
 	render() {
@@ -83,10 +97,12 @@ class TimeLine extends Component {
 						<span>time</span>
 					</div>
 					<div className="timeLine-events d-flex flex-column flex-md-row">
-						{opened ? (
-							appointments.map(this.eachAppointment)
+						{!this.props.appointmentsLoading ? (
+							this.switchTimeLineStatus(opened, appointments)
 						) : (
-							<p className="text-center w-100 display-4 text-danger">STORE CLOSED</p>
+							<div className="mx-auto spinner-border" role="status">
+								<span className="sr-only">Loading...</span>
+							</div>
 						)}
 					</div>
 				</div>
@@ -102,7 +118,7 @@ TimeLine.propTypes = {
 };
 const mapStatetoProps = (state) => ({
 	myBusiness: state.business.myBusiness,
-	isAppointments: state.appointment.loading,
+	appointmentsLoading: state.appointment.loading,
 	appointments: state.appointment.appointments
 });
 export default connect(mapStatetoProps, {})(TimeLine);
