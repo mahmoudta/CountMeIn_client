@@ -19,3 +19,25 @@
 .timeLine .icon:hover {
 	filter: opacity(85%);
 }
+
+/* view style */
+
+.title-container {
+	display: flex;
+	justify-items: baseline;
+	flex-direction: row;
+	margin-bottom: 15px;
+}
+
+.title-container .h3 {
+	margin: 0;
+	padding: 0;
+}
+.title-container .title {
+	font-weight: 300;
+}
+
+.title-container button {
+	padding: 0 24px;
+	margin-left: 25px;
+}

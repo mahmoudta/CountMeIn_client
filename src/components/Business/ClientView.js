@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { getBusinessById } from '../../actions/businessActions';
+import axios from 'axios';
+import { API } from '../../consts';
+
+import './Business.css';
 
 class ClientView extends Component {
 	constructor(props) {
@@ -11,6 +15,7 @@ class ClientView extends Component {
 			business: false,
 			loading: false,
 			followed: false,
+			loadingFollow: false,
 			style: {
 				'.header': {
 					background: 'green',
@@ -20,7 +25,7 @@ class ClientView extends Component {
 		};
 	}
 
-	async componentDidMount() {
+	componentDidMount() {
 		const id = this.props.match.params.id;
 		if (!this.state.business || id !== this.props.business.id) {
 			this.setState({ loading: true });
@@ -31,7 +36,34 @@ class ClientView extends Component {
 			});
 		}
 	}
-	handleFollow = () => {};
+	followBusiness = (business_id) => {
+		this.setState({ loadingFollow: true });
+		axios
+			.put(`${API}/business/follow`, { business_id: business_id })
+			.then((response) => response.json())
+			.then((data) => {
+				console.log(data);
+				this.setState({ loadingFollow: false });
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	unfollowBusiness = (business_id) => {
+		this.setState({ loadingFollow: true });
+		axios
+			.put(`${API}/business/unfollow`, { business_id: business_id })
+			.then((response) => response.json())
+			.then((data) => {
+				console.log(data);
+				this.setState({ loadingFollow: false });
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	render() {
 		// var stringStyle = '';
 		// for (let key in this.state.style) {
@@ -64,24 +96,34 @@ class ClientView extends Component {
 										/>
 									</div>
 									<div className="col-8 offset-md-1">
-										<h1 className="h3 title">
-											{business.profile.name}
-											{!this.state.followed ? (
-												<button
-													className=" mx-md-3 btn btn-sm btn-secondary"
-													onClick={this.handleFollow()}
-												>
-													follow
-												</button>
-											) : (
-												<button className=" mx-2 btn btn-sm btn-secondary" disabled>
-													following
-												</button>
-											)}
-										</h1>
+										<div className="row">
+											<div className="title-container col-12  ">
+												<h1 className="h3 title">{business.profile.name}</h1>
+												<div>
+													<span>
+														{!business.isFollower ? (
+															<button
+																className=" btn btn-sm btn-primary"
+																onClick={() => this.followBusiness(business._id)}
+															>
+																follow
+															</button>
+														) : (
+															<button
+																className="btn btn-sm btn-secondary"
+																onClick={() => this.unfollowBusiness(business._id)}
+															>
+																following
+															</button>
+														)}
+													</span>
+												</div>
+											</div>
+										</div>
+
 										<p>
 											<span className="mr-2 follower">
-												<strong>600 </strong>followers
+												<strong>{business.followers} </strong>followers
 											</span>
 											<span className="mx-2">
 												<a href="#">
@@ -116,7 +158,9 @@ class ClientView extends Component {
 						</div>
 					</div>
 				) : (
-					<p className="display-3 text-muted">Loading busines...</p>
+					<div className="mx-auto spinner-border" role="status">
+						<span className="sr-only">Loading...</span>
+					</div>
 				)}
 			</section>
 		);

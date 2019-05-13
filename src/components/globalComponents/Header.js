@@ -8,7 +8,7 @@ import { logout } from '../../actions/authActions';
 import { FaSignOutAlt } from 'react-icons/fa';
 import logo from '../../images/logo.png';
 
-import './global.css';
+// import './global.css';
 
 class Header extends Component {
 	constructor(props) {
