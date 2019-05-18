@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import Select from 'react-select';
 
 export default class CreateThirdStep extends Component {
 	render() {
 		const { values } = this.props;
-
+		const options = [
+			{ value: 'chocolate', label: 'Chocolate' },
+			{ value: 'strawberry', label: 'Strawberry' },
+			{ value: 'vanilla', label: 'Vanilla' }
+		];
 		return (
 			<section className="mt-5">
 				<div className="container">
@@ -21,7 +26,8 @@ export default class CreateThirdStep extends Component {
 											purposes
 											<span className="form-required" />
 										</label>
-										<select
+										<Select options={options} />
+										{/* <select
 											className="form-control"
 											name="subCategory"
 											onChange={this.props.handleChange}
@@ -44,7 +50,7 @@ export default class CreateThirdStep extends Component {
 														);
 													});
 												})}
-										</select>
+										</select> */}
 									</div>
 								</form>
 								<div className="col-12">

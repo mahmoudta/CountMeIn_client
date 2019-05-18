@@ -1,0 +1,44 @@
+.text-xs {
+	font-size: .7rem;
+}
+.text-sm {
+	font-size: .8rem;
+}
+.pt-sm {
+	padding-top: .85rem;
+}
+
+.border-left-primary {
+	border-left: .25rem solid #4e73df !important;
+}
+
+.border-left-warning {
+	border-left: .25rem solid #f6c23e !important;
+}
+
+.border-left-info {
+	border-left: .25rem solid #36b9cc !important;
+}
+
+.border-left-success {
+	border-left: .25rem solid #1cc88a !important;
+}
+
+.timeLine-events {
+	margin-top: 0.5rem;
+	position: relative;
+	min-height: 220px;
+}
+
+.event {
+	height: 200px;
+	/* padding: .5rem; */
+	/* width: 14.2857%; */
+	border: 0;
+	position: absolute !important;
+}
+
+.event .card-header,
+.event .card-body {
+	padding: 0.5rem;
+}

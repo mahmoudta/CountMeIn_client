@@ -7,11 +7,14 @@ import isEmpty from 'lodash/isEmpty';
 import { getBusinessAppointmentsByDate } from '../../../actions/appointmentsAction';
 import { getCurrentDate, getDay, getTimeDifference, getTime, getWorkDay } from '../../../utils/date';
 
-import '../Business.css';
+// import '../Business.css';
+import './Schedule.css';
 
 import axios from 'axios';
 import { API } from '../../../consts';
 import TimeLine from './TimeLine';
+
+import { FaPaperPlane } from 'react-icons/fa';
 
 class Schedule extends Component {
 	constructor(props) {
@@ -40,7 +43,6 @@ class Schedule extends Component {
 	}
 
 	pickDate = (date) => {
-		console.log(date);
 		this.setState({ date, day: getDay(date) });
 		this.props.getBusinessAppointmentsByDate(this.state.business_id, date);
 	};
@@ -61,6 +63,67 @@ class Schedule extends Component {
 		return (
 			<section className="my-5">
 				<div className="container">
+					<div className="row">
+						<div className="col-12 col-md-6 col-lg-3 mb-4">
+							<div className="card border-left-primary shadow py-2">
+								<div className="card-body">
+									<div className="row no-gutters align-items-center">
+										<div className="col mr-2">
+											<div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
+												Earnings (Monthly)
+											</div>
+											<div className="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div className="col-12 col-md-6 col-lg-3 mb-4">
+							<div className="card border-left-success shadow py-2">
+								<div className="card-body">
+									<div className="row no-gutters align-items-center">
+										<div className="col mr-2">
+											<div className="text-xs font-weight-bold text-success text-uppercase mb-1">
+												Earnings (Monthly)
+											</div>
+											<div className="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div className="col-12 col-md-6 col-lg-3 mb-4">
+							<div className="card border-left-info shadow py-2">
+								<div className="card-body">
+									<div className="row no-gutters align-items-center">
+										<div className="col mr-2">
+											<div className="text-xs font-weight-bold text-info text-uppercase mb-1">
+												Earnings (Monthly)
+											</div>
+											<div className="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div className="col-12 col-md-6 col-lg-3 mb-4">
+							<div className="card border-left-warning shadow py-2">
+								<div className="card-body">
+									<div className="row no-gutters align-items-center">
+										<div className="col mr-2">
+											<div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
+												Earnings (Monthly)
+											</div>
+											<div className="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					{!this.state.loading ? (
 						<section>
 							<NavLink to="/business/mySchedule/new-appointment" className="btn btn-sm btn-success">
