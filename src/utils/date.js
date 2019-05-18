@@ -1,5 +1,3 @@
-import { number } from 'prop-types';
-
 const days = [ 'sunday', 'monday', 'tuesday', 'wedensday', 'thursday', 'friday', 'satarday' ];
 
 export function getCurrentDate(separator = '-') {
@@ -21,6 +19,7 @@ export function getDay(date) {
 }
 
 export function convertToUtcTime(date) {
+	console.log(date);
 	let splitter = date.split('-');
 	return new Date(Date.UTC(splitter[2], splitter[1], splitter[0], 0, 0, 0));
 }
@@ -28,9 +27,8 @@ export function convertToUtcTime(date) {
 export function getTime(date) {
 	if (date) {
 		const Ndate = new Date(date);
-		const hour = Number(Ndate.getUTCHours()) + 3;
 		return {
-			hour: hour < 10 ? `0${hour}` : hour,
+			hour: Number(Ndate.getUTCHours()) + 3,
 			minute: Number(Ndate.getUTCMinutes()) < 10 ? `0${Ndate.getUTCMinutes()}` : Ndate.getUTCMinutes()
 		};
 	}
