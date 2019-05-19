@@ -13,9 +13,12 @@ import { Link } from "react-router-dom";
 
 import DateRange from "@material-ui/icons/DateRange";
 import Store from "@material-ui/icons/Store";
+import AddIcon from "@material-ui/icons/AlarmAdd";
+import Icon from "@material-ui/core/Icon";
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
+//import { addListener } from "cluster";
 
 class BusinessList extends Component {
   constructor(props) {
@@ -26,7 +29,8 @@ class BusinessList extends Component {
         profile: {
           name: "loading"
         }
-      }
+      },
+      refresh: 0
     };
   }
 
@@ -41,6 +45,20 @@ class BusinessList extends Component {
         console.log(err);
       });
   }
+
+  unfollowBusiness = business_id => {
+    this.setState({ loadingFollow: true });
+    axios
+      .put(`${API}/business/unfollow`, { business_id: business_id })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.setState({ refresh: 1 });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   render() {
     const { classes } = this.props;
@@ -63,6 +81,19 @@ class BusinessList extends Component {
             <div className={classes.stats}>
               <DateRange />
               Online 24 Hours
+            </div>
+            <div>
+              <Link to={`/business/new-appointment/${this.state.business._id}`}>
+                <Icon color="disabled">alarm_add</Icon>
+              </Link>
+              <Link to={"/dashboard"}>
+                <Icon
+                  color="disabled"
+                  onClick={() => this.unfollowBusiness(this.state.business._id)}
+                >
+                  person_add_disabled
+                </Icon>
+              </Link>
             </div>
           </CardFooter>
         </Card>
