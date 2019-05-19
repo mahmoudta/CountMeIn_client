@@ -21,12 +21,15 @@ export default class CreateFStep extends Component {
 										</label>
 										<input
 											type="text"
-											className="form-control"
+											className={`form-control ${!isEmpty(values.step1Errors.name)
+												? 'is-invalid'
+												: ''}`}
 											name="name"
 											placeholder="business name"
 											value={values.name}
 											onChange={this.props.handleChange}
 										/>
+										<div className="invalid-feedback">{values.step1Errors.name}</div>
 									</div>
 									<div className="form-group">
 										<label className="text-uppercase" htmlFor="category">
@@ -34,7 +37,9 @@ export default class CreateFStep extends Component {
 											<span className="form-required" />
 										</label>
 										<select
-											className="form-control"
+											className={`form-control ${!isEmpty(values.step1Errors.category)
+												? 'is-invalid'
+												: ''}`}
 											name="category"
 											onChange={this.props.handleChange}
 											value={values.category}
@@ -48,11 +53,44 @@ export default class CreateFStep extends Component {
 												);
 											})}
 										</select>
+										<div className="invalid-feedback">{values.step1Errors.category}</div>
 									</div>
+									<div className="form-group">
+										<label className="text-uppercase" htmlFor="phone">
+											Phone Number
+											<span className="form-required" />
+										</label>
+										<input
+											type="phone"
+											className={`form-control ${!isEmpty(values.step1Errors.phone)
+												? 'is-invalid'
+												: ''}`}
+											name="phone"
+											placeholder="phone number"
+											value={values.phone}
+											onChange={this.props.handleChange}
+										/>
+										<div className="invalid-feedback">{values.step1Errors.phone}</div>
+									</div>
+
+									<div className="form-group">
+										<label className="text-uppercase" htmlFor="phone">
+											description
+										</label>
+										<textarea
+											type="text"
+											className="form-control"
+											name="description"
+											placeholder="Some text about the business"
+											value={values.description}
+											onChange={this.props.handleChange}
+										/>
+									</div>
+
 									<div className="form-group mb-0">
 										<label className="text-uppercase " htmlFor="name">
 											image
-											<span className="form-required" />
+											{/* <span className="form-required" /> */}
 											{values.imgLoading ? (
 												<div
 													className="spinner-border text-primary"

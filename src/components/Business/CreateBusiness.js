@@ -13,26 +13,59 @@ import { createNewBusiness } from '../../actions/businessActions';
 import CreateFStep from './CreateFStep';
 import CreateSecStep from './CreateSecStep';
 import CreateThirdStep from './CreateThirdStep';
+import { isTimeBigger } from '../../utils/date';
 
 //Optional Import
+
+const phoneRegex = RegExp(/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/);
+
+const validForm = ({ stepErros, ...rest }) => {
+	let valid = true;
+	Object.values(stepErros).forEach((val) => {
+		!isEmpty(val) && (valid = false);
+	});
+	if (rest) {
+		console.log(rest);
+		Object.values(rest).forEach((val) => {
+			isEmpty(val) && (valid = false);
+		});
+	}
+
+	return valid;
+};
 class CreateBusiness extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			step: 1,
-			categories: [],
+			step: 3,
+
+			/* STEP 1 */
+			step1Errors: {
+				name: '',
+				category: '',
+				phone: ''
+			},
 			imgLoading: false,
-			name: '',
+			category: '' /* required */,
+			description: '',
+			name: '' /* required */,
 			img: '',
+			phone: 0 /* required */,
+
+			/* STEP 2 */
+			step2Errors: {},
 			breakTime: 10,
-			category: '',
-			working: [],
+			working: {},
+
+			/* STEP 3 */
+			categories: [],
 			purposes: []
 		};
 		this.nextStep = this.nextStep.bind(this);
 		this.prevStep = this.prevStep.bind(this);
 		this.handleChange = this.handleChange.bind(this);
-		this.handleWork = this.handleWork.bind(this);
+		this.handleSchedule = this.handleSchedule.bind(this);
+		// this.handleWork = this.handleWork.bind(this);
 		this.handleTime = this.handleTime.bind(this);
 		this.handlePurpose = this.handlePurpose.bind(this);
 	}
@@ -42,6 +75,7 @@ class CreateBusiness extends Component {
 			const categories = await this.props.getAllCategories();
 			this.setState({ categories: categories.payload });
 		}
+		// console.log(this.state.working['monday']);
 	};
 
 	uploadFile = (e) => {
@@ -55,11 +89,29 @@ class CreateBusiness extends Component {
 			})
 			.catch((err) => console.error(err));
 	};
-
 	/* handle the steps of the form */
 	nextStep = () => {
-		const { step } = this.state;
-		this.setState({ step: step + 1 });
+		const { step, step1Errors, step2Errors, ...state } = this.state;
+		let obj = {};
+		switch (step) {
+			case 1:
+				obj = {
+					stepErros: step1Errors,
+					name: state.name,
+					category: state.category,
+					phone: state.phone
+				};
+				// if (validForm(obj)) this.setState({ step: step + 1 });
+				break;
+			case 2:
+				obj = {
+					stepErros: step2Errors,
+					working: state.working
+				};
+			default:
+				break;
+		}
+		if (validForm(obj)) this.setState({ step: step + 1 });
 	};
 	prevStep = () => {
 		const { step } = this.state;
@@ -68,27 +120,70 @@ class CreateBusiness extends Component {
 
 	/* Fileds change handler */
 	handleChange = (e) => {
-		this.setState({ [e.target.name]: e.target.value });
+		const { name, value } = e.target;
+		let step1Errors = this.state.step1Errors;
+		switch (name) {
+			case 'name':
+				step1Errors.name = value.length < 3 ? 'minimum 3 charcters required' : '';
+				break;
+			case 'category':
+				step1Errors.category = value === '-1' ? 'you have to select category' : '';
+				break;
+			case 'phone':
+				step1Errors.phone = phoneRegex.test(value) ? '' : 'it must contain 10 digits';
+				break;
+		}
+		this.setState({ step1Errors, [name]: value }, () => console.log(this.state));
 	};
 
-	handleWork = (e) => {
-		var working = this.state.working;
-		var index = working.findIndex((elem) => {
-			return elem.day === e.target.value;
-		});
-		if (index > -1) {
-			working[index].opened = false;
-			this.setState({ working: working });
+	// handleWork = (e) => {
+	// 	var working = this.state.working;
+	// 	var index = working.findIndex((elem) => {
+	// 		return elem.day === e.target.value;
+	// 	});
+	// 	if (index > -1) {
+	// 		working[index].opened = false;
+	// 		this.setState({ working: working });
+	// 	} else {
+	// 		working.push({
+	// 			day: e.target.value.toLowerCase(),
+	// 			opened: true,
+	// 			from: '00:00',
+	// 			until: '00:00'
+	// 		});
+	// 		this.setState({ working: working });
+	// 	}
+	// };
+
+	handleSchedule = (e, day = '') => {
+		console.log('here');
+		const { name, value } = e.target;
+		let working = this.state.working;
+		let step2Errors = this.state.step2Errors;
+
+		if (isEmpty(day)) {
+			if (!working[value]) {
+				working[value] = {
+					opened: true,
+					from: '00:00',
+					until: '00:00'
+				};
+			} else {
+				delete working[value];
+			}
 		} else {
-			working.push({
-				day: e.target.value.toLowerCase(),
-				opened: true,
-				from: '00:00',
-				until: '00:00'
-			});
-			this.setState({ working: working });
+			working[day][name] = value;
+			/* day error */
+			step2Errors[day] =
+				isEmpty(working[day]['from']) ||
+				isEmpty(working[day]['until']) ||
+				isTimeBigger(working[day]['until'], working[day]['from'])
+					? 'invalid range'
+					: '';
 		}
+		this.setState({ step2Errors, working }, () => console.log(this.state));
 	};
+
 	handleTime = (e) => {
 		var choice = e.target.name.split(' ');
 		var working = this.state.working;
@@ -133,6 +228,7 @@ class CreateBusiness extends Component {
 
 	render() {
 		const { step } = this.state;
+
 		switch (step) {
 			case 1:
 				return (
@@ -149,7 +245,7 @@ class CreateBusiness extends Component {
 						nextStep={this.nextStep}
 						prevStep={this.prevStep}
 						handleChange={this.handleChange}
-						handleWork={this.handleWork}
+						handleSchedule={this.handleSchedule}
 						handleTime={this.handleTime}
 						values={this.state}
 					/>
