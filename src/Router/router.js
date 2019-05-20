@@ -15,6 +15,7 @@ import Schedule from '../components/Business/Schedule/Schedule';
 import NewAppointment from '../components/Business/NewAppointment';
 
 import BnewAppointment from '../components/Business/Schedule/BnewAppointment';
+import EditBusiness from '../components/Business/EditBusiness/EditBusiness';
 
 const ReactRouter = () => {
 	return (
@@ -32,12 +33,13 @@ const ReactRouter = () => {
 								<Route path="/dashboard" component={requireAuth(Dashboard)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
 								<Route exact path="/business/pages/create" component={requireAuth(CreateBusiness)} />
-								<Route exact path="/business/:id" component={requireAuth(ClientView)} />
+								<Route path="/business/view/:id" component={requireAuth(ClientView)} />
 								<Route excat path="/business/pages/mySchedule/:id" component={requireAuth(Schedule)} />
 								<Route
 									path="/business/mySchedule/new-appointment"
 									component={requireAuth(BnewAppointment)}
 								/>
+								<Route path="/business/edit" component={requireAuth(EditBusiness)} />
 
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />

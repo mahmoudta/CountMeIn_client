@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import S3 from 'aws-s3';
 
 /* UTILS */
-import { S3IMAGESCONFIG, IMAGES } from '../../consts';
+import { S3IMAGESCONFIG } from '../../consts';
 import { getAllCategories } from '../../actions/categoryActions';
 import { createNewBusiness } from '../../actions/businessActions';
 
@@ -37,7 +37,7 @@ class CreateBusiness extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			step: 3,
+			step: 1,
 
 			/* STEP 1 */
 			step1Errors: {
@@ -58,8 +58,9 @@ class CreateBusiness extends Component {
 			working: {},
 
 			/* STEP 3 */
+			step3Errors: {},
 			categories: [],
-			purposes: []
+			services: []
 		};
 		this.nextStep = this.nextStep.bind(this);
 		this.prevStep = this.prevStep.bind(this);
@@ -67,7 +68,7 @@ class CreateBusiness extends Component {
 		this.handleSchedule = this.handleSchedule.bind(this);
 		// this.handleWork = this.handleWork.bind(this);
 		this.handleTime = this.handleTime.bind(this);
-		this.handlePurpose = this.handlePurpose.bind(this);
+		this.handleServices = this.handleServices.bind(this);
 	}
 
 	componentDidMount = async () => {
@@ -136,27 +137,11 @@ class CreateBusiness extends Component {
 		this.setState({ step1Errors, [name]: value }, () => console.log(this.state));
 	};
 
-	// handleWork = (e) => {
-	// 	var working = this.state.working;
-	// 	var index = working.findIndex((elem) => {
-	// 		return elem.day === e.target.value;
-	// 	});
-	// 	if (index > -1) {
-	// 		working[index].opened = false;
-	// 		this.setState({ working: working });
-	// 	} else {
-	// 		working.push({
-	// 			day: e.target.value.toLowerCase(),
-	// 			opened: true,
-	// 			from: '00:00',
-	// 			until: '00:00'
-	// 		});
-	// 		this.setState({ working: working });
-	// 	}
-	// };
+	handleServices = (services) => {
+		this.setState({ services }, () => console.log(this.state));
+	};
 
 	handleSchedule = (e, day = '') => {
-		console.log('here');
 		const { name, value } = e.target;
 		let working = this.state.working;
 		let step2Errors = this.state.step2Errors;
@@ -184,15 +169,14 @@ class CreateBusiness extends Component {
 		this.setState({ step2Errors, working }, () => console.log(this.state));
 	};
 
-	handleTime = (e) => {
-		var choice = e.target.name.split(' ');
-		var working = this.state.working;
-		var index = working.findIndex((elem) => {
-			return elem.day === choice[0];
-		});
-
-		working[index][choice[1]] = e.target.value;
-		this.setState({ working: working });
+	handleTime = (e, index) => {
+		const { name, value } = e.target;
+		let services = this.state.services;
+		let step3Errors = this.state.step3Errors;
+		step3Errors[index] = value < 10 ? 'minimum time 10 minutes' : '';
+		step3Errors[index] = value > 120 ? 'maximum time 120 minutes' : step3Errors[index];
+		services[index][name] = value;
+		this.setState({ step3Errors, services }, () => console.log(this.state));
 	};
 
 	handlePurpose = (e) => {
@@ -246,7 +230,6 @@ class CreateBusiness extends Component {
 						prevStep={this.prevStep}
 						handleChange={this.handleChange}
 						handleSchedule={this.handleSchedule}
-						handleTime={this.handleTime}
 						values={this.state}
 					/>
 				);
@@ -256,7 +239,9 @@ class CreateBusiness extends Component {
 						values={this.state}
 						handleSubmit={this.handleSubmit}
 						prevStep={this.prevStep}
+						handleServices={this.handleServices}
 						handleChange={this.handlePurpose}
+						handleTime={this.handleTime}
 					/>
 				);
 		}

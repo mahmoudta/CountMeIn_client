@@ -77,7 +77,7 @@ class CategoryList extends Component {
 					<span>{category.name}</span>
 				</td>
 				<td>
-					<span>{category.subCats.length > 0 ? category.subCats.length : 'empty'}</span>
+					<span>{category.services.length > 0 ? category.services.length : '-'}</span>
 				</td>
 
 				<td>
@@ -100,7 +100,7 @@ class CategoryList extends Component {
 					<h3 className="card-title">category list</h3>
 					<div className="card-options">
 						<Link className="btn btn-sm btn-success" to="/category/new-category">
-							<FaPlusCircle /> add new category
+							<FaPlusCircle /> create
 						</Link>
 					</div>
 				</div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import isEmpty from 'lodash/isEmpty';
 
-import { IMAGES } from '../../consts';
+import { B_IMAGES } from '../../consts';
 
 export default class CreateFStep extends Component {
 	render() {
@@ -108,7 +108,7 @@ export default class CreateFStep extends Component {
 												<div className="col-md-8 mx-auto border mb-2 ">
 													<img
 														className="w-100 img-fluid"
-														src={IMAGES + '/' + values.img}
+														src={B_IMAGES + '/' + values.img}
 														alt=""
 													/>
 												</div>

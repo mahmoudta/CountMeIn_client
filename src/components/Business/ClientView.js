@@ -80,6 +80,7 @@ class ClientView extends Component {
 		// 	href="https://drive.google.com/uc?id=1batJ1VAiU_yXbdlHSFpoprebS8__ceQ0"
 		// />
 		const { business } = this.props;
+		const isOwner = business.owner_id === this.props.auth.user.sub;
 		return (
 			<section className="mt-5">
 				{/* <style>{stringStyle}</style> */}
@@ -101,21 +102,42 @@ class ClientView extends Component {
 												<h1 className="h3 title">{business.profile.name}</h1>
 												<div>
 													<span>
-														{!business.isFollower ? (
+														{!business.isFollower &&
+														!isOwner && (
 															<button
 																className=" btn btn-sm btn-primary"
 																onClick={() => this.followBusiness(business._id)}
 															>
 																follow
 															</button>
-														) : (
+														)}
+														{business.isFollower &&
+														!isOwner && (
 															<button
-																className="btn btn-sm btn-secondary"
+																className=" btn btn-sm btn-secondary"
 																onClick={() => this.unfollowBusiness(business._id)}
 															>
-																following
+																unfollow
 															</button>
 														)}
+														{isOwner && [
+															<NavLink
+																key={`editProfile${business._id}`}
+																to={'/business/edit'}
+																className=" mx-2 btn btn-sm btn-secondary"
+																// onClick={() => this.unfollowBusiness(business._id)}
+															>
+																Edit Profile
+															</NavLink>,
+															<NavLink
+																key={`editView${business._id}`}
+																to={'/business/edit'}
+																className=" mx-2 btn btn-sm btn-secondary"
+																// onClick={() => this.unfollowBusiness(business._id)}
+															>
+																Customize View
+															</NavLink>
+														]}
 													</span>
 												</div>
 											</div>
@@ -145,13 +167,15 @@ class ClientView extends Component {
 											consequatur, dicta quibusdam nesciunt explicabo porro similique sunt
 											architecto reprehenderit.
 										</p>
-										<NavLink
-											to={'/business/new-appointment/' + this.props.business._id}
-											className="btn btn-sm btn-primary"
-											// businessValues={this.state}
-										>
-											new appointment
-										</NavLink>
+										{!isOwner && (
+											<NavLink
+												to={'/business/new-appointment/' + this.props.business._id}
+												className="btn btn-sm btn-primary"
+												// businessValues={this.state}
+											>
+												new appointment
+											</NavLink>
+										)}
 									</div>
 								</div>
 							</div>

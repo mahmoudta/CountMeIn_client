@@ -40,7 +40,9 @@ class Navbar extends Component {
 				}
 			});
 	}
+	businessDropDown = () => {};
 	renderNav = () => {
+		console.log(this.props.auth.user.isBusinessOwner);
 		return (
 			<div>
 				<aside className="">
@@ -52,26 +54,32 @@ class Navbar extends Component {
 							</NavLink>
 						</li>
 						<li className="">
-							<NavLink to="#" activeClassName="active">
+							<NavLink to="#" activeClassName="active" role="button">
 								<FaBriefcase className="icon" />
 								<span>Businesses</span>
 							</NavLink>
+
 							<ul className="nav flex-column">
-								<li className="nav-item text-uppercase">
-									<NavLink to={'/business/pages/mySchedule/' + this.state.business_id}>
-										<FaCalendarAlt /> my schedule
-									</NavLink>
-								</li>
-								<li className="nav-item text-uppercase">
-									<NavLink to={'/business/' + this.state.business_id}>
-										<FaPalette /> Page View
-									</NavLink>
-								</li>
-								<li className="nav-item text-uppercase">
-									<NavLink to="/business/pages/create">
-										<FaAddressCard /> Create
-									</NavLink>
-								</li>
+								{this.props.auth.user.isBusinessOwner ? (
+									[
+										<li className="nav-item text-uppercase">
+											<NavLink to={'/business/pages/mySchedule/' + this.state.business_id}>
+												<FaCalendarAlt /> my schedule
+											</NavLink>
+										</li>,
+										<li className="nav-item text-uppercase">
+											<NavLink to={'/business/view/' + this.state.business_id}>
+												<FaPalette /> Page View
+											</NavLink>
+										</li>
+									]
+								) : (
+									<li className="nav-item text-uppercase">
+										<NavLink to="/business/pages/create">
+											<FaAddressCard /> Create
+										</NavLink>
+									</li>
+								)}
 							</ul>
 						</li>
 					</ul>

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 
-import { getAllCategories, createCategory, addSubCategory } from '../../../actions/categoryActions';
+import { getAllCategories, createCategory, addService } from '../../../actions/categoryActions';
 
 import { FaArrowLeft } from 'react-icons/fa';
 import { FaCheck } from 'react-icons/fa';
@@ -19,10 +19,11 @@ class CreateCategory extends Component {
 		this.state = {
 			name: '',
 			parent_category: '',
-			time: '',
-			show_time: false,
+			time: 10,
+			isService: false,
 			loading: false,
-			alert: ''
+			alert: '',
+			cost: 0
 		};
 		this.onChange = this.onChange.bind(this);
 		this.formSubmit = this.formSubmit.bind(this);
@@ -34,16 +35,16 @@ class CreateCategory extends Component {
 	}
 	onChange = (e) => {
 		const target = e.target;
-		var { show_time } = this.state;
+		var { isService } = this.state;
 		if (target.name === 'parent_category') {
 			if (!isEmpty(target.value)) {
-				show_time = true;
+				isService = true;
 			} else {
-				show_time = false;
+				isService = false;
 			}
 		}
 
-		this.setState({ [target.name]: target.value, show_time: show_time });
+		this.setState({ [target.name]: target.value, isService: isService });
 	};
 
 	Alert = async (redirect, text) => {
@@ -61,16 +62,16 @@ class CreateCategory extends Component {
 
 	formSubmit = (e) => {
 		e.preventDefault();
-		const { show_time, name, time, parent_category } = this.state;
+		const { isService, name, time, parent_category, cost } = this.state;
 		this.setState({ loading: true });
-		if (!show_time) {
+		if (!isService) {
 			this.props.createCategory({ name }).then((res) => {
 				const redirect = res.type === 'CREATE_CATEGORY' ? true : false;
 				this.setState({ loading: false });
 				this.Alert(redirect, res.payload);
 			});
 		} else {
-			this.props.addSubCategory({ parent_category, name, time }).then((res) => {
+			this.props.addService({ parent_category, name, time, cost }).then((res) => {
 				const redirect = res.type === 'CREATE_CATEGORY' ? true : false;
 				this.setState({ loading: false });
 				this.Alert(redirect, res.payload);
@@ -133,7 +134,7 @@ class CreateCategory extends Component {
 													</select>
 												</div>
 											</div>
-											<div className={this.state.show_time ? 'col-md-6' : 'hide'}>
+											<div className={this.state.isService ? 'col-md-4' : 'hide'}>
 												<div className="form-group">
 													<label className="form-label">
 														time
@@ -154,11 +155,12 @@ class CreateCategory extends Component {
 														</div>
 														<input
 															className="form-control"
+															type="number"
 															name="time"
 															placeholder="Ex: 20"
 															min="10"
 															max="120"
-															required={this.state.show_time}
+															required={this.state.isService}
 															value={this.state.time}
 															onChange={this.onChange}
 														/>
@@ -168,6 +170,34 @@ class CreateCategory extends Component {
 													</div>
 												</div>
 											</div>
+
+											<div className={this.state.isService ? 'col-md-4' : 'hide'}>
+												<div className="form-group">
+													<label className="form-label">cost</label>
+													{/* {!isEmpty(this.state.alert) ? (
+														<div class="alert alert-danger" role="alert">
+															{this.state.alert}
+														</div>
+													) : (
+														''
+													)} */}
+													<div className="input-group mb-2 mr-sm-2">
+														<div className="input-group-prepend">
+															<div className="input-group-text">&#8362;</div>
+														</div>
+														<input
+															className="form-control"
+															type="number"
+															name="cost"
+															placeholder="Ex: 50"
+															required={this.state.isService}
+															value={this.state.cost}
+															onChange={this.onChange}
+														/>
+													</div>
+												</div>
+											</div>
+
 											<hr className="my-4 w-100" />
 											<div className="col-12 clear-fix">
 												{!this.state.loading ? (
@@ -199,7 +229,7 @@ CreateCategory.propTypes = {
 	categories: PropTypes.array.isRequired,
 	getAllCategories: PropTypes.func.isRequired,
 	createCategory: PropTypes.func.isRequired,
-	addSubCategory: PropTypes.func.isRequired
+	addService: PropTypes.func.isRequired
 };
 CreateCategory.contextTypes = {
 	router: PropTypes.object.isRequired
@@ -207,4 +237,4 @@ CreateCategory.contextTypes = {
 const mapStatetoProps = (state) => ({
 	categories: state.category.categories
 });
-export default connect(mapStatetoProps, { getAllCategories, createCategory, addSubCategory })(CreateCategory);
+export default connect(mapStatetoProps, { getAllCategories, createCategory, addService })(CreateCategory);

@@ -21,10 +21,10 @@ export const createCategory = (name) => (dispatch) => {
 		});
 };
 
-export const addSubCategory = (subCat) => (dispatch) => {
+export const addService = (service) => (dispatch) => {
 	dispatch(setCategoryLoading());
 	return axios
-		.post(`${API}/category/sub-category`, subCat)
+		.post(`${API}/category/service`, service)
 		.then((result) => {
 			return dispatch({
 				type: CREATE_CATEGORY,
