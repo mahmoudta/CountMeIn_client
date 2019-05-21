@@ -1,7 +1,14 @@
 import axios from 'axios';
 import { API } from '../consts';
 
-import { CREATE_CATEGORY, GET_ALL_CATEGORIES, CATEGORY_LOADING, CREATE_CATEGORY_ERROR, DELETE_CATEGORY } from './types';
+import {
+	CREATE_CATEGORY,
+	GET_ALL_CATEGORIES,
+	CATEGORY_LOADING,
+	CREATE_CATEGORY_ERROR,
+	DELETE_CATEGORY,
+	SET_FLASH_MESSAGE
+} from './types';
 
 export const createCategory = (name) => (dispatch) => {
 	dispatch(setCategoryLoading());
@@ -41,16 +48,16 @@ export const addService = (service) => (dispatch) => {
 
 export const getAllCategories = () => (dispatch) => {
 	dispatch(setCategoryLoading());
-	return axios
+	axios
 		.get(`${API}/category/`)
 		.then((result) => {
-			return dispatch({
+			dispatch({
 				type: GET_ALL_CATEGORIES,
 				payload: result.data.categories
 			});
 		})
 		.catch((err) => {
-			return dispatch({
+			dispatch({
 				type: GET_ALL_CATEGORIES,
 				payload: { message: 'caant get the categories' }
 			});
@@ -62,15 +69,19 @@ export const deleteCategory = (id) => (dispatch) => {
 	return axios
 		.delete(`${API}/category/${id}`)
 		.then((result) => {
-			return dispatch({
+			dispatch({
+				type: SET_FLASH_MESSAGE,
+				message: { type: 'success', text: 'Successfully deleted' }
+			});
+			dispatch({
 				type: DELETE_CATEGORY,
-				payload: result.data
+				payload: result.data.category
 			});
 		})
 		.catch((err) => {
-			return dispatch({
-				type: DELETE_CATEGORY,
-				payload: { error: 'An Error Occurred' }
+			dispatch({
+				type: SET_FLASH_MESSAGE,
+				message: { type: 'error', text: err.response.data.error }
 			});
 			//TODO
 		});

@@ -176,11 +176,13 @@ class TimeLine extends Component {
 }
 
 TimeLine.propTypes = {
+	user: PropTypes.object.isRequired,
 	myBusiness: PropTypes.object.isRequired,
 	appointments: PropTypes.array.isRequired
 	// getBusinessAppointmentsByDate: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
+	user: state.auth.user,
 	myBusiness: state.business.myBusiness,
 	appointmentsLoading: state.appointment.loading,
 	appointments: state.appointment.appointments

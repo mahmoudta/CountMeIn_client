@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import isEmpty from 'lodash/isEmpty';
 
-import { B_IMAGES } from '../../consts';
+import { B_IMAGES } from '../../../consts';
 
 class Basicinfo extends Component {
 	render() {
@@ -32,12 +32,13 @@ class Basicinfo extends Component {
 
 						<select
 							className={`form-control ${!isEmpty(values.step1Errors.category) ? 'is-invalid' : ''}`}
-							name="category"
+							name="categories"
+							multiple
 							onChange={this.props.handleChange}
-							value={values.category}
+							value={values.categories}
 						>
 							<option>choose one</option>
-							{values.categories.map((category, i) => {
+							{values.mainCategories.map((category, i) => {
 								return (
 									<option key={category._id + i} value={category._id}>
 										{category.name}

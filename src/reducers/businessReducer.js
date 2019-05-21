@@ -3,7 +3,10 @@ import {
 	GET_BUSINESS_BY_OWNER,
 	GET_BUSINESS_BY_ID,
 	GET_CUREENT_BUSINESS_CUSTOMERS,
-	GET_CUREENT_BUSINESS_SERVICES
+	GET_CUREENT_BUSINESS_SERVICES,
+	BUSNIESS_LOADING,
+	FOLLOW_BUSINESS,
+	UNFOLLOW_BUSINESS
 } from '../actions/types';
 // import isEmpty from 'lodash/isEmpty';
 
@@ -24,12 +27,7 @@ export default function(state = initialState, action) {
 				success: ' business successfully added',
 				loading: false
 			};
-		// case CATEGORY_LOADING: {
-		// 	return {
-		// 		...state,
-		// 		loading: true
-		// 	};
-		// }
+
 		case GET_BUSINESS_BY_OWNER:
 			return {
 				...state,
@@ -54,6 +52,33 @@ export default function(state = initialState, action) {
 				businessServices: action.payload,
 				loading: false
 			};
+
+		case FOLLOW_BUSINESS:
+			const newBusiness = { ...state.business };
+			newBusiness.isFollower = action.payload;
+			newBusiness.followers = Number(newBusiness.followers) + 1;
+			return {
+				...state,
+				business: newBusiness,
+				loading: false
+			};
+		case UNFOLLOW_BUSINESS:
+			const BusinessEdit = { ...state.business };
+			BusinessEdit.isFollower = action.payload;
+			BusinessEdit.followers = Number(BusinessEdit.followers) - 1;
+			return {
+				...state,
+				business: BusinessEdit,
+				loading: false
+			};
+
+		case BUSNIESS_LOADING: {
+			return {
+				...state,
+				loading: action.payload
+			};
+		}
+
 		default:
 			return state;
 	}

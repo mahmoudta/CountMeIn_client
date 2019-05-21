@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getBusinessById } from '../../actions/businessActions';
+import { getBusinessById, followBusiness, unFollowBusiness } from '../../actions/businessActions';
+import { setFlashMessage } from '../../actions/flashMessageActions';
 import axios from 'axios';
 import { API } from '../../consts';
+import isEmpty from 'lodash.isempty';
 
 import './Business.css';
 
@@ -23,45 +25,84 @@ class ClientView extends Component {
 				}
 			}
 		};
+		this.showButtons = this.showButtons.bind(this);
 	}
 
 	componentDidMount() {
 		const id = this.props.match.params.id;
-		if (!this.state.business || id !== this.props.business.id) {
-			this.setState({ loading: true });
-			this.props.getBusinessById(id).then((result) => {
-				this.setState({ loading: false });
-
-				if (!result.payload.error) this.setState({ business: true });
-			});
-		}
+		this.props.getBusinessById(id);
 	}
+
+	showButtons = () => {
+		const { business, loading } = this.props;
+		const isOwner = business.owner_id === this.props.auth.user.sub;
+		if (isOwner) {
+			return [
+				<NavLink
+					key={`editProfile${business._id}`}
+					to={'/business/edit'}
+					className=" mx-2 btn btn-sm btn-secondary"
+					// onClick={() => this.unfollowBusiness(business._id)}
+				>
+					Edit Profile
+				</NavLink>,
+				<NavLink
+					key={`editView${business._id}`}
+					to={'/business/edit'}
+					className=" mx-2 btn btn-sm btn-secondary"
+					// onClick={() => this.unfollowBusiness(business._id)}
+				>
+					Customize View
+				</NavLink>
+			];
+		}
+		if (business.isFollower) {
+			return [
+				<button
+					key={`unfollow${business._id}`}
+					className="btn btn-sm btn-secondary"
+					disabled={loading}
+					onClick={() => this.unfollowBusiness(business._id)}
+				>
+					{loading ? (
+						<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
+					) : (
+						'UnFollow'
+					)}
+				</button>
+			];
+		}
+		return [
+			<button
+				key={`follow${business._id}`}
+				className="btn btn-sm btn-primary"
+				disabled={loading}
+				onClick={() => this.followBusiness(business._id)}
+			>
+				{loading ? (
+					<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
+				) : (
+					'Follow'
+				)}
+			</button>
+		];
+	};
+
 	followBusiness = (business_id) => {
-		this.setState({ loadingFollow: true });
-		axios
-			.put(`${API}/business/follow`, { business_id: business_id })
-			.then((response) => response.json())
-			.then((data) => {
-				console.log(data);
-				this.setState({ loadingFollow: false });
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		this.props.followBusiness(business_id);
 	};
 
 	unfollowBusiness = (business_id) => {
-		this.setState({ loadingFollow: true });
-		axios
-			.put(`${API}/business/unfollow`, { business_id: business_id })
-			.then((response) => response.json())
-			.then((data) => {
-				console.log(data);
-				this.setState({ loadingFollow: false });
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		this.props.setFlashMessage({
+			type: 'warning',
+			text: 'Are You sure You want to UnFollow?',
+			action: {
+				CancelButton: true,
+				confirmText: 'Delete',
+				next: 'UNFOLLOW_BUSINESS',
+				business_id
+			}
+		});
 	};
 
 	render() {
@@ -81,10 +122,12 @@ class ClientView extends Component {
 		// />
 		const { business } = this.props;
 		const isOwner = business.owner_id === this.props.auth.user.sub;
+		const buttons = this.showButtons();
+		// is!isEmpty(business)
 		return (
 			<section className="mt-5">
 				{/* <style>{stringStyle}</style> */}
-				{!this.state.loading && this.state.business ? (
+				{!isEmpty(business) ? (
 					<div className="container">
 						<div className="row">
 							<div className="col-12 header">
@@ -102,42 +145,9 @@ class ClientView extends Component {
 												<h1 className="h3 title">{business.profile.name}</h1>
 												<div>
 													<span>
-														{!business.isFollower &&
-														!isOwner && (
-															<button
-																className=" btn btn-sm btn-primary"
-																onClick={() => this.followBusiness(business._id)}
-															>
-																follow
-															</button>
-														)}
-														{business.isFollower &&
-														!isOwner && (
-															<button
-																className=" btn btn-sm btn-secondary"
-																onClick={() => this.unfollowBusiness(business._id)}
-															>
-																unfollow
-															</button>
-														)}
-														{isOwner && [
-															<NavLink
-																key={`editProfile${business._id}`}
-																to={'/business/edit'}
-																className=" mx-2 btn btn-sm btn-secondary"
-																// onClick={() => this.unfollowBusiness(business._id)}
-															>
-																Edit Profile
-															</NavLink>,
-															<NavLink
-																key={`editView${business._id}`}
-																to={'/business/edit'}
-																className=" mx-2 btn btn-sm btn-secondary"
-																// onClick={() => this.unfollowBusiness(business._id)}
-															>
-																Customize View
-															</NavLink>
-														]}
+														{buttons.map((button) => {
+															return button;
+														})}
 													</span>
 												</div>
 											</div>
@@ -148,9 +158,9 @@ class ClientView extends Component {
 												<strong>{business.followers} </strong>followers
 											</span>
 											<span className="mx-2">
-												<a href="#">
+												<NavLink to="#">
 													<strong>200 </strong>review
-												</a>
+												</NavLink>
 											</span>
 										</p>
 										<p>
@@ -194,10 +204,16 @@ class ClientView extends Component {
 ClientView.propTypes = {
 	auth: PropTypes.object.isRequired,
 	business: PropTypes.object.isRequired,
-	getBusinessById: PropTypes.func.isRequired
+	getBusinessById: PropTypes.func.isRequired,
+	followBusiness: PropTypes.func.isRequired,
+	unFollowBusiness: PropTypes.func.isRequired,
+	setFlashMessage: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
 	auth: state.auth,
-	business: state.business.business
+	business: state.business.business,
+	loading: state.business.loading
 });
-export default connect(mapStatetoProps, { getBusinessById })(ClientView);
+export default connect(mapStatetoProps, { getBusinessById, followBusiness, setFlashMessage, unFollowBusiness })(
+	ClientView
+);

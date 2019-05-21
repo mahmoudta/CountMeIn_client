@@ -29,6 +29,7 @@
 		"react-select-search": "^0.9.6",
 		"redux": "^4.0.1",
 		"redux-thunk": "^2.3.0",
+		"shortid": "^2.2.14",
 		"sweetalert2": "^8.7.0"
 	},
 	"scripts": {

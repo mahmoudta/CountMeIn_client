@@ -7,10 +7,9 @@ import {
 } from '../actions/types';
 
 const initialState = {
-	category: {},
 	categories: [],
 	loading: false,
-	message: {}
+	error: ''
 };
 
 export default function(state = initialState, action) {
@@ -29,10 +28,10 @@ export default function(state = initialState, action) {
 			};
 		}
 		case DELETE_CATEGORY: {
-			return {
-				...state,
+			return Object.assign({}, state, {
+				categories: [ ...state.categories.filter((category) => category._id !== action.payload._id) ],
 				loading: false
-			};
+			});
 		}
 		case GET_ALL_CATEGORIES:
 			return {

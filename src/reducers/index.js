@@ -3,10 +3,12 @@ import authReducer from './authReducer';
 import categoryReducer from './categoryReducer';
 import businessReducer from './businessReducer';
 import appointmentReducer from './appointmentReducer';
+import flashMessageReducer from './flashMessageReducer';
 
 export default combineReducers({
 	auth: authReducer,
 	category: categoryReducer,
 	business: businessReducer,
-	appointment: appointmentReducer
+	appointment: appointmentReducer,
+	flashMessage: flashMessageReducer
 });

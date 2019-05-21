@@ -8,14 +8,14 @@ import { getAllCategories, deleteCategory } from '../../../actions/categoryActio
 import { FaPlusCircle } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
-import { FaPlus } from 'react-icons/fa';
+// import { FaPlus } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 class CategoryList extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			loading: false
+			loading: props.loading
 		};
 		this.eachCategory = this.eachCategory.bind(this);
 		this.eachSubCategory = this.eachSubCategory.bind(this);
@@ -37,17 +37,11 @@ class CategoryList extends Component {
 		this.props.getAllCategories();
 	}
 
-	handleDeleteCategory = (e) => {
-		console.log(e.target);
-		this.props.deleteCategory(e.target.name).then((res) => {
-			console.log(res);
-			if (!res.payload.error) {
-				this.Alert(true, res.payload.success);
-			} else {
-				this.Alert(false, res.payload.error);
-			}
-			this.setState({ loading: false });
-		});
+	handleDeleteCategory = (e, category_id) => {
+		e.stopPropagation();
+		e.preventDefault();
+		console.log(category_id);
+		this.props.deleteCategory(category_id);
 	};
 	eachSubCategory(parent, category, i) {
 		return (
@@ -81,8 +75,12 @@ class CategoryList extends Component {
 				</td>
 
 				<td>
-					<button name={category._id} className="btn btn-sm btn-danger" onClick={this.handleDeleteCategory}>
-						<FaTrashAlt onClick={(e) => e.preventDefault()} />
+					<button
+						name={category._id}
+						className="btn btn-sm btn-danger"
+						onClick={(e) => this.handleDeleteCategory(e, category._id)}
+					>
+						<FaTrashAlt />
 					</button>
 					<button name={category._id} className="btn btn-sm btn-primary mx-2">
 						<FaEdit />
@@ -93,7 +91,6 @@ class CategoryList extends Component {
 	}
 	render() {
 		const { categories } = this.props;
-
 		return (
 			<div className="card">
 				<div className="card-header">
@@ -103,6 +100,7 @@ class CategoryList extends Component {
 							<FaPlusCircle /> create
 						</Link>
 					</div>
+					{this.props.loading && 'loading'}
 				</div>
 				<div className="table-responsive">
 					<table className="table card-table mb-0 table-vcenter text-nowrap listTable">

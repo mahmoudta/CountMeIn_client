@@ -31,18 +31,17 @@ class Navbar extends Component {
 	};
 	componentDidMount() {
 		const id = this.props.auth.user.sub;
-		if (isEmpty(this.props.myBusiness))
-			this.props.getBusinessByOwner(id).then((result) => {
-				if (!result.payload.error) {
-					this.setState({ business_id: result.payload._id });
-					this.props.getBusinessCustomers();
-					this.props.getBusinessServices(result.payload._id);
-				}
-			});
+		this.props.getBusinessByOwner(id);
+		// .then((result) => {
+		// 	if (!result.payload.error) {
+		// 		this.setState({ business_id: result.payload._id });
+		// 		this.props.getBusinessCustomers();
+		// 		this.props.getBusinessServices(result.payload._id);
+		// 	}
+		// });
 	}
 	businessDropDown = () => {};
 	renderNav = () => {
-		console.log(this.props.auth.user.isBusinessOwner);
 		return (
 			<div>
 				<aside className="">
@@ -62,13 +61,19 @@ class Navbar extends Component {
 							<ul className="nav flex-column">
 								{this.props.auth.user.isBusinessOwner ? (
 									[
-										<li className="nav-item text-uppercase">
-											<NavLink to={'/business/pages/mySchedule/' + this.state.business_id}>
+										<li
+											key={`Schedule${this.props.myBusiness._id}`}
+											className="nav-item text-uppercase"
+										>
+											<NavLink to={'/business/pages/mySchedule/' + this.props.myBusiness._id}>
 												<FaCalendarAlt /> my schedule
 											</NavLink>
 										</li>,
-										<li className="nav-item text-uppercase">
-											<NavLink to={'/business/view/' + this.state.business_id}>
+										<li
+											key={`View${this.props.myBusiness._id}`}
+											className="nav-item text-uppercase"
+										>
+											<NavLink to={'/business/view/' + this.props.myBusiness._id}>
 												<FaPalette /> Page View
 											</NavLink>
 										</li>
@@ -115,12 +120,13 @@ class Navbar extends Component {
 Navbar.propTypes = {
 	auth: PropTypes.object.isRequired,
 	myBusiness: PropTypes.object.isRequired,
-	getBusinessByOwner: PropTypes.func.isRequired,
-	getBusinessCustomers: PropTypes.func.isRequired,
-	getBusinessServices: PropTypes.func.isRequired
+	getBusinessByOwner: PropTypes.func.isRequired
+
+	// getBusinessCustomers: PropTypes.func.isRequired,
+	// getBusinessServices: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
 	auth: state.auth,
 	myBusiness: state.business.myBusiness
 });
-export default connect(mapStatetoProps, { getBusinessByOwner, getBusinessCustomers, getBusinessServices })(Navbar);
+export default connect(mapStatetoProps, { getBusinessByOwner })(Navbar);
