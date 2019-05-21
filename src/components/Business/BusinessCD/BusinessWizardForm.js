@@ -187,7 +187,7 @@ class BusinessWizardForm extends Component {
 		const { step } = this.state;
 		// const ShowForm = this.renderView();
 		return (
-			<div className="col-10 mx-auto wizard rounded bg-white shadow pb-3">
+			<div className="col-10 mx-auto wizard rounded bg-white shadow px-md-0 pb-3">
 				<div className="wizard-header pt-5">
 					<h2 className="d-block w-100 text-center">{this.props.title}</h2>
 
