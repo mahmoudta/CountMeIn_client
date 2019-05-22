@@ -4,9 +4,11 @@ import makeAnimated from 'react-select/lib/animated';
 import { FaBusinessTime } from 'react-icons/fa';
 
 export default class ServicesForm extends Component {
+	constructor(props) {
+		super(props);
+	}
 	render() {
 		const { values } = this.props;
-
 		const options = values.mainCategories
 			.filter((category) => {
 				return category._id === '5ce16c30af34709bd25fb510';
@@ -31,7 +33,21 @@ export default class ServicesForm extends Component {
 							you can modify the time and the cost of these services.
 						</small>
 					</div>
-					<div className="col-12">
+					<div className="col-12 my-3">
+						<label className="text-uppercase" htmlFor="purposes">
+							Categories
+							<span className="form-required" />
+						</label>
+						<Select
+							options={values.mainCategories}
+							value={values.services}
+							isMulti
+							components={makeAnimated()}
+							closeMenuOnSelect={false}
+							// onChange={this.props.handleServices}
+						/>
+					</div>
+					<div className="col-12 my-3">
 						<label className="text-uppercase" htmlFor="purposes">
 							Services
 							<span className="form-required" />
