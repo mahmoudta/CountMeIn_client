@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-// import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import S3 from 'aws-s3';
+import isEmpty from 'lodash/isEmpty';
 /* Components */
 import BasicinfoForm from './BasicinfoForm';
 import ManagmentForm from './ManagmentForm';
 import ServicesForm from './ServicesForm';
 /* UTILS */
 import { S3IMAGESCONFIG } from '../../../consts';
+import { isTimeBigger } from '../../../utils/date';
 // import { getAllCategories } from '../../../actions/categoryActions';
 // import { getBusinessByOwner } from '../../../actions/businessActions';
-import isEmpty from 'lodash/isEmpty';
 
 /* style */
 import '../Business.css';
@@ -43,7 +44,14 @@ class BusinessWizardForm extends Component {
 				name: '',
 				category: '',
 				phone: ''
+				// postal_code: ''
 			},
+			/* Location */
+			street: '',
+			city: '',
+			building: '',
+			postal_code: '',
+
 			imgLoading: false,
 			categories: [] /* required */,
 			description: '',
@@ -54,25 +62,21 @@ class BusinessWizardForm extends Component {
 			/* STEP 2 */
 			step2Errors: {},
 			breakTime: 10,
-			working: [
-				// { day: 'sunday', isOpened: false, from: '00:00', until: '00:00' },
-				// { day: 'monday', isOpened: false, from: '00:00', until: '00:00' },
-				// { day: 'tuesday', isOpened: false, from: '00:00', until: '00:00' },
-				// { day: 'wedensday', isOpened: false, from: '00:00', until: '00:00' },
-				// { day: 'thursday', isOpened: false, from: '00:00', until: '00:00' },
-				// { day: 'friday', isOpened: false, from: '00:00', until: '00:00' },
-				// { day: 'saturday', isOpened: false, from: '00:00', until: '00:00' }
-			],
+			working: [],
 
 			/* STEP 3 */
 			step3Errors: {},
 
 			services: []
 		};
+		this.nextStep = this.nextStep.bind(this);
+		this.prevStep = this.prevStep.bind(this);
+
 		this.handleChange = this.handleChange.bind(this);
 		this.uploadFile = this.uploadFile.bind(this);
 		this.renderView = this.renderView.bind(this);
 		this.buildSchedule = this.buildSchedule.bind(this);
+		this.handleSchedule = this.handleSchedule.bind(this);
 	}
 
 	static getDerivedStateFromProps(props, state) {
@@ -90,31 +94,86 @@ class BusinessWizardForm extends Component {
 				services: myBusiness.profile.services
 			};
 		}
+
 		return null;
 	}
+
+	/*                "opened": true,
+                "from": {
+                    "$date": "2019-04-04T06:10:35.448Z"
+                },
+                "until": {
+                    "$date": "2019-04-04T15:00:35.449Z"
+                } */
 	async buildSchedule() {
 		const days = [ 'sunday', 'monday', 'tuesday', 'wedensday', 'thursday', 'friday', 'saturday' ];
 		let Schedule = [];
 		for (let i in days) {
-			await working.push({
+			await Schedule.push({
 				day: days[i],
 				opened: false,
 				from: '00:00',
 				until: '00:00',
 				break: {
-					from: '',
-					until: ''
+					isBreak: false,
+					from: '00:00',
+					until: '00:00'
 				}
 			});
 		}
+
 		const working = await Schedule;
-		console.log(working);
 		this.setState({ working });
+	}
+
+	handleSchedule = (e, index) => {
+		const { name, value } = e.target;
+		let working = this.state.working;
+		let step2Errors = this.state.step2Errors;
+
+		switch (name) {
+			case 'from':
+				working[index].from = value;
+				break;
+			case 'until':
+				working[index].until = value;
+				break;
+			case 'break':
+				break;
+			case 'break_from':
+				break;
+			case 'break_until':
+				break;
+
+			default:
+				working[index].opened = !working[index].opened;
+				break;
+		}
+
+		/* day error */
+		if (working[index].opened) {
+			step2Errors[working[index].day] =
+				isEmpty(working[index].from) ||
+				isEmpty(working[index].until) ||
+				isTimeBigger(working[index].until, working[index].from)
+					? 'invalid range'
+					: '';
+		}
+
+		this.setState({ step2Errors, working });
+	};
+	componentDidMount() {
+		const { working } = this.state;
+		if (working.length === 0) {
+			this.buildSchedule();
+		}
 	}
 
 	handleChange = (e) => {
 		const { name, value } = e.target;
 		let step1Errors = this.state.step1Errors;
+		let step2Errors = this.state.step2Errors;
+
 		switch (name) {
 			case 'name':
 				step1Errors.name = value.length < 3 ? 'minimum 3 charcters required' : '';
@@ -126,8 +185,10 @@ class BusinessWizardForm extends Component {
 				step1Errors.phone = phoneRegex.test(value) ? '' : 'it must contain 10 digits';
 				break;
 		}
-		this.setState({ step1Errors, [name]: value }, () => console.log(this.state));
+
+		this.setState({ step1Errors, [name]: value });
 	};
+
 	uploadFile = (e) => {
 		this.setState({ imgLoading: true });
 		var newName = this.props.user.sub;
@@ -162,6 +223,12 @@ class BusinessWizardForm extends Component {
 		}
 		if (validForm(obj)) this.setState({ step: step + 1 });
 	};
+	prevStep = () => {
+		const { step } = this.state;
+		if (step > 1) {
+			this.setState({ step: step - 1 });
+		}
+	};
 
 	renderView = () => {
 		const { step } = this.state;
@@ -174,12 +241,18 @@ class BusinessWizardForm extends Component {
 				return (
 					<ManagmentForm
 						handleChange={this.handleChange}
-						buildSchedule={this.state.buildSchedule}
+						handleSchedule={this.handleSchedule}
 						values={this.state}
 					/>
 				);
 			case 3:
-				return <ServicesForm handleChange={this.handleChange} values={this.state} />;
+				return (
+					<ServicesForm
+						handleChange={this.handleChange}
+						categories={this.props.categories}
+						values={this.state}
+					/>
+				);
 		}
 	};
 
@@ -224,17 +297,17 @@ class BusinessWizardForm extends Component {
 		);
 	}
 }
-export default BusinessWizardForm;
-// BusinessWizardForm.propTypes = {
-// 	categories: PropTypes.array.isRequired,
-// 	getAllCategories: PropTypes.func.isRequired,
-// 	getBusinessByOwner: PropTypes.func.isRequired,
-// 	myBusiness: PropTypes.object.isRequired
-// 	// 	// createNewBusiness: PropTypes.func.isRequired
-// };
-// const mapStatetoProps = (state) => ({
-// 	categories: state.category.categories,
-// 	myBusiness: state.business.myBusiness,
-// 	user: state.auth.user
-// });
-// export default connect(mapStatetoProps, { getAllCategories, getBusinessByOwner })(BusinessWizardForm);
+// export default BusinessWizardForm;
+BusinessWizardForm.propTypes = {
+	user: PropTypes.object.isRequired
+	// getAllCategories: PropTypes.func.isRequired,
+	// getBusinessByOwner: PropTypes.func.isRequired,
+	// myBusiness: PropTypes.object.isRequired
+	// 	// createNewBusiness: PropTypes.func.isRequired
+};
+const mapStatetoProps = (state) => ({
+	// categories: state.category.categories,
+	// myBusiness: state.business.myBusiness,
+	user: state.auth.user
+});
+export default connect(mapStatetoProps, {})(BusinessWizardForm);

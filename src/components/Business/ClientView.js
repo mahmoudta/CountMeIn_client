@@ -214,6 +214,7 @@ const mapStatetoProps = (state) => ({
 	business: state.business.business,
 	loading: state.business.loading
 });
+
 export default connect(mapStatetoProps, { getBusinessById, followBusiness, setFlashMessage, unFollowBusiness })(
 	ClientView
 );
