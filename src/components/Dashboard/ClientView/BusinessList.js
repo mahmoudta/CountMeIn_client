@@ -22,14 +22,15 @@ import withStyles from "@material-ui/core/styles/withStyles";
 class BusinessList extends Component {
   constructor(props) {
     super(props);
+    // this.refresh = this.refresh.bind(this);
+
     this.state = {
       business: {
         _id: null,
         profile: {
           name: "loading"
         }
-      },
-      refresh: 0
+      }
     };
   }
 
@@ -52,7 +53,7 @@ class BusinessList extends Component {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        this.setState({ refresh: "1" });
+        // this.props.refresh();
       })
       .catch(err => {
         console.log(err);
@@ -85,7 +86,7 @@ class BusinessList extends Component {
               <Link to={`/business/new-appointment/${this.state.business._id}`}>
                 <Icon color="disabled">alarm_add</Icon>
               </Link>
-              <Link to={"/dashboard"}>
+              <Link to={"#"}>
                 <Icon
                   color="disabled"
                   onClick={() => this.unfollowBusiness(this.state.business._id)}

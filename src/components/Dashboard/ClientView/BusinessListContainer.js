@@ -9,7 +9,8 @@ export default class BusinessListContainer extends Component {
     super(props);
     this.state = {
       fallowedArr: [],
-      fallowedComponent: null
+      fallowedComponent: null,
+      refresh: false
     };
   }
 

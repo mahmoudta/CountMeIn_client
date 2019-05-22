@@ -235,7 +235,9 @@ class Upcomming extends React.Component {
             ...prevState.tableContent,
             [
               appointment[2],
-              <Link to={`/business/${appointment[0]}`}>{appointment[3]}</Link>,
+              <Link to={`/business/view/${appointment[0]}`}>
+                {appointment[3]}
+              </Link>,
               appointment[4],
               appointment[5],
               appointment[6],
