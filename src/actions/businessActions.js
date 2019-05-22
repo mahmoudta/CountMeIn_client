@@ -14,11 +14,11 @@ import {
 } from './types';
 
 export const createNewBusiness = (data) => (dispatch) => {
-	// dispatch(setCategoryLoading());
-	return axios
+	dispatch(setBusinessLoading());
+	axios
 		.post(`${API}/business/`, data)
 		.then((result) => {
-			return dispatch({
+			dispatch({
 				type: CREATE_BUSINESS,
 				payload: result.data.success
 			});
@@ -84,16 +84,16 @@ export const getBusinessServices = (id) => (dispatch) => {
 
 export const getBusinessById = (id) => (dispatch) => {
 	dispatch(setBusinessLoading());
-	axios
+	return axios
 		.get(`${API}/business/${id}`)
 		.then((result) => {
-			dispatch({
+			return dispatch({
 				type: GET_BUSINESS_BY_ID,
 				payload: result.data.business
 			});
 		})
 		.catch((err) => {
-			dispatch({
+			return dispatch({
 				type: GET_BUSINESS_BY_ID,
 				payload: {}
 			});

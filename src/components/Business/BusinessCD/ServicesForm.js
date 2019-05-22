@@ -9,20 +9,24 @@ export default class ServicesForm extends Component {
 	}
 	render() {
 		const { values } = this.props;
-		const options = values.mainCategories
-			.filter((category) => {
-				return category._id === '5ce16c30af34709bd25fb510';
-			})
+		const categoriesOptions = values.mainCategories
 			.map((category) => {
-				return category.services
-					.map((service) => {
-						return { value: service._id, label: service.title, time: service.time, cost: service.cost };
-					})
-					.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
-			}, []);
-		console.log(options);
+				return { label: category.name, value: category._id, services: category.services };
+			}, [])
+			.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
+
+		const servicesOptions = values.categories.map((category) => {
+			return category.services
+				.map((service) => {
+					return { value: service._id, label: service.title, time: service.time, cost: service.cost };
+				})
+				.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
+		});
+
+		console.log(servicesOptions);
+
 		// const options = [];
-		console.log(options);
+
 		return (
 			<form className="p-md-4">
 				<h4 className="text-center font-weight-regular" />
@@ -39,12 +43,12 @@ export default class ServicesForm extends Component {
 							<span className="form-required" />
 						</label>
 						<Select
-							options={values.mainCategories}
-							value={values.services}
+							options={categoriesOptions}
+							name="categories"
+							value={values.categories}
 							isMulti
 							components={makeAnimated()}
-							closeMenuOnSelect={false}
-							// onChange={this.props.handleServices}
+							onChange={this.props.handleServices}
 						/>
 					</div>
 					<div className="col-12 my-3">
@@ -53,12 +57,13 @@ export default class ServicesForm extends Component {
 							<span className="form-required" />
 						</label>
 						<Select
-							options={[]}
+							options={servicesOptions[0]}
 							value={values.services}
 							isMulti
+							name="services"
 							components={makeAnimated()}
 							closeMenuOnSelect={false}
-							// onChange={this.props.handleServices}
+							onChange={this.props.handleServices}
 						/>
 					</div>
 				</div>
@@ -70,7 +75,7 @@ export default class ServicesForm extends Component {
 							return (
 								<div className="col-3 py-2" key={service.value + i}>
 									<div className="col-12 border rounded py-2 bg-light">
-										<span className="mb-2 d-block w-100 text-center">{service.title}</span>
+										<span className="mb-2 d-block w-100 text-center">{service.label}</span>
 										<div className="input-group input-group-sm">
 											<div className="input-group-prepend">
 												<span className="input-group-text">
@@ -82,7 +87,7 @@ export default class ServicesForm extends Component {
 												className={`form-control ${values.step3Errors[i] ? 'is-invalid' : ''}`}
 												name="time"
 												value={service.time}
-												// onChange={(e) => this.props.handleTime(e, i)}
+												onChange={(e) => this.props.handleTime(e, i)}
 											/>
 											<div className="invalid-feedback">{values.step3Errors[i]}</div>
 										</div>

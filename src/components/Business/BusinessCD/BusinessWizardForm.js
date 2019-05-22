@@ -37,7 +37,7 @@ class BusinessWizardForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			step: 2,
+			step: 1,
 			mainCategories: [],
 			/* STEP 1 */
 			step1Errors: {
@@ -77,8 +77,52 @@ class BusinessWizardForm extends Component {
 		this.renderView = this.renderView.bind(this);
 		this.buildSchedule = this.buildSchedule.bind(this);
 		this.handleSchedule = this.handleSchedule.bind(this);
+		this.handleServices = this.handleServices.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
+	handleSubmit = async (e) => {
+		e.preventDefault();
 
+		const {
+			street,
+			city,
+			building,
+			postal_code,
+			breakTime,
+			categories,
+			description,
+			name,
+			img,
+			phone,
+			working,
+			services
+		} = this.state;
+		// const splitPurposes = async () => {
+		// 	var services = [];
+		// 	for (const element of purposes) {
+		// 		await services.push({
+		// 			purpose_id: element.value,
+		// 			time: element.time
+		// 		});
+		// 		return await services;
+		// 	}
+		// };
+		// const services = await splitPurposes();
+		this.props.createNewBusiness({
+			street,
+			city,
+			building,
+			postal_code,
+			breakTime,
+			categories,
+			description,
+			name,
+			img,
+			phone,
+			working,
+			services
+		});
+	};
 	static getDerivedStateFromProps(props, state) {
 		const { categories, myBusiness } = props;
 		if (!isEmpty(myBusiness._id)) {
@@ -94,8 +138,9 @@ class BusinessWizardForm extends Component {
 				services: myBusiness.profile.services
 			};
 		}
-
-		return null;
+		return {
+			mainCategories: categories
+		};
 	}
 
 	/*                "opened": true,
@@ -125,7 +170,11 @@ class BusinessWizardForm extends Component {
 		const working = await Schedule;
 		this.setState({ working });
 	}
-
+	handleServices = (value, action) => {
+		const name = action.name;
+		this.setState({ [name]: value });
+		// this.setState({ services }, () => console.log(this.state));
+	};
 	handleSchedule = (e, index) => {
 		const { name, value } = e.target;
 		let working = this.state.working;
@@ -221,7 +270,8 @@ class BusinessWizardForm extends Component {
 			default:
 				break;
 		}
-		if (validForm(obj)) this.setState({ step: step + 1 });
+		// if (validForm(obj))
+		this.setState({ step: step + 1 });
 	};
 	prevStep = () => {
 		const { step } = this.state;
@@ -249,7 +299,7 @@ class BusinessWizardForm extends Component {
 				return (
 					<ServicesForm
 						handleChange={this.handleChange}
-						categories={this.props.categories}
+						handleServices={this.handleServices}
 						values={this.state}
 					/>
 				);

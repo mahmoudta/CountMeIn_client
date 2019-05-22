@@ -18,8 +18,8 @@ class BusinessCD extends Component {
 
 	componentDidMount() {
 		let path = window.location.pathname.split('/');
+		this.props.getAllCategories();
 		if (path[2] == 'edit') {
-			this.props.getAllCategories();
 			this.props.getBusinessByOwner(this.props.user.sub);
 			this.setState({ isEdit: true });
 		}
