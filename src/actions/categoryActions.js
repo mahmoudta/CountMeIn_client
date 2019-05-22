@@ -30,16 +30,16 @@ export const createCategory = (name) => (dispatch) => {
 
 export const addService = (service) => (dispatch) => {
 	dispatch(setCategoryLoading());
-	return axios
+	axios
 		.post(`${API}/category/service`, service)
 		.then((result) => {
-			return dispatch({
+			dispatch({
 				type: CREATE_CATEGORY,
 				payload: result.data.success
 			});
 		})
 		.catch((err) => {
-			return dispatch({
+			dispatch({
 				type: CREATE_CATEGORY_ERROR,
 				payload: err.response.data.error
 			});

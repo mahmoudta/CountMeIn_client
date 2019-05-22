@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { getBusinessById, followBusiness, unFollowBusiness } from '../../actions/businessActions';
 import { setFlashMessage } from '../../actions/flashMessageActions';
-import axios from 'axios';
-import { API } from '../../consts';
+import { B_IMAGES } from '../../consts';
+// import axios from 'axios';
+// import { API } from '../../consts';
 import isEmpty from 'lodash.isempty';
 
 import './Business.css';
@@ -135,7 +136,7 @@ class ClientView extends Component {
 									<div className="col-2">
 										<img
 											className="img-fluid rounded-circle"
-											src="https://www.w3schools.com/w3images/avatar2.png"
+											src={B_IMAGES + '/' + business.profile.img}
 											alt=""
 										/>
 									</div>
@@ -171,12 +172,7 @@ class ClientView extends Component {
 												width="auto"
 											/>
 										</p>
-										<p>
-											Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio sunt veniam
-											libero ut iste? Inventore, aspernatur aut repellendus corporis voluptas
-											consequatur, dicta quibusdam nesciunt explicabo porro similique sunt
-											architecto reprehenderit.
-										</p>
+										<p>{business.profile.description}</p>
 										{!isOwner && (
 											<NavLink
 												to={'/business/new-appointment/' + this.props.business._id}

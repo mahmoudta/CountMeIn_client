@@ -11,6 +11,7 @@ import ServicesForm from './ServicesForm';
 /* UTILS */
 import { S3IMAGESCONFIG } from '../../../consts';
 import { isTimeBigger } from '../../../utils/date';
+import { createNewBusiness } from '../../../actions/businessActions';
 // import { getAllCategories } from '../../../actions/categoryActions';
 // import { getBusinessByOwner } from '../../../actions/businessActions';
 
@@ -270,8 +271,7 @@ class BusinessWizardForm extends Component {
 			default:
 				break;
 		}
-		// if (validForm(obj))
-		this.setState({ step: step + 1 });
+		if (validForm(obj)) this.setState({ step: step + 1 });
 	};
 	prevStep = () => {
 		const { step } = this.state;
@@ -331,7 +331,11 @@ class BusinessWizardForm extends Component {
 				<div className="wizard-body">{this.renderView()}</div>
 				<div className="wizard-footer clearfix">
 					<div className="float-left">
-						{step > 1 && <button className="btn btn-sm btn-secondary shadow to-uppercase">previous</button>}
+						{step > 1 && (
+							<button className="btn btn-sm btn-secondary shadow to-uppercase" onClick={this.prevStep}>
+								previous
+							</button>
+						)}
 					</div>
 					<div className="float-right">
 						{step != 3 ? (
@@ -339,7 +343,9 @@ class BusinessWizardForm extends Component {
 								next
 							</button>
 						) : (
-							<button className="btn btn-sm btn-primary shadow to-uppercase">finish</button>
+							<button className="btn btn-sm btn-primary shadow to-uppercase" onClick={this.handleSubmit}>
+								finish
+							</button>
 						)}
 					</div>
 				</div>
@@ -349,15 +355,15 @@ class BusinessWizardForm extends Component {
 }
 // export default BusinessWizardForm;
 BusinessWizardForm.propTypes = {
-	user: PropTypes.object.isRequired
+	user: PropTypes.object.isRequired,
 	// getAllCategories: PropTypes.func.isRequired,
 	// getBusinessByOwner: PropTypes.func.isRequired,
 	// myBusiness: PropTypes.object.isRequired
-	// 	// createNewBusiness: PropTypes.func.isRequired
+	createNewBusiness: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
 	// categories: state.category.categories,
 	// myBusiness: state.business.myBusiness,
 	user: state.auth.user
 });
-export default connect(mapStatetoProps, {})(BusinessWizardForm);
+export default connect(mapStatetoProps, { createNewBusiness })(BusinessWizardForm);

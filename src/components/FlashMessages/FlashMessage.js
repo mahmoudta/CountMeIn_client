@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import Swal from 'sweetalert2';
 import { deleteFlashMessage } from '../../actions/flashMessageActions';
 import { unFollowBusiness } from '../../actions/businessActions';
-
+import { Redirect } from 'react-router';
 class FlashMessage extends Component {
 	constructor(props) {
 		super(props);
@@ -21,6 +21,9 @@ class FlashMessage extends Component {
 				console.log('here');
 				console.log(action.business_id);
 				this.props.unFollowBusiness(action.business_id);
+				break;
+			case 'REDIRECT_TO_PAGE':
+				this.context.router.history.push(action.path);
 				break;
 			case 'REDIRECT_TO_DASHBAORD':
 				break;
@@ -71,7 +74,7 @@ FlashMessage.propTypes = {
 	unFollowBusiness: PropTypes.func.isRequired
 };
 FlashMessage.contextTypes = {
-	router: PropTypes.object.isRequired
+	router: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
 	flashMessage: state.flashMessage

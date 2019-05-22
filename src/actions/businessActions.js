@@ -10,7 +10,8 @@ import {
 	BUSNIESS_LOADING,
 	FOLLOW_BUSINESS,
 	UNFOLLOW_BUSINESS,
-	SET_FLASH_MESSAGE
+	SET_FLASH_MESSAGE,
+	SET_AS_BUSINESS_OWNER
 } from './types';
 
 export const createNewBusiness = (data) => (dispatch) => {
@@ -20,7 +21,21 @@ export const createNewBusiness = (data) => (dispatch) => {
 		.then((result) => {
 			dispatch({
 				type: CREATE_BUSINESS,
-				payload: result.data.success
+				payload: result.data.business
+			});
+			dispatch({
+				type: SET_FLASH_MESSAGE,
+				message: {
+					type: 'success',
+					text: 'Your Business is waiting for You',
+					action: {
+						next: 'REDIRECT_TO_PAGE',
+						path: `/business/view/${result.data.business._id}`
+					}
+				}
+			});
+			dispatch({
+				type: SET_AS_BUSINESS_OWNER
 			});
 		})
 		.catch((err) => {

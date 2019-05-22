@@ -3,6 +3,7 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SET_USER_ERROR = 'SET_USER_ERROR';
 export const LOCAL_SIGN_IN = 'LOCAL_SIGN_IN';
 export const USER_LOADING = 'USER_LOADING';
+export const SET_AS_BUSINESS_OWNER = 'SET_AS_BUSINESS_OWNER';
 
 /*Category types */
 export const CREATE_CATEGORY = 'CREATE_CATEGORY';

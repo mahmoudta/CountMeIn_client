@@ -4,7 +4,7 @@ import jwtDecode from 'jwt-decode';
 
 import { setAuthorizationToken } from '../utils/setAuthorizationToken';
 
-import { SET_CURRENT_USER, SET_USER_ERROR } from './types';
+import { SET_CURRENT_USER, SET_USER_ERROR, SET_AS_BUSINESS_OWNER } from './types';
 
 export function setCurrentUser(user) {
 	return {
@@ -27,6 +27,12 @@ export const localSignIn = (user) => (dispatch) => {
 				payload: 'UnAuthirized'
 			});
 		});
+};
+
+export const SetUserAsBusinessOwner = () => (dispatch) => {
+	return {
+		type: SET_AS_BUSINESS_OWNER
+	};
 };
 
 export const logout = () => {
