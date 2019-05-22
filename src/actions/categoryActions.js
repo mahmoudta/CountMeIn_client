@@ -30,16 +30,16 @@ export const createCategory = (name) => (dispatch) => {
 
 export const addService = (service) => (dispatch) => {
 	dispatch(setCategoryLoading());
-	axios
+	return axios
 		.post(`${API}/category/service`, service)
 		.then((result) => {
-			dispatch({
+			return dispatch({
 				type: CREATE_CATEGORY,
 				payload: result.data.success
 			});
 		})
 		.catch((err) => {
-			dispatch({
+			return dispatch({
 				type: CREATE_CATEGORY_ERROR,
 				payload: err.response.data.error
 			});
@@ -48,16 +48,16 @@ export const addService = (service) => (dispatch) => {
 
 export const getAllCategories = () => (dispatch) => {
 	dispatch(setCategoryLoading());
-	axios
+	return axios
 		.get(`${API}/category/`)
 		.then((result) => {
-			dispatch({
+			return dispatch({
 				type: GET_ALL_CATEGORIES,
 				payload: result.data.categories
 			});
 		})
 		.catch((err) => {
-			dispatch({
+			return dispatch({
 				type: GET_ALL_CATEGORIES,
 				payload: { message: 'caant get the categories' }
 			});
@@ -69,11 +69,11 @@ export const deleteCategory = (id) => (dispatch) => {
 	return axios
 		.delete(`${API}/category/${id}`)
 		.then((result) => {
-			dispatch({
+			return dispatch({
 				type: SET_FLASH_MESSAGE,
 				message: { type: 'success', text: 'Successfully deleted' }
 			});
-			dispatch({
+			return dispatch({
 				type: DELETE_CATEGORY,
 				payload: result.data.category
 			});

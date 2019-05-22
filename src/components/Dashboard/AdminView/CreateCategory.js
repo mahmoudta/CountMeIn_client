@@ -38,6 +38,7 @@ class CreateCategory extends Component {
 		var { isService } = this.state;
 		if (target.name === 'parent_category') {
 			if (!isEmpty(target.value)) {
+				console.log('here');
 				isService = true;
 			} else {
 				isService = false;
@@ -72,6 +73,7 @@ class CreateCategory extends Component {
 			});
 		} else {
 			this.props.addService({ parent_category, name, time, cost }).then((res) => {
+				console.log('service');
 				const redirect = res.type === 'CREATE_CATEGORY' ? true : false;
 				this.setState({ loading: false });
 				this.Alert(redirect, res.payload);
