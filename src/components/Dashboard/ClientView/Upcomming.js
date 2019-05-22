@@ -4,6 +4,8 @@ import axios from "axios";
 import { API } from "../../../consts";
 import SweetAlert from "react-bootstrap-sweetalert";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
 
 // core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -22,12 +24,14 @@ import sweetAlertStyle from "../../Interface/Assets/sweetAlertStyle.jsx";
 import userProfileStyles from "../../Interface/Assets/userProfileStyles";
 import CardAvatar from "../../Interface/Card/CardAvatar.jsx";
 import avatar from "../../Interface/marc.jpg";
+import dashboardStyle from "../../Interface/Assets/dashboardStyle";
 
 // icons
 import Assignment from "@material-ui/icons/Assignment";
 import Person from "@material-ui/icons/Person";
 import Edit from "@material-ui/icons/Edit";
 import Close from "@material-ui/icons/Close";
+//import { addListener } from "cluster";
 //import Axios from 'axios';
 // import Check from '@material-ui/icons/Check';
 // import Remove from '@material-ui/icons/Remove';
@@ -231,7 +235,9 @@ class Upcomming extends React.Component {
             ...prevState.tableContent,
             [
               appointment[2],
-              appointment[3],
+              <Link to={`/business/view/${appointment[0]}`}>
+                {appointment[3]}
+              </Link>,
               appointment[4],
               appointment[5],
               appointment[6],
@@ -320,5 +326,10 @@ Upcomming.propTypes = {
 };
 
 export default connect(mapStateToProps)(
-  withStyles(extendedTablesStyle, sweetAlertStyle, userProfileStyles)(Upcomming)
+  withStyles(
+    extendedTablesStyle,
+    sweetAlertStyle,
+    userProfileStyles,
+    dashboardStyle
+  )(Upcomming)
 );

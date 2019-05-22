@@ -13,24 +13,24 @@ import { Link } from "react-router-dom";
 
 import DateRange from "@material-ui/icons/DateRange";
 import Store from "@material-ui/icons/Store";
-import AddIcon from "@material-ui/icons/AlarmAdd";
 import Icon from "@material-ui/core/Icon";
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 //import { addListener } from "cluster";
-
+//testestestest
 class BusinessList extends Component {
   constructor(props) {
     super(props);
+    // this.refresh = this.refresh.bind(this);
+
     this.state = {
       business: {
         _id: null,
         profile: {
           name: "loading"
         }
-      },
-      refresh: 0
+      }
     };
   }
 
@@ -53,7 +53,7 @@ class BusinessList extends Component {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        this.setState({ refresh: 1 });
+        // this.props.refresh();
       })
       .catch(err => {
         console.log(err);
@@ -67,15 +67,15 @@ class BusinessList extends Component {
       <GridItem xs={12} sm={6} md={6} lg={3}>
         <Card>
           <CardHeader color="success" stats icon>
-            <CardIcon color="success">
+            <CardIcon color="info">
               <Store />
             </CardIcon>
-            <Link to={`/business/${this.state.business._id}`}>
+            <Link to={`/business/view/${this.state.business._id}`}>
               <p className={classes.cardCategory}>Visit Business</p>
             </Link>
-            <h3 className={classes.cardTitle}>
+            <h5 className={classes.cardTitle}>
               {this.state.business.profile.name}
-            </h3>
+            </h5>
           </CardHeader>
           <CardFooter stats>
             <div className={classes.stats}>
@@ -86,7 +86,7 @@ class BusinessList extends Component {
               <Link to={`/business/new-appointment/${this.state.business._id}`}>
                 <Icon color="disabled">alarm_add</Icon>
               </Link>
-              <Link to={"/dashboard"}>
+              <Link to={"#"}>
                 <Icon
                   color="disabled"
                   onClick={() => this.unfollowBusiness(this.state.business._id)}
