@@ -12,6 +12,7 @@ import ServicesForm from './ServicesForm';
 import { S3IMAGESCONFIG } from '../../../consts';
 import { isTimeBigger } from '../../../utils/date';
 import { createNewBusiness } from '../../../actions/businessActions';
+import { getTime } from '../../../utils/date';
 // import { getAllCategories } from '../../../actions/categoryActions';
 // import { getBusinessByOwner } from '../../../actions/businessActions';
 
@@ -136,7 +137,11 @@ class BusinessWizardForm extends Component {
 				working: myBusiness.profile.working_hours,
 				img: myBusiness.profile.img,
 				breakTime: myBusiness.profile.break_time,
-				services: myBusiness.profile.services
+				services: myBusiness.profile.services,
+				street: myBusiness.profile.location.street,
+				city: myBusiness.profile.location.city,
+				building: myBusiness.profile.location.building,
+				postal_code: myBusiness.profile.location.postal_code
 			};
 		}
 		return {
@@ -171,6 +176,7 @@ class BusinessWizardForm extends Component {
 		const working = await Schedule;
 		this.setState({ working });
 	}
+
 	handleServices = (value, action) => {
 		const name = action.name;
 		this.setState({ [name]: value });
@@ -212,10 +218,22 @@ class BusinessWizardForm extends Component {
 
 		this.setState({ step2Errors, working });
 	};
-	componentDidMount() {
-		const { working } = this.state;
+	async componentDidMount() {
+		let { working } = this.state;
 		if (working.length === 0) {
+			console.log('if');
 			this.buildSchedule();
+		} else {
+			console.log('else');
+			const newWorking = working.map((day) => {
+				return {
+					day: day.day,
+					from: getTime(day.from),
+					until: getTime(day.until),
+					breakTime: day.break_time
+				};
+			});
+			this.setState({ working: newWorking });
 		}
 	}
 

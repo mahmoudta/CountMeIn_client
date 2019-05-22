@@ -35,35 +35,41 @@ class LoginForm extends Component {
 		});
 	};
 	render() {
-		return (
-			<form className="border-right p-lg-2" onSubmit={(e) => this.handleSubmit(e)}>
-				<div className="alert alert-danger">{this.props.error}</div>
-				<div className="form-group">
-					<label htmlFor="email">Email address</label>
-					<input
-						type="email"
-						className="form-control"
-						name="email"
-						placeholder="name@example.com"
-						value={this.state.email}
-						onChange={(e) => this.handleChange(e)}
-					/>
-				</div>
-				<div className="form-group">
-					<label htmlFor="password">Password</label>
-					<input
-						type="password"
-						className="form-control"
-						name="password"
-						value={this.state.password}
-						onChange={this.handleChange}
-					/>
-				</div>
-				<button type="submit" className="btn btn-primary my-2">
-					Sign in
-				</button>
-			</form>
-		);
+		const { isAuthenticated } = this.props;
+		if (!isAuthenticated) {
+			return (
+				<form className="border-right p-lg-2" onSubmit={(e) => this.handleSubmit(e)}>
+					<div className="alert alert-danger">{this.props.error}</div>
+					<div className="form-group">
+						<label htmlFor="email">Email address</label>
+						<input
+							type="email"
+							className="form-control"
+							name="email"
+							placeholder="name@example.com"
+							value={this.state.email}
+							onChange={(e) => this.handleChange(e)}
+						/>
+					</div>
+					<div className="form-group">
+						<label htmlFor="password">Password</label>
+						<input
+							type="password"
+							className="form-control"
+							name="password"
+							value={this.state.password}
+							onChange={this.handleChange}
+						/>
+					</div>
+					<button type="submit" className="btn btn-primary my-2">
+						Sign in
+					</button>
+				</form>
+			);
+		} else {
+			this.context.router.history.push('/dashboard');
+			return null;
+		}
 	}
 }
 LoginForm.propTypes = {
@@ -73,7 +79,8 @@ LoginForm.contextTypes = {
 	router: PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	error: state.auth.error
+	error: state.auth.error,
+	isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStatetoProps, { localSignIn })(LoginForm);

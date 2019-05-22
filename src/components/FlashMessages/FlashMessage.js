@@ -74,7 +74,7 @@ FlashMessage.propTypes = {
 	unFollowBusiness: PropTypes.func.isRequired
 };
 FlashMessage.contextTypes = {
-	router: PropTypes.func.isRequired
+	router: PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
 	flashMessage: state.flashMessage

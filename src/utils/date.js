@@ -27,9 +27,10 @@ export function convertToUtcTime(date) {
 export function getTime(date) {
 	if (date) {
 		const Ndate = new Date(date);
+		let hour = Number(Ndate.getUTCHours()) + 3;
 		return {
-			hour: Number(Ndate.getUTCHours()) + 3,
-			minute: Number(Ndate.getUTCMinutes()) < 10 ? `0${Ndate.getUTCMinutes()}` : Ndate.getUTCMinutes()
+			hour: hour < 10 ? `0${hour}` : hour,
+			minute: Number(Ndate.getUTCMinutes()) < 10 ? `0${Ndate.getUTCMinutes()}:` : Ndate.getUTCMinutes()
 		};
 	}
 }

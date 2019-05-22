@@ -1,5 +1,9 @@
 import axios from 'axios';
 import { API } from '../consts';
+import { setCurrentUser } from './authActions';
+import jwtDecode from 'jwt-decode';
+
+import { setAuthorizationToken } from '../utils/setAuthorizationToken';
 
 import {
 	CREATE_BUSINESS,
@@ -19,6 +23,11 @@ export const createNewBusiness = (data) => (dispatch) => {
 	axios
 		.post(`${API}/business/`, data)
 		.then((result) => {
+			const token = result.data.token;
+			localStorage.setItem('jwtToken', token);
+			setAuthorizationToken(token);
+			dispatch(setCurrentUser(jwtDecode(token)));
+
 			dispatch({
 				type: CREATE_BUSINESS,
 				payload: result.data.business
@@ -34,14 +43,15 @@ export const createNewBusiness = (data) => (dispatch) => {
 					}
 				}
 			});
-			dispatch({
-				type: SET_AS_BUSINESS_OWNER
-			});
 		})
 		.catch((err) => {
-			return dispatch({
+			dispatch({
 				type: CREATE_BUSINESS,
-				payload: err.response.data.error
+				payload: {}
+			});
+			return dispatch({
+				type: SET_FLASH_MESSAGE,
+				message: { type: 'error', text: err.response.data.error }
 			});
 		});
 };
@@ -119,7 +129,7 @@ export const followBusiness = (business_id) => (dispatch) => {
 	axios
 		.put(`${API}/business/follow`, { business_id })
 		.then((result) => {
-			dispatch({
+			return dispatch({
 				type: FOLLOW_BUSINESS,
 				payload: result.data.isFollower
 			});
@@ -129,7 +139,7 @@ export const followBusiness = (business_id) => (dispatch) => {
 				type: SET_FLASH_MESSAGE,
 				message: { type: 'error', text: err.response.data.error }
 			});
-			dispatch(setBusinessLoading());
+			return dispatch(setBusinessLoading(false));
 		});
 };
 

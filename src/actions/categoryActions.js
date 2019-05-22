@@ -69,10 +69,11 @@ export const deleteCategory = (id) => (dispatch) => {
 	return axios
 		.delete(`${API}/category/${id}`)
 		.then((result) => {
-			return dispatch({
+			dispatch({
 				type: SET_FLASH_MESSAGE,
 				message: { type: 'success', text: 'Successfully deleted' }
 			});
+
 			return dispatch({
 				type: DELETE_CATEGORY,
 				payload: result.data.category

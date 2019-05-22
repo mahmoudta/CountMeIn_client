@@ -29,7 +29,7 @@ export const localSignIn = (user) => (dispatch) => {
 		});
 };
 
-export const SetUserAsBusinessOwner = () => (dispatch) => {
+export const SetUserAsBusinessOwner = (token) => (dispatch) => {
 	return {
 		type: SET_AS_BUSINESS_OWNER
 	};

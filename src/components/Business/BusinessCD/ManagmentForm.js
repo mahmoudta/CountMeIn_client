@@ -5,7 +5,9 @@ export default class CreateSecStep extends Component {
 	constructor(props) {
 		super(props);
 	}
-
+	// componentDidMount(){
+	// 	let
+	// }
 	render() {
 		const { values } = this.props;
 		return (
@@ -134,7 +136,7 @@ export default class CreateSecStep extends Component {
 						className="form-control"
 						name="break"
 						placeholder="break time- ex:20"
-						value={values.break}
+						value={values.breakTime}
 						onChange={this.props.handleChange}
 					/>
 					<small className="form-text text-muted">optional: default break time 10 minutes</small>
