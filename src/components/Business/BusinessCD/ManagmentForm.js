@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
 
-export default class CreateSecStep extends Component {
-	constructor(props) {
-		super(props);
+export default class ManagmnetForm extends Component {
+	async componentDidMount() {
+		await this.props.scheduleBuilder();
 	}
-	// componentDidMount(){
-	// 	let
-	// }
 	render() {
 		const { values } = this.props;
 		return (
@@ -134,7 +130,7 @@ export default class CreateSecStep extends Component {
 						min="10"
 						max="120"
 						className="form-control"
-						name="break"
+						name="breakTime"
 						placeholder="break time- ex:20"
 						value={values.breakTime}
 						onChange={this.props.handleChange}

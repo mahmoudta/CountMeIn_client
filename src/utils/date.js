@@ -1,4 +1,5 @@
-const days = [ 'sunday', 'monday', 'tuesday', 'wedensday', 'thursday', 'friday', 'satarday' ];
+import isEmpty from 'lodash/isEmpty';
+const days = [ 'sunday', 'monday', 'tuesday', 'wedensday', 'thursday', 'friday', 'saturday' ];
 
 export function getCurrentDate(separator = '-') {
 	let newDate = new Date();
@@ -13,8 +14,9 @@ export function getDay(date) {
 	if (date) {
 		const Ndate = new Date(date);
 		const day = Number(Ndate.getDay());
-		if (day > -1 && day < 7) return days[day];
-		return '';
+		return day;
+		// if (day > -1 && day < 7) return days[day];
+		// return '';
 	}
 }
 
@@ -22,6 +24,16 @@ export function convertToUtcTime(date) {
 	console.log(date);
 	let splitter = date.split('-');
 	return new Date(Date.UTC(splitter[2], splitter[1], splitter[0], 0, 0, 0));
+}
+
+export function dateToStringTime(date) {
+	const Ndate = new Date(date);
+	var hours = Ndate.getHours();
+	var minutes = Ndate.getMinutes();
+	hours = hours > 9 ? hours : `0${hours}`;
+	minutes = minutes > 9 ? minutes : `0${minutes}`;
+
+	return `${hours}:${minutes}`;
 }
 
 export function getTime(date) {
@@ -33,6 +45,29 @@ export function getTime(date) {
 			minute: Number(Ndate.getUTCMinutes()) < 10 ? `0${Ndate.getUTCMinutes()}:` : Ndate.getUTCMinutes()
 		};
 	}
+}
+
+export function getBusinessTime(working, date) {
+	/* 
+* this function is taking Business schedule array , selected date(year-month-day) as args
+* and return array of String time => "10:00","11:00"....
+*/
+	let day = getDay(date);
+	if (!isEmpty(working) && day > -1) {
+		if (working[day].opened) {
+			let from = new Date(working[day].from);
+			let start = from.getHours();
+			let diff = Math.ceil(Number(getTimeDifference(working[day].from, working[day].until)));
+			var times = [];
+			for (let i = 0; i <= diff; i++) {
+				let time = Number(start) + i;
+				// time = time < 10 ? '0' + time : time;
+				times.push(time < 10 ? `0${time}:00` : `${time}:00`);
+			}
+			return times;
+		}
+	}
+	return [];
 }
 
 export function getAppointmentTime(start, end) {
@@ -53,17 +88,19 @@ export function isTimeBigger(s_from, s_until) {
 
 	if (Number(until[0]) < Number(from[0])) return false;
 
-	return Number(until[1]) > Number(until[0]);
+	return Number(until[1]) > Number(from[1]);
 }
 export function getTimeDifference(from, until) {
 	var diff = new Date(new Date(until) - new Date(from));
+
 	return Number(diff.getUTCHours() + '.' + diff.getUTCMinutes());
 }
 
 export function appointmentTimeDiffrence(from, until) {
 	/* from and until are objects from appointment*/
 	const hours = Number(until._hour) - Number(from._hour);
-	const minutes = Number(until._minute) - Number(from._minute);
+	const minutes = (Number(until._minute) - Number(from._minute)) / 60;
+	console.log(minutes);
 	return Number(hours + '.' + minutes);
 }
 

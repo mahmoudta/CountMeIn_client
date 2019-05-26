@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import S3 from 'aws-s3';
@@ -11,8 +10,11 @@ import ServicesForm from './ServicesForm';
 /* UTILS */
 import { S3IMAGESCONFIG } from '../../../consts';
 import { isTimeBigger } from '../../../utils/date';
-import { createNewBusiness } from '../../../actions/businessActions';
-import { getTime } from '../../../utils/date';
+import { createNewBusiness, getBusinessByOwner, updateBusiness } from '../../../actions/businessActions';
+import { getAllCategories } from '../../../actions/categoryActions';
+
+import { dateToStringTime } from '../../../utils/date';
+
 // import { getAllCategories } from '../../../actions/categoryActions';
 // import { getBusinessByOwner } from '../../../actions/businessActions';
 
@@ -48,6 +50,7 @@ class BusinessWizardForm extends Component {
 				phone: ''
 				// postal_code: ''
 			},
+
 			/* Location */
 			street: '',
 			city: '',
@@ -77,86 +80,48 @@ class BusinessWizardForm extends Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.uploadFile = this.uploadFile.bind(this);
 		this.renderView = this.renderView.bind(this);
-		this.buildSchedule = this.buildSchedule.bind(this);
+		this.scheduleBuilder = this.scheduleBuilder.bind(this);
 		this.handleSchedule = this.handleSchedule.bind(this);
 		this.handleServices = this.handleServices.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		// this.selectedItems = this.selectedItems.bind(this);
 	}
-	handleSubmit = async (e) => {
-		e.preventDefault();
+	selectedItems(myBusiness, categories) {
+		if (!isEmpty(myBusiness) && !isEmpty(categories)) {
+			const selectedCategories = categories
+				.filter(function(elem) {
+					return this.indexOf(elem._id.toString()) > -1;
+				}, myBusiness.profile.category_id)
+				.map((category) => {
+					return { value: category._id, label: category.name, services: category.services };
+				});
+			const services = myBusiness.profile.services.map((service) => {
+				return { label: service.title, value: service._id, cost: service.cost, time: service.time };
+			});
 
-		const {
-			street,
-			city,
-			building,
-			postal_code,
-			breakTime,
-			categories,
-			description,
-			name,
-			img,
-			phone,
-			working,
-			services
-		} = this.state;
-		// const splitPurposes = async () => {
-		// 	var services = [];
-		// 	for (const element of purposes) {
-		// 		await services.push({
-		// 			purpose_id: element.value,
-		// 			time: element.time
-		// 		});
-		// 		return await services;
-		// 	}
-		// };
-		// const services = await splitPurposes();
-		this.props.createNewBusiness({
-			street,
-			city,
-			building,
-			postal_code,
-			breakTime,
-			categories,
-			description,
-			name,
-			img,
-			phone,
-			working,
-			services
-		});
-	};
-	static getDerivedStateFromProps(props, state) {
-		const { categories, myBusiness } = props;
-		if (!isEmpty(myBusiness._id)) {
-			return {
-				mainCategories: props.categories,
-				categories: myBusiness.profile.category_id,
-				description: myBusiness.profile.description,
-				phone: myBusiness.profile.phone,
-				name: myBusiness.profile.name,
-				working: myBusiness.profile.working_hours,
-				img: myBusiness.profile.img,
-				breakTime: myBusiness.profile.break_time,
-				services: myBusiness.profile.services,
-				street: myBusiness.profile.location.street,
-				city: myBusiness.profile.location.city,
-				building: myBusiness.profile.location.building,
-				postal_code: myBusiness.profile.location.postal_code
-			};
+			return { categories: selectedCategories, services };
 		}
-		return {
-			mainCategories: categories
-		};
 	}
 
-	/*                "opened": true,
-                "from": {
-                    "$date": "2019-04-04T06:10:35.448Z"
-                },
-                "until": {
-                    "$date": "2019-04-04T15:00:35.449Z"
-                } */
-	async buildSchedule() {
+	async scheduleBuilder() {
+		const { myBusiness } = this.props;
+		if (!isEmpty(myBusiness)) {
+			const schedule = await myBusiness.profile.working_hours.map((day) => {
+				return {
+					day: day.day,
+					opened: day.opened,
+					from: dateToStringTime(day.from),
+					until: dateToStringTime(day.until),
+					break: {
+						isBreak: day.isBreak,
+						from: dateToStringTime(day.break.from),
+						until: dateToStringTime(day.break.until)
+					}
+				};
+			});
+			this.setState({ working: schedule });
+			return;
+		}
 		const days = [ 'sunday', 'monday', 'tuesday', 'wedensday', 'thursday', 'friday', 'saturday' ];
 		let Schedule = [];
 		for (let i in days) {
@@ -177,10 +142,102 @@ class BusinessWizardForm extends Component {
 		this.setState({ working });
 	}
 
+	componentDidMount() {
+		this.props.getAllCategories();
+		this.props.getBusinessByOwner(this.props.user.sub).then(async (result) => {
+			if (!result.payload.error) {
+				const categories = await this.props.categories;
+				const business = result.payload;
+				const selectedItems = this.selectedItems(business, categories);
+				// const working = this.
+				this.setState({
+					mainCategories: categories,
+					categories: selectedItems.categories,
+					description: business.profile.description,
+					phone: business.profile.phone,
+					name: business.profile.name,
+					// working: working,
+					img: business.profile.img,
+					breakTime: business.profile.break_time,
+					services: selectedItems.services,
+					street: business.profile.location.street,
+					city: business.profile.location.city,
+					building: business.profile.location.building,
+					postal_code: business.profile.location.postal_code
+				});
+			}
+		});
+	}
+	handleSubmit = async (e) => {
+		e.preventDefault();
+		const { myBusiness } = this.props;
+
+		const {
+			street,
+			city,
+			building,
+			postal_code,
+			breakTime,
+			categories,
+			description,
+			name,
+			img,
+			phone,
+			working,
+			services
+		} = this.state;
+		if (isEmpty(myBusiness)) {
+			this.props.createNewBusiness({
+				street,
+				city,
+				building,
+				postal_code,
+				breakTime,
+				categories,
+				description,
+				name,
+				img,
+				phone,
+				working,
+				services
+			});
+			return;
+		}
+
+		this.props.updateBusiness({
+			business_id: myBusiness._id,
+			street,
+			city,
+			building,
+			postal_code,
+			breakTime,
+			categories,
+			description,
+			name,
+			img,
+			phone,
+			working,
+			services
+		});
+	};
+
+	// async buildSchedule() {}
+
 	handleServices = (value, action) => {
-		const name = action.name;
-		this.setState({ [name]: value });
-		// this.setState({ services }, () => console.log(this.state));
+		/* Select Box returns object of value and action which contains type and name of the input */
+		if (action && typeof action === 'object') {
+			const name = action.name;
+			this.setState({ [name]: value });
+			return;
+		}
+
+		/* 
+			* Switching the first step tp handle also the time and the cost of the service  
+			* whic the first arg = event the second one is the index of target in the services array
+		*/
+		let services = this.state.services;
+		services[action][value.target.name] = value.target.value;
+		this.setState({ services });
 	};
 	handleSchedule = (e, index) => {
 		const { name, value } = e.target;
@@ -218,24 +275,6 @@ class BusinessWizardForm extends Component {
 
 		this.setState({ step2Errors, working });
 	};
-	async componentDidMount() {
-		let { working } = this.state;
-		if (working.length === 0) {
-			console.log('if');
-			this.buildSchedule();
-		} else {
-			console.log('else');
-			const newWorking = working.map((day) => {
-				return {
-					day: day.day,
-					from: getTime(day.from),
-					until: getTime(day.until),
-					breakTime: day.break_time
-				};
-			});
-			this.setState({ working: newWorking });
-		}
-	}
 
 	handleChange = (e) => {
 		const { name, value } = e.target;
@@ -251,6 +290,8 @@ class BusinessWizardForm extends Component {
 				break;
 			case 'phone':
 				step1Errors.phone = phoneRegex.test(value) ? '' : 'it must contain 10 digits';
+				break;
+			default:
 				break;
 		}
 
@@ -286,6 +327,7 @@ class BusinessWizardForm extends Component {
 					stepErros: step2Errors,
 					working: state.working
 				};
+				break;
 			default:
 				break;
 		}
@@ -300,6 +342,7 @@ class BusinessWizardForm extends Component {
 
 	renderView = () => {
 		const { step } = this.state;
+
 		switch (step) {
 			case 1:
 				return (
@@ -310,9 +353,11 @@ class BusinessWizardForm extends Component {
 					<ManagmentForm
 						handleChange={this.handleChange}
 						handleSchedule={this.handleSchedule}
+						scheduleBuilder={this.scheduleBuilder}
 						values={this.state}
 					/>
 				);
+
 			case 3:
 				return (
 					<ServicesForm
@@ -321,10 +366,13 @@ class BusinessWizardForm extends Component {
 						values={this.state}
 					/>
 				);
+			default:
+				break;
 		}
 	};
 
 	render() {
+		// const { myBusiness } = this.props;
 		const { step } = this.state;
 		// const ShowForm = this.renderView();
 		return (
@@ -356,7 +404,7 @@ class BusinessWizardForm extends Component {
 						)}
 					</div>
 					<div className="float-right">
-						{step != 3 ? (
+						{step !== 3 ? (
 							<button className="btn btn-sm btn-primary shadow to-uppercase" onClick={this.nextStep}>
 								next
 							</button>
@@ -374,14 +422,18 @@ class BusinessWizardForm extends Component {
 // export default BusinessWizardForm;
 BusinessWizardForm.propTypes = {
 	user: PropTypes.object.isRequired,
-	// getAllCategories: PropTypes.func.isRequired,
-	// getBusinessByOwner: PropTypes.func.isRequired,
-	// myBusiness: PropTypes.object.isRequired
+	getAllCategories: PropTypes.func.isRequired,
+	getBusinessByOwner: PropTypes.func.isRequired,
+	updateBusiness: PropTypes.func.isRequired,
+	myBusiness: PropTypes.object.isRequired,
+	categories: PropTypes.array.isRequired,
 	createNewBusiness: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	// categories: state.category.categories,
-	// myBusiness: state.business.myBusiness,
+	categories: state.category.categories,
+	myBusiness: state.business.myBusiness,
 	user: state.auth.user
 });
-export default connect(mapStatetoProps, { createNewBusiness })(BusinessWizardForm);
+export default connect(mapStatetoProps, { getAllCategories, getBusinessByOwner, createNewBusiness, updateBusiness })(
+	BusinessWizardForm
+);

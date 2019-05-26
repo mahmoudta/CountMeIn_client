@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+// import PropTypes from 'prop-types';
+// import { connect } from 'react-redux';
 /* Component */
 import BusinessWizardForm from './BusinessWizardForm';
 
 /* FUNCTIONS */
-import { getAllCategories } from '../../../actions/categoryActions';
-import { getBusinessByOwner } from '../../../actions/businessActions';
+
+/* UTILS */
 
 class BusinessCD extends Component {
 	constructor(props) {
@@ -18,25 +18,18 @@ class BusinessCD extends Component {
 
 	componentDidMount() {
 		let path = window.location.pathname.split('/');
-		this.props.getAllCategories();
-		if (path[2] == 'edit') {
-			this.props.getBusinessByOwner(this.props.user.sub);
+		if (path[2] === 'edit') {
 			this.setState({ isEdit: true });
 		}
 	}
 	render() {
-		const { categories, myBusiness } = this.props;
 		return (
 			<section className="my-5">
 				<div className="container">
 					{this.state.isEdit ? (
-						<BusinessWizardForm
-							title={'Edit Your Business'}
-							categories={categories}
-							myBusiness={myBusiness}
-						/>
+						<BusinessWizardForm title={'Edit Your Business'} />
 					) : (
-						<BusinessWizardForm title={'Create a Business'} categories={categories} myBusiness={{}} />
+						<BusinessWizardForm title={'Create a Business'} />
 					)}
 				</div>
 			</section>
@@ -44,15 +37,15 @@ class BusinessCD extends Component {
 	}
 }
 
-BusinessCD.propTypes = {
-	categories: PropTypes.array.isRequired,
-	getAllCategories: PropTypes.func.isRequired,
-	getBusinessByOwner: PropTypes.func.isRequired,
-	myBusiness: PropTypes.object.isRequired
-};
-const mapStatetoProps = (state) => ({
-	categories: state.category.categories,
-	myBusiness: state.business.myBusiness,
-	user: state.auth.user
-});
-export default connect(mapStatetoProps, { getAllCategories, getBusinessByOwner })(BusinessCD);
+// BusinessCD.propTypes = {
+// 	categories: PropTypes.array.isRequired,
+// 	getAllCategories: PropTypes.func.isRequired,
+// 	// getBusinessByOwner: PropTypes.func.isRequired,
+// 	myBusiness: PropTypes.object.isRequired
+// };
+// const mapStatetoProps = (state) => ({
+// 	categories: state.category.categories,
+// 	myBusiness: state.business.myBusiness,
+// 	user: state.auth.user
+// });
+export default BusinessCD;

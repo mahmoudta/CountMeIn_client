@@ -3,15 +3,17 @@ import { API } from '../consts';
 import jwtDecode from 'jwt-decode';
 
 import { setAuthorizationToken } from '../utils/setAuthorizationToken';
+import { getTodaysReadyAppointments } from '../actions/appointmentsAction';
 
 import { SET_CURRENT_USER, SET_USER_ERROR, SET_AS_BUSINESS_OWNER } from './types';
 
-export function setCurrentUser(user) {
-	return {
+export const setCurrentUser = (user) => (dispatch) => {
+	dispatch({
 		type: SET_CURRENT_USER,
 		payload: user
-	};
-}
+	});
+	if (user.isBusinessOwner) dispatch(getTodaysReadyAppointments(user.business_id));
+};
 export const localSignIn = (user) => (dispatch) => {
 	return axios
 		.post(`${API}/users/signin`, user)
@@ -19,7 +21,8 @@ export const localSignIn = (user) => (dispatch) => {
 			const token = result.data.token;
 			localStorage.setItem('jwtToken', token);
 			setAuthorizationToken(token);
-			dispatch(setCurrentUser(jwtDecode(token)));
+			const user = jwtDecode(token);
+			dispatch(setCurrentUser(user));
 		})
 		.catch((err) => {
 			dispatch({

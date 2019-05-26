@@ -24,30 +24,7 @@ class Basicinfo extends Component {
 						/>
 						<div className="invalid-feedback">{values.step1Errors.name}</div>
 					</div>
-					{/* <div className=" col-12 col-md-6 form-group">
-						<label className="text-uppercase" htmlFor="category">
-							category
-							<span className="form-required" />
-						</label>
 
-						<select
-							className={`form-control ${!isEmpty(values.step1Errors.category) ? 'is-invalid' : ''}`}
-							name="categories"
-							multiple
-							onChange={this.props.handleChange}
-							value={values.categories}
-						>
-							<option>choose one</option>
-							{values.mainCategories.map((category, i) => {
-								return (
-									<option key={category._id + i} value={category._id}>
-										{category.name}
-									</option>
-								);
-							})}
-						</select>
-						<div className="invalid-feedback">{values.step1Errors.category}</div>
-					</div> */}
 					<div className="col-12 col-md-5 form-group">
 						<label className="text-uppercase" htmlFor="phone">
 							Phone Number

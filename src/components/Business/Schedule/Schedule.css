@@ -24,21 +24,33 @@
 	border-left: .25rem solid #1cc88a !important;
 }
 
-.timeLine-events {
-	margin-top: 0.5rem;
+.timeSlot-group {
+	border-bottom: 1px solid #ddd;
+	min-height: 60px;
+	border-right: 1px solid #ddd;
+	min-width: 60px;
+	/* display: flex;
+	flex-flow: column nowrap; */
+}
+
+.event-space {
 	position: relative;
-	min-height: 220px;
 }
 
-.event {
-	height: 200px;
-	/* padding: .5rem; */
-	/* width: 14.2857%; */
-	border: 0;
-	position: absolute !important;
-}
+.event-space:after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	width: 100%;
 
-.event .card-header,
-.event .card-body {
-	padding: 0.5rem;
+	border: 1px dotted #f4f4f4;
+}
+.calendar-content {
+	overflow-x: hidden;
+}
+.appointment-event {
+	position: absolute;
+	z-index: 5;
+	left: 80px;
+	width: 100%;
 }

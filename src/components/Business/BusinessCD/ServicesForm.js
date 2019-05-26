@@ -23,13 +23,13 @@ export default class ServicesForm extends Component {
 				.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
 		});
 
-		console.log(servicesOptions);
+		// console.log(servicesOptions);
 
-		// const options = [];
+		// // const options = [];
 
 		return (
 			<form className="p-md-4">
-				<h4 className="text-center font-weight-regular" />
+				<h4 className="text-center font-weight-light mb-3">SetUp Your Business Categories And services</h4>
 				<div className="form-row">
 					<div className="col-12 mb-3">
 						<small className="mb-2">
@@ -87,7 +87,7 @@ export default class ServicesForm extends Component {
 												className={`form-control ${values.step3Errors[i] ? 'is-invalid' : ''}`}
 												name="time"
 												value={service.time}
-												onChange={(e) => this.props.handleTime(e, i)}
+												onChange={(e) => this.props.handleServices(e, i)}
 											/>
 											<div className="invalid-feedback">{values.step3Errors[i]}</div>
 										</div>
@@ -96,7 +96,13 @@ export default class ServicesForm extends Component {
 											<div className="input-group-prepend">
 												<span className="input-group-text">&#8362;</span>
 											</div>
-											<input type="number" value={service.cost} className="form-control" />
+											<input
+												type="number"
+												value={service.cost}
+												name="cost"
+												onChange={(e) => this.props.handleServices(e, i)}
+												className="form-control"
+											/>
 										</div>
 									</div>
 								</div>

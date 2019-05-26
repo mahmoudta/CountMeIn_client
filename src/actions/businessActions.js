@@ -15,9 +15,40 @@ import {
 	FOLLOW_BUSINESS,
 	UNFOLLOW_BUSINESS,
 	SET_FLASH_MESSAGE,
-	SET_AS_BUSINESS_OWNER
+	UPDATE_BUSINESS
 } from './types';
-
+export const updateBusiness = (data) => (dispatch) => {
+	dispatch(setBusinessLoading());
+	return axios
+		.put(`${API}/business/edit`, data)
+		.then((result) => {
+			dispatch({
+				type: SET_FLASH_MESSAGE,
+				message: {
+					type: 'success',
+					text: 'Your Business updated successfully',
+					action: {
+						next: 'REDIRECT_TO_PAGE',
+						path: `/business/view/${result.data.business._id}`
+					}
+				}
+			});
+			return dispatch({
+				type: UPDATE_BUSINESS,
+				payload: result.data.business
+			});
+		})
+		.catch((err) => {
+			dispatch({
+				type: SET_FLASH_MESSAGE,
+				message: { type: 'error', text: err.response.data.error }
+			});
+			return dispatch({
+				type: UPDATE_BUSINESS,
+				payload: {}
+			});
+		});
+};
 export const createNewBusiness = (data) => (dispatch) => {
 	dispatch(setBusinessLoading());
 	axios
@@ -57,16 +88,16 @@ export const createNewBusiness = (data) => (dispatch) => {
 };
 
 export const getBusinessByOwner = (id) => (dispatch) => {
-	axios
+	return axios
 		.get(`${API}/business/owner/${id}`)
 		.then((result) => {
-			dispatch({
+			return dispatch({
 				type: GET_BUSINESS_BY_OWNER,
 				payload: result.data.business
 			});
 		})
 		.catch((err) => {
-			dispatch({
+			return dispatch({
 				type: GET_BUSINESS_BY_OWNER,
 				payload: err.response.data
 			});

@@ -80,7 +80,7 @@ export const deleteCategory = (id) => (dispatch) => {
 			});
 		})
 		.catch((err) => {
-			dispatch({
+			return dispatch({
 				type: SET_FLASH_MESSAGE,
 				message: { type: 'error', text: err.response.data.error }
 			});

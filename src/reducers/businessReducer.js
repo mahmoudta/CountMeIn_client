@@ -6,7 +6,8 @@ import {
 	GET_CUREENT_BUSINESS_SERVICES,
 	BUSNIESS_LOADING,
 	FOLLOW_BUSINESS,
-	UNFOLLOW_BUSINESS
+	UNFOLLOW_BUSINESS,
+	UPDATE_BUSINESS
 } from '../actions/types';
 // import isEmpty from 'lodash/isEmpty';
 
@@ -25,6 +26,13 @@ export default function(state = initialState, action) {
 			return {
 				...state,
 				success: ' business successfully added',
+				loading: false
+			};
+
+		case UPDATE_BUSINESS:
+			return {
+				...state,
+				myBusiness: action.payload,
 				loading: false
 			};
 

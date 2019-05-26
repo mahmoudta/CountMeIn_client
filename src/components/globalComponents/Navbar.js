@@ -29,21 +29,10 @@ class Navbar extends Component {
 			this.setState({ width: 'aside-md' });
 		}
 	};
-	componentDidMount() {
-		// const id = this.props.auth.user.sub;
-		// this.props.getBusinessByOwner(id);
-		// .then((result) => {
-		// 	if (!result.payload.error) {
-		// 		this.setState({ business_id: result.payload._id });
-		// 		this.props.getBusinessCustomers();
-		// 		this.props.getBusinessServices(result.payload._id);
-		// 	}
-		// });
-	}
+	componentDidMount() {}
 	businessDropDown = () => {};
 	renderNav = () => {
 		const { user } = this.props.auth;
-		console.log(user);
 		return (
 			<div>
 				<aside className="">
@@ -107,8 +96,6 @@ class Navbar extends Component {
 		);
 	};
 	render() {
-		// const { _id } = this.props.myBusiness;
-		// console.log(_id);
 		return (
 			<div
 				id="sidebar"
