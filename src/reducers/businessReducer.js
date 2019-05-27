@@ -13,8 +13,6 @@ import {
 
 const initialState = {
 	myBusiness: {},
-	customers: [],
-	businessServices: [],
 	business: {},
 	loading: false,
 	success: ''

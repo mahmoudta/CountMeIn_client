@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
+import { Link } from 'react-router-dom';
 
 /* UTILS */
 import { getBusinessTime, appointmentTimeDiffrence } from '../../../utils/date';
@@ -28,7 +29,9 @@ class TimeLine extends Component {
 				<div className="container">
 					<div className="col-12 bg-white shadow-sm calendar-content pt-md-3">
 						<div className="col-12 claendar-Tools clear-fix my-2">
-							<button className="btn btn-primary btn-sm">New Appointment</button>
+							<Link to="/business/mySchedule/new-appointment" className="btn btn-primary btn-sm">
+								New Appointment
+							</Link>
 						</div>
 						<div className="col-12 calendar-header">
 							<div className="row">
@@ -124,9 +127,9 @@ TimeLine.propTypes = {
 	// customers: PropTypes.array.isRequired,
 	// services: PropTypes.array.isRequired,
 };
-// Schedule.contextTypes = {
-// 	router: PropTypes.object.isRequired
-// };
+TimeLine.contextTypes = {
+	router: PropTypes.object.isRequired
+};
 const mapStatetoProps = (state) => ({
 	auth: state.auth,
 	myBusiness: state.business.myBusiness,

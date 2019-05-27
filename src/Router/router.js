@@ -41,11 +41,11 @@ const ReactRouter = () => {
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
 								<Route exact path="/business/pages/create" component={requireAuth(BusinessCD)} />
 								<Route path="/business/view/:id" component={requireAuth(ClientView)} />
-								<Route excat path="/business/pages/mySchedule/:id" component={requireAuth(Schedule)} />
 								<Route
 									path="/business/mySchedule/new-appointment"
 									component={requireAuth(BnewAppointment)}
 								/>
+								<Route excat path="/business/pages/mySchedule/:id" component={requireAuth(Schedule)} />
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
