@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
 export default class ManagmnetForm extends Component {
-	async componentDidMount() {
-		await this.props.scheduleBuilder();
-	}
+	componentDidMount() {}
 	render() {
 		const { values } = this.props;
 		return (
@@ -71,11 +69,8 @@ export default class ManagmnetForm extends Component {
 											<input
 												type="button"
 												name="break"
-												value="set break"
-												className={`text-sm mx-1 my-1 text-uppercase btn border-0 ${day.break
-													.isBreak
-													? 'hide'
-													: ''}`}
+												value={day.break.isBreak ? 'X' : 'set break'}
+												className="text-sm mx-1 my-1 text-uppercase btn border-0 fade show"
 												onClick={(e) => {
 													e.preventDefault();
 													this.props.handleSchedule(e, i);
@@ -112,6 +107,7 @@ export default class ManagmnetForm extends Component {
 													}}
 												/>
 											</div>
+											{day.break.isBreak ? <hr className="w-75 ml-0 my-3" /> : ''}
 										</div>
 									</div>
 								) : (
@@ -122,7 +118,7 @@ export default class ManagmnetForm extends Component {
 					);
 				})}
 				<div className="form-group">
-					<label className="text-uppercase" htmlFor="brak">
+					<label className="text-uppercase" htmlFor="break">
 						break between appointments
 					</label>
 					<input

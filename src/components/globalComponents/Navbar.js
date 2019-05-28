@@ -8,7 +8,7 @@ import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } fro
 import { MdDashboard } from 'react-icons/md';
 import isEmpty from 'lodash/isEmpty';
 
-import { getBusinessByOwner, getBusinessCustomers, getBusinessServices } from '../../actions/businessActions';
+// import { getBusinessByOwner, getBusinessCustomers, getBusinessServices } from '../../actions/businessActions';
 
 class Navbar extends Component {
 	constructor(props) {

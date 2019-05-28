@@ -19,6 +19,7 @@ import BusinessCD from '../components/Business/BusinessCD/BusinessCD';
 
 import FlashMessage from '../components/FlashMessages/FlashMessage';
 import Businesses from '../components/Businesses/Businesses';
+import BusinessProfile from '../components/Business/Profile/BusinessProfile';
 
 const ReactRouter = () => {
 	return (
@@ -40,7 +41,9 @@ const ReactRouter = () => {
 								<Route path="/businesses" component={requireAuth(Businesses)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
 								<Route exact path="/business/pages/create" component={requireAuth(BusinessCD)} />
-								<Route path="/business/view/:id" component={requireAuth(ClientView)} />
+								<Route path="/business/view/testview/:id" component={requireAuth(BusinessProfile)} />
+								<Route exact path="/business/view/:id" component={requireAuth(ClientView)} />
+
 								<Route
 									path="/business/mySchedule/new-appointment"
 									component={requireAuth(BnewAppointment)}

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API } from '../consts';
+import isEmpty from 'lodash/isEmpty';
 
 import {
 	GET_BUSINESS_APPOINTMENTS,
@@ -36,18 +37,19 @@ export const getTodaysReadyAppointments = (business_id) => (dispatch) => {
 				type: TODAY_READY_APPOINTMENTS,
 				payload: result.data.appointments
 			});
-
-			let time = new Date();
-			new Date(
-				time.setHours(
-					result.data.appointments[0].time.start._hour,
-					result.data.appointments[0].time.start._minute
-				)
-			);
-			const now = new Date();
-			setTimeout(() => {
-				dispatch(setAppointmentActive(result.data.appointments[0]._id));
-			}, time - now);
+			if (!isEmpty(result.data.appointments)) {
+				let time = new Date();
+				new Date(
+					time.setHours(
+						result.data.appointments[0].time.start._hour,
+						result.data.appointments[0].time.start._minute
+					)
+				);
+				const now = new Date();
+				setTimeout(() => {
+					dispatch(setAppointmentActive(result.data.appointments[0]._id));
+				}, time - now);
+			}
 			// dispatch({
 			// 	type: NEXT_APPOINTMENT_ALERT,
 			// 	payload: {

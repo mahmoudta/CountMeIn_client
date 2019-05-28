@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { FaBusinessTime } from 'react-icons/fa';
 
-export default class ServicesForm extends Component {
+class ServicesForm extends Component {
 	constructor(props) {
 		super(props);
 	}
 	render() {
-		const { values } = this.props;
-		const categoriesOptions = values.mainCategories
+		const { values, categories } = this.props;
+		/* converting category  */
+		const categoriesOptions = categories
 			.map((category) => {
 				return { label: category.name, value: category._id, services: category.services };
 			}, [])
@@ -114,3 +118,10 @@ export default class ServicesForm extends Component {
 		);
 	}
 }
+ServicesForm.propTypes = {
+	categories: PropTypes.array.isRequired
+};
+const mapStatetoProps = (state) => ({
+	categories: state.category.categories
+});
+export default connect(mapStatetoProps, {})(ServicesForm);

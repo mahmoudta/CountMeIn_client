@@ -110,7 +110,7 @@ export const getBusinessCustomers = () => (dispatch) => {
 		.then((result) => {
 			dispatch({
 				type: GET_CUREENT_BUSINESS_CUSTOMERS,
-				payload: result.data.customers
+				payload: []
 			});
 		})
 		.catch((err) => {

@@ -18,13 +18,13 @@ class ClientView extends Component {
 			business: false,
 			loading: false,
 			followed: false,
-			loadingFollow: false,
-			style: {
-				'.header': {
-					background: 'green',
-					font: 'yellow'
-				}
-			}
+			loadingFollow: false
+			// style: {
+			// 	'.header': {
+			// 		background: 'green',
+			// 		font: 'yellow'
+			// 	}
+			// }
 		};
 		this.showButtons = this.showButtons.bind(this);
 	}

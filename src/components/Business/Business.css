@@ -74,3 +74,10 @@
 	color: #6b7682;
 	font-weight: 400;
 }
+
+.working-hours {
+	padding-right: 2.1875rem;
+	width: 25rem;
+	height: 1px;
+	position: fixed;
+}

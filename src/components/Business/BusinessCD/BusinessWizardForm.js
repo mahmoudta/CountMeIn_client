@@ -84,36 +84,37 @@ class BusinessWizardForm extends Component {
 		this.handleSchedule = this.handleSchedule.bind(this);
 		this.handleServices = this.handleServices.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
-		// this.selectedItems = this.selectedItems.bind(this);
+		this.selectedItems = this.selectedItems.bind(this);
 	}
 	selectedItems(myBusiness, categories) {
 		if (!isEmpty(myBusiness) && !isEmpty(categories)) {
-			const selectedCategories = categories
-				.filter(function(elem) {
-					return this.indexOf(elem._id.toString()) > -1;
-				}, myBusiness.profile.category_id)
-				.map((category) => {
-					return { value: category._id, label: category.name, services: category.services };
-				});
-			const services = myBusiness.profile.services.map((service) => {
-				return { label: service.title, value: service._id, cost: service.cost, time: service.time };
+			const selectedCategories = categories.map((category) => {
+				return { value: category._id, label: category.name, services: category.services };
+			});
+			const services = myBusiness.services.map((service) => {
+				return {
+					label: service.service_id.title,
+					value: service.service_id._id,
+					cost: service.cost,
+					time: service.time
+				};
 			});
 
-			return { categories: selectedCategories, services };
+			return { categories: selectedCategories, services: services };
 		}
 	}
 
 	async scheduleBuilder() {
 		const { myBusiness } = this.props;
 		if (!isEmpty(myBusiness)) {
-			const schedule = await myBusiness.profile.working_hours.map((day) => {
+			const schedule = await myBusiness.working_hours.map((day) => {
 				return {
 					day: day.day,
 					opened: day.opened,
 					from: dateToStringTime(day.from),
 					until: dateToStringTime(day.until),
 					break: {
-						isBreak: day.isBreak,
+						isBreak: day.break.isBreak,
 						from: dateToStringTime(day.break.from),
 						until: dateToStringTime(day.break.until)
 					}
@@ -144,29 +145,38 @@ class BusinessWizardForm extends Component {
 
 	componentDidMount() {
 		this.props.getAllCategories();
-		this.props.getBusinessByOwner(this.props.user.sub).then(async (result) => {
-			if (!result.payload.error) {
-				const categories = await this.props.categories;
-				const business = result.payload;
-				const selectedItems = this.selectedItems(business, categories);
-				// const working = this.
-				this.setState({
-					mainCategories: categories,
-					categories: selectedItems.categories,
-					description: business.profile.description,
-					phone: business.profile.phone,
-					name: business.profile.name,
-					// working: working,
-					img: business.profile.img,
-					breakTime: business.profile.break_time,
-					services: selectedItems.services,
-					street: business.profile.location.street,
-					city: business.profile.location.city,
-					building: business.profile.location.building,
-					postal_code: business.profile.location.postal_code
-				});
-			}
-		});
+		this.props
+			.getBusinessByOwner(this.props.user.sub)
+			.then(async (result) => {
+				if (!result.payload.error) {
+					console.log("i'm hereee");
+					const categories = await this.props.categories;
+					const business = result.payload;
+					const selectedItems = this.selectedItems(business, categories);
+					// const working = this.
+					this.setState({
+						// mainCategories: categories,
+						categories: selectedItems.categories,
+						description: business.profile.description,
+						phone: business.profile.phone,
+						name: business.profile.name,
+						// working: working,
+						img: business.profile.img,
+						breakTime: business.break_time,
+						services: selectedItems.services,
+						street: business.profile.location.street,
+						city: business.profile.location.city,
+						building: business.profile.location.building,
+						postal_code: business.profile.location.postal_code
+					});
+					this.scheduleBuilder();
+					return;
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		this.scheduleBuilder();
 	}
 	handleSubmit = async (e) => {
 		e.preventDefault();
@@ -252,10 +262,13 @@ class BusinessWizardForm extends Component {
 				working[index].until = value;
 				break;
 			case 'break':
+				working[index].break.isBreak = !working[index].break.isBreak;
 				break;
 			case 'break_from':
+				working[index].break.from = value;
 				break;
 			case 'break_until':
+				working[index].break.until = value;
 				break;
 
 			default:
@@ -353,6 +366,7 @@ class BusinessWizardForm extends Component {
 					<ManagmentForm
 						handleChange={this.handleChange}
 						handleSchedule={this.handleSchedule}
+						scheduleBuilder={this.scheduleBuilde}
 						scheduleBuilder={this.scheduleBuilder}
 						values={this.state}
 					/>

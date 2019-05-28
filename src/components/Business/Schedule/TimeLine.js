@@ -18,7 +18,7 @@ class TimeLine extends Component {
 		let date1 = new Date();
 		let date2 = new Date();
 		if (!isEmpty(myBusiness)) {
-			times = getBusinessTime(myBusiness.profile.working_hours, date);
+			times = getBusinessTime(myBusiness.working_hours, date);
 			if (!isEmpty(times)) {
 				startTime = Number(times[0].split(':')[0]);
 			}
@@ -29,7 +29,11 @@ class TimeLine extends Component {
 				<div className="container">
 					<div className="col-12 bg-white shadow-sm calendar-content pt-md-3">
 						<div className="col-12 claendar-Tools clear-fix my-2">
-							<Link to="/business/mySchedule/new-appointment" className="btn btn-primary btn-sm">
+							<Link
+								to="/business/mySchedule/new-appointment"
+								props={this.props.handleNewAppointmentForm}
+								className="btn btn-primary btn-sm"
+							>
 								New Appointment
 							</Link>
 						</div>

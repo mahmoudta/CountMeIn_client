@@ -5,6 +5,11 @@ import { FaTimes } from 'react-icons/fa';
 import axios from 'axios';
 import { API } from '../../../consts';
 import Swal from 'sweetalert2';
+import Select from 'react-select';
+import makeAnimated from 'react-select/lib/animated';
+import { getBusinessByOwner } from '../../../actions/businessActions';
+
+import isEmpty from 'lodash.isempty';
 
 class BnewAppointment extends Component {
 	constructor(props) {
@@ -22,88 +27,35 @@ class BnewAppointment extends Component {
 			dates: []
 		};
 	}
-	// componentDidMount() {
-	// 	if (this.props.myBusiness.owner_id !== this.props.auth.user.sub) {
-	// 		this.setState({ authirized: false });
-	// 	} else {
-	// 		const date = new Date();
-	// 		var today =
-	// 			date.getFullYear() +
-	// 			'-' +
-	// 			('0' + (date.getMonth() + 1)).slice(-2) +
-	// 			'-' +
-	// 			('0' + date.getDate()).slice(-2);
-	// 		this.setState({ date_from: today, date_until: today, today: today });
-	// 	}
-	// }
+	componentDidMount() {
+		this.props.getBusinessByOwner(this.props.auth.user.sub).then((res) => {
+			if (this.props.myBusiness.owner_id !== this.props.auth.user.sub) {
+				this.setState({ authirized: false });
+			}
+		});
+	}
 
-	// handleChange = (e) => {
-	// 	if (e.target.name === 'services') {
-	// 		const { services } = this.state;
-	// 		if (!services.includes(e.target.value) && e.target.value != -1) {
-	// 			services.push(e.target.value);
-	// 			this.setState(services);
-	// 		}
-	// 	} else {
-	// 		this.setState({ [e.target.name]: e.target.value });
-	// 	}
-	// };
-	// popService = (e) => {
-	// 	e.preventDefault();
-	// 	this.setState({
-	// 		services: this.state.services.filter((service) => {
-	// 			return service !== e.target.value;
-	// 		})
-	// 	});
-	// };
-	// Alert = async (redirect, text) => {
-	// 	Swal.fire({
-	// 		title: redirect ? 'Success' : 'Error!',
-	// 		text: text,
-	// 		type: redirect ? 'success' : 'error',
-	// 		focusConfirm: false,
-	// 		confirmButtonText: redirect ? 'done' : 'back',
-	// 		confirmButtonColor: redirect ? '#5eba00' : '#495057'
-	// 	}).then((res) => {
-	// 		if (redirect) this.context.router.history.push('/business/pages/mySchedule');
-	// 	});
-	// };
-	// fetchFreeTime = (e) => {
-	// 	e.preventDefault();
-	// 	axios
-	// 		.post(`${API}/algorithms/freetime`, {
-	// 			business: this.props.myBusiness._id,
-	// 			services: this.state.services,
-	// 			date_from: this.state.date_from,
-	// 			date_until: this.state.date_until
-	// 		})
-	// 		.then((response) => {
-	// 			console.log(response.data);
-	// 			axios
-	// 				.post(`${API}/appointments/business/setAppointmnet`, {
-	// 					business: this.props.myBusiness._id,
-	// 					client: this.state.client,
-	// 					services: this.state.services,
-	// 					date: response.data.dates[0].Date,
-	// 					start: response.data.dates[0].Free[0]._start,
-	// 					end: response.data.dates[0].Free[0]._end
-	// 				})
-	// 				.then((res) => {
-	// 					console.log(res);
-	// 					const text = `your appointment added at :  ${res.data.appointment.time.date}`;
-	// 					this.Alert(true, text);
-	// 				})
-	// 				.catch((err) => {
-	// 					const text = `error : try another date`;
-	// 					this.Alert(false, text);
-	// 				});
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// };
 	render() {
-		// const { authirized } = this.state;
+		const { myBusiness } = this.props;
+		let services = [];
+		let customers = [];
+		if (!isEmpty(myBusiness)) {
+			services = myBusiness.services
+				.map((service) => {
+					return {
+						label: service.service_id.title,
+						value: service.service_id._id
+					};
+				}, [])
+				.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
+
+			customers = myBusiness.customers.map((customer) => {
+				return {
+					label: `${customer.customer_id.profile.name.first} ${customer.customer_id.profile.name.last}`,
+					value: customer.customer_id._id
+				};
+			}, []);
+		}
 
 		return (
 			<section className="mt-5">
@@ -121,47 +73,14 @@ class BnewAppointment extends Component {
 												your customers
 												<span className="form-required" />
 											</label>
-											<select
-												className="form-control"
-												name="client"
-												value={this.state.client}
-												onChange={this.handleChange}
-												required
-											>
-												<option>choose customer</option>
-											</select>
-										</div>
-									</div>
-									<div className="col-md-4">
-										<div className="form-group">
-											<label className="form-label" htmlFor="">
-												date from
-												<span className="form-required" />
-											</label>
-											<input
-												type="date"
-												className="form-control"
-												name="date_from"
-												min={this.state.today}
-												value={this.state.date_from}
-												onChange={this.handleChange}
-											/>
-										</div>
-									</div>
-
-									<div className="col-md-4">
-										<div className="form-group">
-											<label className="form-label" htmlFor="">
-												date until
-												<span className="form-required" />
-											</label>
-											<input
-												type="date"
-												className="form-control"
-												name="date_until"
-												min={this.state.today}
-												value={this.state.date_until}
-												onChange={this.handleChange}
+											<Select
+												options={customers}
+												// value={values.services}
+												isMulti={false}
+												name="services"
+												components={makeAnimated()}
+												closeMenuOnSelect={true}
+												onChange={this.props.handleServices}
 											/>
 										</div>
 									</div>
@@ -172,7 +91,16 @@ class BnewAppointment extends Component {
 												services
 												<span className="form-required" />
 											</label>
-											<select
+											<Select
+												options={services}
+												// value={values.services}
+												isMulti
+												name="services"
+												components={makeAnimated()}
+												closeMenuOnSelect={false}
+												onChange={this.props.handleServices}
+											/>
+											{/* <select
 												className="form-control"
 												name="services"
 												onChange={this.handleChange}
@@ -182,14 +110,14 @@ class BnewAppointment extends Component {
 												<option key={'service._id'} value={'service._id'}>
 													{'service.sub'}
 												</option>
-											</select>
+											</select> */}
 											<small className="form-text text-muted">
 												you can select more than one service
 											</small>
 										</div>
 									</div>
 
-									<div className="col-12 my-3">
+									{/* <div className="col-12 my-3">
 										{this.state.services.length > 0 && <h6>selected services:</h6>}
 										<div className="col-md-4">
 											<div className="row">
@@ -204,7 +132,7 @@ class BnewAppointment extends Component {
 												</div>
 											</div>
 										</div>
-									</div>
+									</div> */}
 									<div className="col-12">
 										<button
 											type="submit"
@@ -212,6 +140,10 @@ class BnewAppointment extends Component {
 											className="btn btn-sm btn-primary"
 										>
 											save
+										</button>
+										<button to="/dashboard" className="btn btn-secondary ml-auto float-right">
+											{/* <FaArrowLeft />  */}
+											back
 										</button>
 									</div>
 								</div>
@@ -224,19 +156,20 @@ class BnewAppointment extends Component {
 	}
 }
 
-// BnewAppointment.propTypes = {
-// 	auth: PropTypes.object.isRequired,
-// 	myBusiness: PropTypes.object.isRequired,
-// 	customers: PropTypes.array.isRequired,
-// 	services: PropTypes.array.isRequired
-// };
-// BnewAppointment.contextTypes = {
-// 	router: PropTypes.object.isRequired
-// };
-// const mapStatetoProps = (state) => ({
-// 	auth: state.auth,
-// 	myBusiness: state.business.myBusiness,
-// 	customers: state.business.customers,
-// 	services: state.business.businessServices
-// });
-export default BnewAppointment;
+BnewAppointment.propTypes = {
+	auth: PropTypes.object.isRequired,
+	myBusiness: PropTypes.object.isRequired,
+	getBusinessByOwner: PropTypes.func.isRequired
+	// customers: PropTypes.array.isRequired,
+	// services: PropTypes.array.isRequired
+};
+BnewAppointment.contextTypes = {
+	router: PropTypes.object.isRequired
+};
+const mapStatetoProps = (state) => ({
+	auth: state.auth,
+	myBusiness: state.business.myBusiness
+	// customers: state.business.customers,
+	// services: state.business.businessServices
+});
+export default connect(mapStatetoProps, { getBusinessByOwner })(BnewAppointment);

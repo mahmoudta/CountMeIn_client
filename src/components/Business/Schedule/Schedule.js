@@ -19,11 +19,17 @@ class Schedule extends Component {
 		super(props);
 		this.state = {
 			dateNow: getCurrentDate(),
-			date: ''
+			date: '',
+			customer_id: '',
+			services: []
 		};
 		this.changeDate = this.changeDate.bind(this);
+		this.handleNewAppointmentForm = this.handleNewAppointmentForm.bind(this);
 	}
 
+	handleNewAppointmentForm() {
+		console.log('okaaay');
+	}
 	componentDidMount() {
 		const { dateNow } = this.state;
 		const { user } = this.props.auth;
@@ -45,7 +51,11 @@ class Schedule extends Component {
 		return (
 			<section key={'mainSchedule'} className="my-5">
 				<StatsticsScheduleHeader />
-				<TimeLine date={this.state.date} changeDate={this.changeDate} />
+				<TimeLine
+					date={this.state.date}
+					changeDate={this.changeDate}
+					handleNewAppointmentForm={this.state.handleNewAppointmentForm}
+				/>
 			</section>
 		);
 	}
