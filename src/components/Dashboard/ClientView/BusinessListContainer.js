@@ -20,7 +20,7 @@ export default class BusinessListContainer extends Component {
       .then(response => {
         console.log("business", response.data.following);
         this.setState({ fallowedArr: response.data.following }, () => {
-          console.log(this.state.fallowedArr);
+          console.log("followed array", this.state.fallowedArr);
         });
       })
       .catch(err => {

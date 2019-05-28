@@ -1,6 +1,7 @@
 import { successColor, tooltip, cardTitle, grayColor } from "../Assets/Styles";
 
 import hoverCardStyle from "../Assets/hoverCardStyle";
+import { blue } from "@material-ui/core/colors";
 
 const dashboardStyle = {
   ...hoverCardStyle,
@@ -76,8 +77,14 @@ const dashboardStyle = {
     }
   },
   iconaa: {
-    width: "70px",
-    height: "90%"
+    borderRadius: "50%",
+    backgroundColor: grayColor[0],
+    padding: "2px",
+    marginTop: "-20px",
+    marginRight: "15px",
+    float: "left",
+    width: "60px",
+    height: "60px"
   }
 };
 

@@ -59,9 +59,8 @@ class BusinessList extends Component {
       <GridItem xs={12} sm={6} md={6} lg={3}>
         <Card>
           <CardHeader color="success" stats icon>
-            <CardIcon color="info">
-              <img src={imgLink} className={classes.iconaa} />
-            </CardIcon>
+            <img src={imgLink} className={classes.iconaa} />
+
             <Link to={`/business/view/${businesses._id}`}>
               <p className={classes.cardCategory}>Visit Business</p>
             </Link>

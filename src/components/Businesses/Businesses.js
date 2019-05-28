@@ -15,6 +15,8 @@ import { API } from "../../consts";
 import { truncateSync } from "fs";
 import BusinessList from "../Dashboard/ClientView/BusinessList";
 import GridContainer from "../Interface/Grid/GridContainer";
+import { connect } from "react-redux";
+import { getAllCategories } from "../../actions/categoryActions";
 
 const styles = theme => ({
   root: {
@@ -58,7 +60,7 @@ function getStyles(name, that) {
   };
 }
 
-export class Businesses extends Component {
+class Businesses extends Component {
   state = {
     name: [],
     value: [],
@@ -69,32 +71,23 @@ export class Businesses extends Component {
 
   componentWillMount() {
     //get all catagories names and ids
-    axios
-      .get(`${API}/category`)
-      .then(response => {
-        //	this.setState({ dates: response.data });
-        console.log(response.data);
-        response.data.categories.map(cat => {
-          // this.state.names.push(cat.name);
-          this.setState({ names: [...this.state.names, cat.name] });
-          this.setState({ values: [...this.state.values, cat._id] });
-          console.log(this.state.names);
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .then(() => {});
+    this.props.getAllCategories();
   }
-  SearchBusinesses = values => {
+  SearchBusinesses = item => {
+    const Name = item.title;
     axios
-      .get(`${API}/business/getBusinessesByCatagory/${values}`)
+      .get(`${API}/business/getBusinessesByCatagory/${item.values}`)
       .then(response => {
         //	this.setState({ dates: response.data });
-        console.log(response.data.ResultQuery);
-        response.data.ResultQuery.map(eachid => {
-          console.log(eachid, this.state.businesses);
-          this.setState({ businesses: [...this.state.businesses, eachid] });
+        console.log("response", response.data.business);
+
+        response.data.business.map(businessProfile => {
+          this.setState(
+            {
+              businesses: [...this.state.businesses, { Name, businessProfile }]
+            },
+            () => console.log("callback", this.state.businesses)
+          );
         });
       })
       .catch(err => {
@@ -105,34 +98,52 @@ export class Businesses extends Component {
 
   handleChange = event => {
     const item = event.target.value;
+    console.log("item", item.length);
     const index = this.state.value.indexOf(item[item.length - 1].values);
-    if (index > -1) {
-      const tmpArr = [...this.state.value];
-      this.state.businesses.splice(index, 1);
-      this.state.name.splice(index, 1);
-      tmpArr.splice(index, 1);
-      this.setState({ value: tmpArr });
-      console.log("here");
-    } else {
-      this.setState({
-        value: [item[item.length - 1].values],
-        name: [item[item.length - 1].title]
-      });
+    console.log(index);
+    if (index === -1) {
       // const item = event.target.attributes.getNamedItem("title").value;
-      // console.log("item", item);
+      //console.log("item", item);
+      const thisItem = item[item.length - 1];
+      this.SearchBusinesses(thisItem);
+      this.setState({
+        name: [...this.state.name, thisItem.title],
+        value: [...this.state.value, thisItem.values]
+      });
+      return;
+    }
+    if (index > -1) {
+      this.state.businesses.map((that, i) => {
+        if (that.Name === this.state.name[index]) {
+          console.log(that.Name, this.state.name[index]);
 
-      this.SearchBusinesses(item[item.length - 1].values);
-      console.log("Values", this.state.value);
-      console.log("Names", this.state.name);
+          const tmpbusiness = this.state.businesses;
+          tmpbusiness.splice(i, 1);
+          this.setState({
+            businesses: tmpbusiness
+          });
+        }
+      });
+      const tmpvalue = this.state.value;
+      tmpvalue.splice(index, 1);
+      const tmpname = this.state.name;
+      tmpname.splice(index, 1);
+      this.setState({ value: tmpvalue, name: tmpname });
+      // this.state.value.splice(index, 1);
+      // this.state.name.splice(index, 1);
+      console.log("thisstatebusinesses", this.state.businesses);
     }
     //console.log(event.target.selectedOptions[0].getAttributes("title"));
   };
 
   render() {
     const { classes } = this.props;
+    const { categoriess } = this.props;
+    console.log("state array", this.state.businesses);
+
     const PrintIt = this.state.businesses.map(i => {
       console.log(i, "i");
-      return <BusinessList businessId={i._id} />;
+      return <BusinessList business={i.businessProfile} />;
     });
 
     return (
@@ -156,14 +167,14 @@ export class Businesses extends Component {
               )}
               MenuProps={MenuProps}
             >
-              {this.state.names.map((name, i) => (
+              {categoriess.map((category, i) => (
                 <MenuItem
-                  key={name}
-                  title={name}
-                  value={{ values: this.state.values[i], title: name }}
-                  style={getStyles(name, this)}
+                  key={category._id}
+                  title={category._id}
+                  value={{ values: category._id, title: category.name }}
+                  style={getStyles(category._id, this)}
                 >
-                  {name}
+                  {category.name}
                 </MenuItem>
               ))}
             </Select>
@@ -177,7 +188,17 @@ export class Businesses extends Component {
   }
 }
 Businesses.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  categories: PropTypes.object.isRequired,
+  getAllCategories: PropTypes.func.isRequired
 };
+const mapStatetoProps = state => ({
+  auth: state.auth,
+  categoriess: state.category.categories
+  //loading: state.business.loading
+});
 
-export default withStyles(styles, { withTheme: true })(Businesses);
+export default connect(
+  mapStatetoProps,
+  { getAllCategories }
+)(withStyles(styles, { withTheme: true })(Businesses));
