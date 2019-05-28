@@ -19,30 +19,34 @@ export default class SetThirdStep extends Component {
               <div className="card-header text-uppercase">Set Appointment </div>
               <div className="card-body">
                 <small className="mb-2">Step 3</small> <br />
-                {values.dates.dates.map(dates => {
-                  return (
-                    <div className="btn-group-vertical">
-                      {dates.Date}
-                      {console.log(dates.Date)}
-                      {dates.Free.map((free, i) => {
-                        return (
-                          <button
-                            type="button"
-                            className="btn btn-secondary"
-                            onClick={this.props.setAppointment}
-                            date={dates.Date}
-                            shour={free._start._hour}
-                            sminute={free._start._minute}
-                            ehour={free._end._hour}
-                            emminute={free._end._minute}
-                          >
-                            {free._start._hour}:{free._start._minute}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
+                <div className="row">
+                  {values.dates.dates.map(dates => {
+                    return (
+                      <div className="col">
+                        <div className="btn-group-vertical">
+                          {dates.Date.slice(0, 10)}
+                          {console.log(dates.Date)}
+                          {dates.Free.map((free, i) => {
+                            return (
+                              <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={this.props.setAppointment}
+                                date={dates.Date}
+                                shour={free._start._hour}
+                                sminute={free._start._minute}
+                                ehour={free._end._hour}
+                                emminute={free._end._minute}
+                              >
+                                {free._start._hour}:{free._start._minute}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
                 {/* 
                                 //<button type="button" class="btn btn-secondary">
 									//dates.free

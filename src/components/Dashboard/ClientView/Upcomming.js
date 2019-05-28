@@ -5,6 +5,7 @@ import { API } from "../../../consts";
 import SweetAlert from "react-bootstrap-sweetalert";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { convertToUtcTime } from "../../../utils/date";
 import Typography from "@material-ui/core/Typography";
 
 // core components
@@ -193,7 +194,7 @@ class Upcomming extends React.Component {
       // this.setState({ appointments: response.data.QueryRes });
       // this.setState({Appointments : dsa});
 
-      console.log(response);
+      console.log("response upcomming", response.data);
 
       response.data.map(appointment => {
         const fillButtons = [
@@ -239,7 +240,7 @@ class Upcomming extends React.Component {
                 {appointment[3]}
               </Link>,
               appointment[4],
-              appointment[5],
+              appointment[5].slice(0, 10),
               appointment[6],
               appointment[7]
             ]
@@ -291,7 +292,7 @@ class Upcomming extends React.Component {
                     "Business",
                     "Start Time",
                     "Date",
-                    "Service Id",
+                    "Service",
                     "Actions"
                   ]}
                   tableData={this.state.tableContent}
