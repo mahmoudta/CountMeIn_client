@@ -9,9 +9,10 @@ import CardFooter from "../../Interface/Card/CardFooter.jsx";
 import dashboardStyle from "../../Interface/Assets/dashboardStyle";
 import axios from "axios";
 import { API } from "../../../consts";
+import { B_IMAGES } from "../../../consts";
 import { Link } from "react-router-dom";
 
-import DateRange from "@material-ui/icons/DateRange";
+import Phone from "@material-ui/icons/Phone";
 import Store from "@material-ui/icons/Store";
 import Icon from "@material-ui/core/Icon";
 
@@ -34,18 +35,6 @@ class BusinessList extends Component {
     };
   }
 
-  componentWillMount() {
-    axios
-      .get(`${API}/business/${this.props.businessId}`, {})
-      .then(response => {
-        console.log(response.data.business.profile);
-        this.setState({ business: response.data.business });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
   unfollowBusiness = business_id => {
     this.setState({ loadingFollow: true });
     axios
@@ -62,34 +51,34 @@ class BusinessList extends Component {
 
   render() {
     const { classes } = this.props;
+    const businesses = this.props.business;
+    const imgLink = `${B_IMAGES}/${businesses.profile.img}`;
+    console.log("props", this.props);
 
     return (
       <GridItem xs={12} sm={6} md={6} lg={3}>
         <Card>
           <CardHeader color="success" stats icon>
-            <CardIcon color="info">
-              <Store />
-            </CardIcon>
-            <Link to={`/business/view/${this.state.business._id}`}>
+            <img src={imgLink} className={classes.iconaa} />
+
+            <Link to={`/business/view/${businesses._id}`}>
               <p className={classes.cardCategory}>Visit Business</p>
             </Link>
-            <h5 className={classes.cardTitle}>
-              {this.state.business.profile.name}
-            </h5>
+            <h5 className={classes.cardTitle}>{businesses.profile.name}</h5>
           </CardHeader>
           <CardFooter stats>
             <div className={classes.stats}>
-              <DateRange />
-              Online 24 Hours
+              <Phone />
+              {businesses.profile.phone}
             </div>
             <div>
-              <Link to={`/business/new-appointment/${this.state.business._id}`}>
+              <Link to={`/business/new-appointment/${businesses._id}`}>
                 <Icon color="disabled">alarm_add</Icon>
               </Link>
               <Link to={"#"}>
                 <Icon
                   color="disabled"
-                  onClick={() => this.unfollowBusiness(this.state.business._id)}
+                  onClick={() => this.unfollowBusiness(businesses._id)}
                 >
                   person_add_disabled
                 </Icon>
