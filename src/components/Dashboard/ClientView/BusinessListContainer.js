@@ -18,9 +18,8 @@ export default class BusinessListContainer extends Component {
     axios
       .get(`${API}/users/getFallowedBusinesses`, {})
       .then(response => {
-        console.log(response.data.QueryRes.following);
-
-        this.setState({ fallowedArr: response.data.QueryRes.following }, () => {
+        console.log("business", response.data.following);
+        this.setState({ fallowedArr: response.data.following }, () => {
           console.log(this.state.fallowedArr);
         });
       })
@@ -31,7 +30,7 @@ export default class BusinessListContainer extends Component {
 
   render() {
     const PrintIt = this.state.fallowedArr.map(i => {
-      return <BusinessList businessId={i} />;
+      return <BusinessList business={i} />;
     });
     return <GridContainer>{PrintIt}</GridContainer>;
   }
