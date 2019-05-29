@@ -24,7 +24,7 @@ export default class SetThirdStep extends Component {
                     return (
                       <div className="col">
                         <div className="btn-group-vertical">
-                          {dates.Date.slice(0, 10)}
+                          {(new Date(dates.Date) + " ").slice(0, 15)}
                           {console.log(dates.Date)}
                           {dates.Free.map((free, i) => {
                             return (
@@ -40,6 +40,9 @@ export default class SetThirdStep extends Component {
                               >
                                 {free._start._hour}:
                                 {zeroPad(free._start._minute, 2)}
+                                {" - "}
+                                {free._end._hour}:
+                                {zeroPad(free._end._minute, 2)}
                               </button>
                             );
                           })}

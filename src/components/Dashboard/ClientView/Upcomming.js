@@ -240,7 +240,7 @@ class Upcomming extends React.Component {
                 {appointment[3]}
               </Link>,
               appointment[4],
-              appointment[5].slice(0, 10),
+              (new Date(appointment[5]) + " ").slice(0, 15),
               appointment[6],
               appointment[7]
             ]

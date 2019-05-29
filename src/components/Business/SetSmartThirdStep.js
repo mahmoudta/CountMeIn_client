@@ -20,8 +20,7 @@ export class SetSmartThirdStep extends Component {
                     return (
                       <div className="col">
                         <div className="btn-group-vertical">
-                          {smart.Date.slice(0, 10)}
-                          {console.log(smart.Date)}
+                          {(new Date(smart.Date) + " ").slice(0, 15)}
                           {smart.Free.map((free, i) => {
                             return (
                               <button
@@ -35,7 +34,9 @@ export class SetSmartThirdStep extends Component {
                                 emminute={free._end._minute}
                               >
                                 {free._start._hour}:
-                                {zeroPad(free._start._minute, 2)}
+                                {zeroPad(free._start._minute, 2)} {" - "}
+                                {free._end._hour}:
+                                {zeroPad(free._end._minute, 2)}
                               </button>
                             );
                           })}

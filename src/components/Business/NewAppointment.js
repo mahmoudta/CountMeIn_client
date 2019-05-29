@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getBusinessById } from "../../actions/businessActions";
+import { setFlashMessage } from "../../actions/flashMessageActions";
 
 import SetFStep from "./SetFStep";
 import SetSecStep from "./SetSecStep";
@@ -92,11 +93,20 @@ class NewAppointment extends Component {
         //	this.setState({ dates: response.data });
         console.log(response);
       })
+      .then(() => {
+        this.props.setFlashMessage({
+          type: "success",
+          text: "Appointment is ready",
+          action: { next: "REDIRECT_TO_DASHBAORD" }
+        });
+      })
       .catch(err => {
         console.log(err);
-      })
-      .then(() => {
-        this.setState({ step: step + 1 });
+        this.props.setFlashMessage({
+          type: "error",
+          text: "Some error accured , Please try later",
+          action: { next: "REDIRECT_TO_DASHBAORD" }
+        });
       });
   };
 
@@ -126,11 +136,16 @@ class NewAppointment extends Component {
         this.setState({ Smartdata: response.data });
         console.log(this.state);
       })
-      .catch(err => {
-        console.log(err);
-      })
       .then(() => {
         this.setState({ step: step + 1 });
+      })
+      .catch(err => {
+        console.log(err);
+        this.props.setFlashMessage({
+          type: "error",
+          text: "Some error accured , Please try later",
+          action: { next: "REDIRECT_TO_DASHBAORD" }
+        });
       });
   };
 
@@ -150,6 +165,11 @@ class NewAppointment extends Component {
       })
       .catch(err => {
         console.log(err);
+        this.props.setFlashMessage({
+          type: "error",
+          text: "Some error accured , Please try later",
+          action: { next: "REDIRECT_TO_DASHBAORD" }
+        });
       })
       .then(() => {
         this.setState({ step: step + 1 });
@@ -223,7 +243,8 @@ class NewAppointment extends Component {
 NewAppointment.propTypes = {
   auth: PropTypes.object.isRequired,
   business: PropTypes.object.isRequired,
-  getBusinessById: PropTypes.func.isRequired
+  getBusinessById: PropTypes.func.isRequired,
+  setFlashMessage: PropTypes.func.isRequired
 };
 
 const mapStatetoProps = state => ({
@@ -233,5 +254,5 @@ const mapStatetoProps = state => ({
 
 export default connect(
   mapStatetoProps,
-  { getBusinessById }
+  { getBusinessById, setFlashMessage }
 )(NewAppointment);
