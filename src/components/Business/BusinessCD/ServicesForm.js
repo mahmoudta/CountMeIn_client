@@ -24,13 +24,13 @@ class ServicesForm extends Component {
 				})
 				.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
 
-			servicesOptions = categories.map((category) => {
+			servicesOptions = categoriesOptions.map((category) => {
 				return category.services
 					.map((service) => {
 						return { value: service._id, label: service.title, time: service.time, cost: service.cost };
-					})
+					}, [])
 					.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
-			}, []);
+			});
 		}
 
 		// console.log(servicesOptions);
@@ -66,15 +66,29 @@ class ServicesForm extends Component {
 							Services
 							<span className="form-required" />
 						</label>
-						<Select
-							options={servicesOptions[0]}
-							value={values.services}
-							isMulti
-							name="services"
-							components={makeAnimated()}
-							closeMenuOnSelect={false}
-							onChange={this.props.handleServices}
-						/>
+						{!isEmpty(categoriesOptions) ? (
+							<Select
+								options={[].concat.apply([], servicesOptions)}
+								// options={categoriesOptions.services
+								// 	.map((service) => {
+								// 		return {
+								// 			value: service._id,
+								// 			label: service.title,
+								// 			time: service.time,
+								// 			cost: service.cost
+								// 		};
+								// 	})
+								// 	.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0))}
+								value={values.services}
+								isMulti
+								name="services"
+								components={makeAnimated()}
+								closeMenuOnSelect={false}
+								onChange={this.props.handleServices}
+							/>
+						) : (
+							''
+						)}
 					</div>
 				</div>
 				<hr />
