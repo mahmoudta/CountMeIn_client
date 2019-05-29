@@ -25,9 +25,7 @@ class SetFStep extends Component {
                 </div>
                 <div className="card-body">
                   <form>
-                    <small className="mb-2">
-                      What is the purpose of the appointment ?
-                    </small>
+                    <small className="mb-2">Please Select Services .</small>
                     <div className="form-group">
                       <label className="text-uppercase" htmlFor="services">
                         Services

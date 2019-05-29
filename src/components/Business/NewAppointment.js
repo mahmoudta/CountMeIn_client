@@ -22,7 +22,7 @@ class NewAppointment extends Component {
       pickedService: "NULL",
       date_from: "",
       date_until: "",
-      services: [],
+      services: [0],
       onBusiness: { profile: { services: [] } },
       Dates: "",
       date: "",
@@ -66,6 +66,9 @@ class NewAppointment extends Component {
   handlePickedService = e => {
     console.log("pick Service handler called");
     this.setState({ pickedService: e.target.value });
+    // this.setState(prevState => ({
+    //   services: [...prevState.services, , this.state.pickedService]
+    // }));
   };
   setAppointment = e => {
     console.log("set appointment");
