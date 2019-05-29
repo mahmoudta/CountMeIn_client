@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import isEmpty from "lodash/isEmpty";
 import { zeroPad } from "../../utils/padding";
-export default class SetThirdStep extends Component {
-  componentDidMount = async () => {
-    console.log("im here");
-  };
 
+export class SetSmartThirdStep extends Component {
   render() {
     //console.log(this.props);
 
@@ -20,19 +16,19 @@ export default class SetThirdStep extends Component {
               <div className="card-body">
                 <small className="mb-2">Step 3</small> <br />
                 <div className="row">
-                  {values.dates.dates.map(dates => {
+                  {values.Smartdata.smartData.map(smart => {
                     return (
                       <div className="col">
                         <div className="btn-group-vertical">
-                          {dates.Date.slice(0, 10)}
-                          {console.log(dates.Date)}
-                          {dates.Free.map((free, i) => {
+                          {smart.Date.slice(0, 10)}
+                          {console.log(smart.Date)}
+                          {smart.Free.map((free, i) => {
                             return (
                               <button
                                 type="button"
                                 className="btn btn-secondary"
                                 onClick={this.props.setAppointment}
-                                date={dates.Date}
+                                date={smart.Date}
                                 shour={free._start._hour}
                                 sminute={free._start._minute}
                                 ehour={free._end._hour}
@@ -60,3 +56,5 @@ export default class SetThirdStep extends Component {
     );
   }
 }
+
+export default SetSmartThirdStep;

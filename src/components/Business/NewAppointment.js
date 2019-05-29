@@ -6,10 +6,12 @@ import { getBusinessById } from "../../actions/businessActions";
 import SetFStep from "./SetFStep";
 import SetSecStep from "./SetSecStep";
 import SetThirdStep from "./SetThirdStep";
+import SetSmartSecStep from "./SetSmartSecStep";
 
 import { convertToUtcTime } from "../../utils/date";
 import axios from "axios";
 import { API } from "../../consts";
+import SetSmartThirdStep from "./SetSmartThirdStep";
 
 class NewAppointment extends Component {
   constructor(props) {
@@ -26,7 +28,8 @@ class NewAppointment extends Component {
       shour: "",
       sminute: "",
       ehour: "", //{free._start}
-      eminute: "" //{free._end}
+      eminute: "", //{free._end}
+      Smartdata: []
     };
     this.nextStep = this.nextStep.bind(this);
     this.prevStep = this.prevStep.bind(this);
@@ -43,6 +46,10 @@ class NewAppointment extends Component {
   nextStep = () => {
     const { step } = this.state;
     this.setState({ step: step + 1 });
+  };
+  toSmart = () => {
+    //const { step } = this.state;
+    this.setState({ step: 6 });
   };
   prevStep = () => {
     const { step } = this.state;
@@ -92,6 +99,41 @@ class NewAppointment extends Component {
         this.setState({ step: step + 1 });
       });
   };
+
+  // smart function call anxsso
+  getSmart = e => {
+    const timeScope = e.target.getAttribute("timeScope");
+    const { step } = this.state;
+    const { business } = this.props;
+    console.log(
+      "businessId",
+      business._id,
+      "servicesArr",
+      [this.state.pickedService],
+      "customerId",
+      this.props.auth.user.sub,
+      "timeScop",
+      Number(timeScope)
+    );
+    axios
+      .post(`${API}/algorithms/smart`, {
+        businessId: business._id,
+        servicesArr: [this.state.pickedService],
+        customerId: this.props.auth.user.sub,
+        timeScope: Number(timeScope)
+      })
+      .then(response => {
+        this.setState({ Smartdata: response.data });
+        console.log(this.state);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .then(() => {
+        this.setState({ step: step + 1 });
+      });
+  };
+
   getFreeTime = e => {
     const { step } = this.state;
     const { business } = this.props;
@@ -126,6 +168,7 @@ class NewAppointment extends Component {
         return (
           <SetFStep
             nextStep={this.nextStep}
+            toSmart={this.toSmart}
             handleChange={this.handleChange}
             handlePickedService={this.handlePickedService}
             values={this.state}
@@ -153,6 +196,27 @@ class NewAppointment extends Component {
         );
       case 4:
         return <div>hey</div>;
+
+      case 6:
+        return (
+          <SetSmartSecStep
+            values={this.state}
+            handleSubmit={this.handleSubmit}
+            getSmart={this.getSmart}
+            prevStep={this.prevStep}
+            setAppointment={this.setAppointment}
+            preSetAppointment={this.preSetAppointment}
+          /> /// SecondstepSmart
+        );
+      case 7:
+        return (
+          <SetSmartThirdStep
+            values={this.state}
+            handleSubmit={this.handleSubmit}
+            prevStep={this.prevStep}
+            setAppointment={this.setAppointment}
+          />
+        );
     }
   }
 }

@@ -13,7 +13,7 @@ class SetFStep extends Component {
     const { values, business, businessLoading } = this.props;
     console.log(values.onBusiness);
     const empty = isEmpty(business);
-    console.log("empty", empty);
+    console.log("empty", values);
     return (
       <section className="mt-5">
         <div className="container">
@@ -46,8 +46,8 @@ class SetFStep extends Component {
                               key={service.service_id._id}
                               value={service.service_id._id}
                             >
-                              {service.service_id.title + " "} -{" "}
-                              {service.service_id.time} Minutes
+                              {service.service_id.title + " "} - {service.time}{" "}
+                              Minutes
                             </option>
                           );
                         })}
@@ -65,12 +65,17 @@ class SetFStep extends Component {
                   >
                     previous
                   </button>
-
+                  <button
+                    className="btn btn-sm btn-success float-right"
+                    onClick={this.props.toSmart}
+                  >
+                    Smart
+                  </button>
                   <button
                     className="btn btn-sm btn-primary float-right"
                     onClick={this.props.nextStep}
                   >
-                    Next
+                    Regular
                   </button>
                 </div>
               </div>

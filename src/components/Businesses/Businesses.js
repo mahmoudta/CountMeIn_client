@@ -113,17 +113,16 @@ class Businesses extends Component {
       return;
     }
     if (index > -1) {
-      this.state.businesses.map((that, i) => {
-        if (that.Name === this.state.name[index]) {
-          console.log(that.Name, this.state.name[index]);
+      console.log("thisstatebusinesses", this.state.businesses);
 
-          const tmpbusiness = this.state.businesses;
-          tmpbusiness.splice(i, 1);
-          this.setState({
-            businesses: tmpbusiness
-          });
-        }
+      const arrayfilter = this.state.businesses.filter(xwx => {
+        return xwx.Name != this.state.name[index];
       });
+      console.log("array", arrayfilter);
+      this.setState({
+        businesses: arrayfilter
+      });
+
       const tmpvalue = this.state.value;
       tmpvalue.splice(index, 1);
       const tmpname = this.state.name;
@@ -140,8 +139,22 @@ class Businesses extends Component {
     const { classes } = this.props;
     const { categoriess } = this.props;
     console.log("state array", this.state.businesses);
+    // const distinctArray = [
+    //   ...new Set(this.state.businesses.map(item => item.businessProfile._id))
+    // ];
 
-    const PrintIt = this.state.businesses.map(i => {
+    var flags = [],
+      output = [],
+      l = this.state.businesses.length,
+      i;
+    for (i = 0; i < l; i++) {
+      if (flags[this.state.businesses[i].businessProfile._id]) continue;
+      flags[this.state.businesses[i].businessProfile._id] = true;
+      output.push(this.state.businesses[i]);
+    }
+
+    console.log("distinct", flags);
+    const PrintIt = output.map(i => {
       console.log(i, "i");
       return <BusinessList business={i.businessProfile} />;
     });
