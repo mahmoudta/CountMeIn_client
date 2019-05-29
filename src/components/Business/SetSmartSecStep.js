@@ -12,35 +12,43 @@ export class SetSmartSecStep extends Component {
               <div className="card-header text-uppercase">Smart Schedule </div>
               <div className="card-body">
                 <form>
-                  <small className="mb-2">I Prefer Appointment in the </small>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={this.props.getSmart}
-                    timeScope={0}
-                  >
-                    Morning
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={this.props.getSmart}
-                    timeScope={1}
-                  >
-                    Afternoon
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={this.props.getSmart}
-                    timeScope={2}
-                  >
-                    Evening
-                  </button>
+                  <div className="row">
+                    <small className="mb-2 mx-auto">
+                      I Prefer Appointment in the{" "}
+                    </small>
+                    <div className="col-12">
+                      <button
+                        type="button"
+                        className="btn btn-secondary  d-block w-75 mx-auto"
+                        onClick={this.props.getSmart}
+                        timeScope={0}
+                      >
+                        Morning
+                      </button>
+                    </div>
+                    <div className="col-12">
+                      <button
+                        type="button"
+                        className="btn btn-secondary d-block w-75 mx-auto"
+                        onClick={this.props.getSmart}
+                        timeScope={1}
+                      >
+                        Afternoon
+                      </button>
+                    </div>
+                    <div className="col-12">
+                      <button
+                        type="button"
+                        className="btn btn-secondary  d-block w-75 mx-auto"
+                        onClick={this.props.getSmart}
+                        timeScope={2}
+                      >
+                        Evening
+                      </button>
+                    </div>
+                  </div>
                 </form>
-                <div className="col-12">
-                  {<p className="my-3">You have choosed</p>}
-                </div>
+                <div className="col-12">{<p className="my-3" />}</div>
               </div>
               <div className="card-footer" />
             </div>
