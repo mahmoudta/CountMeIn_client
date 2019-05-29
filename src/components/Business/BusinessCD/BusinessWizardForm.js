@@ -88,9 +88,14 @@ class BusinessWizardForm extends Component {
 	}
 	selectedItems(myBusiness, categories) {
 		if (!isEmpty(myBusiness) && !isEmpty(categories)) {
-			const selectedCategories = categories.map((category) => {
-				return { value: category._id, label: category.name, services: category.services };
+			const selectedCategories = myBusiness.categories.map((category) => {
+				console.log(category);
+				return {
+					value: category._id,
+					label: category.name
+				};
 			});
+
 			const services = myBusiness.services.map((service) => {
 				return {
 					label: service.service_id.title,
@@ -106,7 +111,7 @@ class BusinessWizardForm extends Component {
 
 	async scheduleBuilder() {
 		const { myBusiness } = this.props;
-		if (!isEmpty(myBusiness)) {
+		if (!myBusiness.error && !isEmpty(myBusiness)) {
 			const schedule = await myBusiness.working_hours.map((day) => {
 				return {
 					day: day.day,
@@ -143,7 +148,7 @@ class BusinessWizardForm extends Component {
 		this.setState({ working });
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		this.props.getAllCategories();
 		this.props
 			.getBusinessByOwner(this.props.user.sub)
@@ -152,7 +157,7 @@ class BusinessWizardForm extends Component {
 					console.log("i'm hereee");
 					const categories = await this.props.categories;
 					const business = result.payload;
-					const selectedItems = this.selectedItems(business, categories);
+					const selectedItems = await this.selectedItems(business, categories);
 					// const working = this.
 					this.setState({
 						// mainCategories: categories,
@@ -196,7 +201,7 @@ class BusinessWizardForm extends Component {
 			working,
 			services
 		} = this.state;
-		if (isEmpty(myBusiness)) {
+		if (myBusiness.error) {
 			this.props.createNewBusiness({
 				street,
 				city,

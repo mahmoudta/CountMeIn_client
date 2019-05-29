@@ -55,14 +55,12 @@ export const createNewBusiness = (data) => (dispatch) => {
 		.post(`${API}/business/`, data)
 		.then((result) => {
 			const token = result.data.token;
+			localStorage.removeItem('jwtToken');
 			localStorage.setItem('jwtToken', token);
 			setAuthorizationToken(token);
+			dispatch(setCurrentUser({}));
 			dispatch(setCurrentUser(jwtDecode(token)));
 
-			dispatch({
-				type: CREATE_BUSINESS,
-				payload: result.data.business
-			});
 			dispatch({
 				type: SET_FLASH_MESSAGE,
 				message: {
@@ -73,6 +71,10 @@ export const createNewBusiness = (data) => (dispatch) => {
 						path: `/business/view/${result.data.business._id}`
 					}
 				}
+			});
+			return dispatch({
+				type: CREATE_BUSINESS,
+				payload: result.data.business
 			});
 		})
 		.catch((err) => {

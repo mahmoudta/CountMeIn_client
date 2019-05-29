@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { FaBusinessTime } from 'react-icons/fa';
+import isEmpty from 'lodash/isEmpty';
 
 class ServicesForm extends Component {
 	constructor(props) {
@@ -13,19 +14,24 @@ class ServicesForm extends Component {
 	render() {
 		const { values, categories } = this.props;
 		/* converting category  */
-		const categoriesOptions = categories
-			.map((category) => {
-				return { label: category.name, value: category._id, services: category.services };
-			}, [])
-			.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
+		let categoriesOptions = [];
+		let servicesOptions = [];
 
-		const servicesOptions = values.categories.map((category) => {
-			return category.services
-				.map((service) => {
-					return { value: service._id, label: service.title, time: service.time, cost: service.cost };
+		if (!isEmpty(categories)) {
+			categoriesOptions = categories
+				.map((category) => {
+					return { label: category.name, value: category._id, services: category.services };
 				})
 				.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
-		});
+
+			servicesOptions = categories.map((category) => {
+				return category.services
+					.map((service) => {
+						return { value: service._id, label: service.title, time: service.time, cost: service.cost };
+					})
+					.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
+			}, []);
+		}
 
 		// console.log(servicesOptions);
 
