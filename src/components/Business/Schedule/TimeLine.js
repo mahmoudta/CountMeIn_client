@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 /* UTILS */
 import { getBusinessTime, appointmentTimeDiffrence } from '../../../utils/date';
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
 class TimeLine extends Component {
 	constructor(props) {
@@ -39,11 +40,17 @@ class TimeLine extends Component {
 						</div>
 						<div className="col-12 calendar-header">
 							<div className="row">
-								<div className="col-12 col-md-4">
+								<div className="col-12 col-md-4 mx-auto">
 									<form>
-										<div className="form-row">
+										<div className="form-group">
+											<label
+												className="w-100 text-capitalize text-center text-secondary h2 font-weight-light"
+												htmlFor="date"
+											>
+												{new Date(date).toLocaleDateString('en-US', options)}
+											</label>
 											<input
-												className="form-control form-control-sm"
+												className="w-md-75 mx-md-auto form-control form-control-sm"
 												type="date"
 												name="date"
 												value={date}
