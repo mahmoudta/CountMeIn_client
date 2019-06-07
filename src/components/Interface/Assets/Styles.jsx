@@ -96,12 +96,12 @@ const defaultFont = {
 	lineHeight: '1.5em'
 };
 
-const primaryColor = [ '#9c27b0', '#ab47bc', '#8e24aa', '#af2cc5', '#7b1fa2' ];
-const warningColor = [ '#ff9800', '#ffa726', '#fb8c00', '#ffa21a', '#f57c00', '#faf2cc', '#fcf8e3' ];
-const dangerColor = [ '#f44336', '#ef5350', '#e53935', '#f55a4e', '#d32f2f', '#ebcccc', '#f2dede' ];
-const successColor = [ '#4caf50', '#66bb6a', '#43a047', '#5cb860', '#388e3c', '#d0e9c6', '#dff0d8' ];
-const infoColor = [ '#00acc1', '#26c6da', '#00acc1', '#00d3ee', '#0097a7', '#c4e3f3', '#d9edf7' ];
-const roseColor = [ '#e91e63', '#ec407a', '#d81b60', '#eb3573', '#c2185b' ];
+const primaryColor = ['#9c27b0', '#ab47bc', '#8e24aa', '#af2cc5', '#7b1fa2'];
+const warningColor = ['#ff9800', '#ffa726', '#fb8c00', '#ffa21a', '#f57c00', '#faf2cc', '#fcf8e3'];
+const dangerColor = ['#f44336', '#ef5350', '#e53935', '#f55a4e', '#d32f2f', '#ebcccc', '#f2dede'];
+const successColor = ['#4caf50', '#66bb6a', '#43a047', '#5cb860', '#388e3c', '#d0e9c6', '#dff0d8'];
+const infoColor = ['#00acc1', '#26c6da', '#00acc1', '#00d3ee', '#0097a7', '#c4e3f3', '#d9edf7'];
+const roseColor = ['#e91e63', '#ec407a', '#d81b60', '#eb3573', '#c2185b'];
 const grayColor = [
 	'#999',
 	'#777',
@@ -135,6 +135,7 @@ const tumblrColor = '#35465c';
 const behanceColor = '#1769ff';
 const dribbbleColor = '#ea4c89';
 const redditColor = '#ff4500';
+const CMIColor = '#353A40'
 
 const boxShadow = {
 	boxShadow:
@@ -183,7 +184,10 @@ const roseBoxShadow = {
 	boxShadow:
 		'0 4px 20px 0 rgba(' + hexToRgb(blackColor) + ',.14), 0 7px 10px -5px rgba(' + hexToRgb(roseColor[0]) + ',.4)'
 };
-
+const CMIBoxShadow = {
+	boxShadow:
+		'0 4px 20px 0 rgba(' + hexToRgb(blackColor) + ',.14), 0 7px 10px -5px rgba(' + hexToRgb('#353A40') + ',.4)'
+};
 const warningCardHeader = {
 	background: 'linear-gradient(60deg, ' + warningColor[1] + ', ' + warningColor[2] + ')',
 	...warningBoxShadow
@@ -208,6 +212,10 @@ const roseCardHeader = {
 	background: 'linear-gradient(60deg, ' + roseColor[1] + ', ' + roseColor[2] + ')',
 	...roseBoxShadow
 };
+const CMICardHeader = {
+	background: 'linear-gradient(60deg, ' + CMIColor + ', ' + CMIColor + ')',
+	...CMIBoxShadow
+}
 
 const card = {
 	display: 'inline-block',
@@ -338,6 +346,7 @@ export {
 	successColor,
 	infoColor,
 	roseColor,
+	CMIColor,
 	grayColor,
 	blackColor,
 	whiteColor,
@@ -357,12 +366,14 @@ export {
 	warningBoxShadow,
 	dangerBoxShadow,
 	roseBoxShadow,
+	CMIBoxShadow,
 	warningCardHeader,
 	successCardHeader,
 	dangerCardHeader,
 	infoCardHeader,
 	primaryCardHeader,
 	roseCardHeader,
+	CMICardHeader,
 	cardActions,
 	cardHeader,
 	defaultBoxShadow,
