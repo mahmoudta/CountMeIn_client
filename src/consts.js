@@ -7,5 +7,12 @@ module.exports = {
 		region: 'eu-west-1',
 		accessKeyId: 'AKIAZBR2KYB2MPQF4WWA',
 		secretAccessKey: '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'
+	},
+	S3IMAGESCONFIGUSERS: {
+		bucketName: 'countmeinfilesnew',
+		dirName: 'users',
+		region: 'eu-west-1',
+		accessKeyId: 'AKIAZBR2KYB2MPQF4WWA',
+		secretAccessKey: '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'
 	}
 };

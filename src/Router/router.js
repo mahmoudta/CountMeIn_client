@@ -21,6 +21,9 @@ import FlashMessage from '../components/FlashMessages/FlashMessage';
 import Businesses from '../components/Businesses/Businesses';
 import BusinessProfile from '../components/Business/Profile/BusinessProfile';
 
+
+import SignUpForm from "../components/Landing/SignUpForm/SignUpForm"
+
 const ReactRouter = () => {
 	return (
 		<React.Fragment>
@@ -52,6 +55,7 @@ const ReactRouter = () => {
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
+								<Route path="/SignUp" component={SignUpForm} />
 							</section>
 						</section>
 					</section>
