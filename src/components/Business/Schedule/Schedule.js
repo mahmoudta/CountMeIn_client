@@ -18,10 +18,10 @@ class Schedule extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dateNow: getCurrentDate(),
-			date: '',
-			customer_id: '',
-			services: []
+			dateNow     : getCurrentDate(),
+			date        : '',
+			customer_id : '',
+			services    : []
 		};
 		this.changeDate = this.changeDate.bind(this);
 		this.handleNewAppointmentForm = this.handleNewAppointmentForm.bind(this);
@@ -51,6 +51,46 @@ class Schedule extends Component {
 		return (
 			<section key={'mainSchedule'} className="my-5">
 				<StatsticsScheduleHeader />
+				<div className="container">
+					<div className="row">
+						<div className="col-12 col-lg-8">
+							<div className="card border-0 shadow">
+								<div className="card-header text-center bg-secondary text-white">
+									<h6 className="card-title w-100 text-center">Up Coming</h6>
+								</div>
+							</div>
+						</div>
+
+						<div className="col-12 col-lg-4">
+							<div className="card">
+								<div className="card-header">
+									<h6 className="card-title">New Appointment</h6>
+								</div>
+								<div className="card-body">
+									<form>
+										<div className="row">
+											<div className="col-12">
+												<div className="form-group">
+													<label className="form-label">Services:</label>
+												</div>
+											</div>
+											<div className="col-6">
+												<div className="form-group">
+													<label className="form-label">Customer</label>
+												</div>
+											</div>
+											<div className="col-8 mx-auto col-lg-12">
+												<button className="btn btn-sm btn-primary w-100">
+													Search free time
+												</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<TimeLine
 					date={this.state.date}
 					changeDate={this.changeDate}
@@ -62,18 +102,18 @@ class Schedule extends Component {
 }
 
 Schedule.propTypes = {
-	auth: PropTypes.object.isRequired,
-	getBusinessByOwner: PropTypes.func.isRequired,
-	// myBusiness: PropTypes.object.isRequired,
+	auth                          : PropTypes.object.isRequired,
+	getBusinessByOwner            : PropTypes.func.isRequired,
+	myBusiness                    : PropTypes.object.isRequired,
 	// customers: PropTypes.array.isRequired,
 	// services: PropTypes.array.isRequired,
-	getBusinessAppointmentsByDate: PropTypes.func.isRequired
+	getBusinessAppointmentsByDate : PropTypes.func.isRequired
 };
 Schedule.contextTypes = {
-	router: PropTypes.object.isRequired
+	router : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth
+	auth : state.auth
 	// myBusiness: state.business.myBusiness
 	// customers: state.business.customers,
 	// services: state.business.businessServices

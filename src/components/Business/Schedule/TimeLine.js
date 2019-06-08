@@ -5,12 +5,54 @@ import isEmpty from 'lodash/isEmpty';
 import { Link } from 'react-router-dom';
 
 /* UTILS */
-import { getBusinessTime, appointmentTimeDiffrence } from '../../../utils/date';
+import { getBusinessTime, getAppointmentTime, objectTimeToString } from '../../../utils/date';
+import AppointmentModal from './AppointmentModal';
 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
 class TimeLine extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			appointmentClicked : false,
+			appointment        : {}
+		};
+		this.eachAppointment = this.eachAppointment.bind(this);
+		this.openModal = this.openModal.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+	}
+
+	closeModal = (e) => {
+		if (e) {
+			e.preventDefault();
+		}
+		this.setState({ appointmentClicked: false });
+	};
+	openModal = (e, appointment) => {
+		if (e) {
+			e.preventDefault();
+		}
+
+		this.setState({ appointmentClicked: true, appointment });
+	};
+
+	eachAppointment(appointment, startTime, index, break_time) {
+		let date = new Date();
+		const height = getAppointmentTime(appointment.time.start, appointment.time.end) - Math.round(break_time);
+		const top = getAppointmentTime({ _hour: startTime, _minute: 0 }, appointment.time.start);
+
+		return (
+			<div
+				key={appointment._id}
+				className={`d-flex justify-content-center align-items-center appointment-event shadow-sm ${appointment.status}`}
+				onClick={(e) => this.openModal(e, appointment)}
+				style={{
+					height : height * 2 + 'px',
+					top    : top * 2 + 'px'
+				}}
+			>
+				<span>{objectTimeToString(appointment.time.start, appointment.time.end)}</span>
+			</div>
+		);
 	}
 	render() {
 		const { appointment, myBusiness, date } = this.props;
@@ -27,6 +69,11 @@ class TimeLine extends Component {
 
 		return (
 			<section key={'TimleLine'}>
+				<AppointmentModal
+					closeModal={this.closeModal}
+					show={this.state.appointmentClicked}
+					appointment={this.state.appointment}
+				/>
 				<div className="container">
 					<div className="col-12 bg-white shadow-sm calendar-content pt-md-3">
 						<div className="col-12 claendar-Tools clear-fix my-2">
@@ -64,39 +111,9 @@ class TimeLine extends Component {
 						<div className="col-12 calendar-body border-top mt-5 p-md-0">
 							<div className="calendar-content ">
 								{!appointment.loading ? (
-									appointment.appointments.map((appointment) => {
-										return (
-											<div
-												key={appointment._id}
-												className="appointment-event bg-primary text-white rounded shadow"
-												style={{
-													height:
-														Number(
-															appointment.time.end._hour -
-																appointment.time.start._hour +
-																'.' +
-																(appointment.time.end._minute -
-																	appointment.time.start._minute)
-														) *
-															100 -
-														10 +
-														'px',
-
-													top:
-														(Number(
-															`${appointment.time.start._hour}.${Number(
-																appointment.time.start._minute
-															) / 60}`
-														) -
-															startTime) *
-															60 +
-														'px'
-												}}
-											>
-												<h4>{appointment.client.profile.name.first}</h4>
-											</div>
-										);
-									})
+									appointment.appointments.map((appointment, index) =>
+										this.eachAppointment(appointment, startTime, index, myBusiness.break_time)
+									)
 								) : (
 									<div
 										className="spinner-border text-primary"
@@ -132,19 +149,19 @@ class TimeLine extends Component {
 	}
 }
 TimeLine.propTypes = {
-	auth: PropTypes.object.isRequired,
-	myBusiness: PropTypes.object.isRequired,
-	appointment: PropTypes.object.isRequired
+	auth        : PropTypes.object.isRequired,
+	myBusiness  : PropTypes.object.isRequired,
+	appointment : PropTypes.object.isRequired
 	// customers: PropTypes.array.isRequired,
 	// services: PropTypes.array.isRequired,
 };
 TimeLine.contextTypes = {
-	router: PropTypes.object.isRequired
+	router : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth,
-	myBusiness: state.business.myBusiness,
-	appointment: state.appointment
+	auth        : state.auth,
+	myBusiness  : state.business.myBusiness,
+	appointment : state.appointment
 	// customers: state.business.customers,
 	// services: state.business.businessServices
 });
