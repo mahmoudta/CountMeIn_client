@@ -13,8 +13,8 @@ class TimeLine extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			appointmentClicked : false,
-			appointment        : {}
+			appointmentClicked: false,
+			appointment: {}
 		};
 		this.eachAppointment = this.eachAppointment.bind(this);
 		this.openModal = this.openModal.bind(this);
@@ -35,8 +35,34 @@ class TimeLine extends Component {
 		this.setState({ appointmentClicked: true, appointment });
 	};
 
-	eachAppointment(appointment, startTime, index, break_time) {
-		let date = new Date();
+	eachAppointmentSuggest(suggest, startTime, break_time) {
+		let date1 = new Date();
+		date1.setHours(suggest._end._hour, suggest._end._minute - break_time, 0, 0);
+		console.log('date1: ', date1);
+
+		const height = getAppointmentTime(suggest._start, suggest._end) - Math.round(break_time);
+		const top = getAppointmentTime({ _hour: startTime, _minute: 0 }, suggest._start);
+		return (
+			<div
+				key={suggest._start._hour + suggest._end._hour}
+				className={`d-flex justify-content-center align-items-center appointment-event shadow-sm bg-warning `}
+				style={{
+					height: height * 2 + 'px',
+					top: top * 2 + 'px'
+				}}
+			>
+				<span>
+					{objectTimeToString(suggest._start, { _hour: date1.getHours(), _minute: date1.getMinutes() })}
+				</span>
+				<button className="btn btn-sm btn-secondary ml-auto">set appointment</button>
+			</div>
+		);
+	}
+
+	eachAppointment(appointment, startTime, break_time) {
+		let date1 = new Date();
+		let date2 = new Date();
+		// date1.setHours()
 		const height = getAppointmentTime(appointment.time.start, appointment.time.end) - Math.round(break_time);
 		const top = getAppointmentTime({ _hour: startTime, _minute: 0 }, appointment.time.start);
 
@@ -46,8 +72,8 @@ class TimeLine extends Component {
 				className={`d-flex justify-content-center align-items-center appointment-event shadow-sm ${appointment.status}`}
 				onClick={(e) => this.openModal(e, appointment)}
 				style={{
-					height : height * 2 + 'px',
-					top    : top * 2 + 'px'
+					height: height * 2 + 'px',
+					top: top * 2 + 'px'
 				}}
 			>
 				<span>{objectTimeToString(appointment.time.start, appointment.time.end)}</span>
@@ -55,7 +81,7 @@ class TimeLine extends Component {
 		);
 	}
 	render() {
-		const { appointment, myBusiness, date } = this.props;
+		const { appointment, myBusiness, date, freeTime } = this.props;
 		let times = [];
 		let startTime = 0;
 		let date1 = new Date();
@@ -110,9 +136,16 @@ class TimeLine extends Component {
 						</div>
 						<div className="col-12 calendar-body border-top mt-5 p-md-0">
 							<div className="calendar-content ">
+								{!isEmpty(freeTime) ? (
+									freeTime.Free.map((suggest) =>
+										this.eachAppointmentSuggest(suggest, startTime, myBusiness.break_time)
+									)
+								) : (
+									''
+								)}
 								{!appointment.loading ? (
-									appointment.appointments.map((appointment, index) =>
-										this.eachAppointment(appointment, startTime, index, myBusiness.break_time)
+									appointment.appointments.map((appointment) =>
+										this.eachAppointment(appointment, startTime, myBusiness.break_time)
 									)
 								) : (
 									<div
@@ -149,19 +182,21 @@ class TimeLine extends Component {
 	}
 }
 TimeLine.propTypes = {
-	auth        : PropTypes.object.isRequired,
-	myBusiness  : PropTypes.object.isRequired,
-	appointment : PropTypes.object.isRequired
+	auth: PropTypes.object.isRequired,
+	myBusiness: PropTypes.object.isRequired,
+	appointment: PropTypes.object.isRequired,
+	freeTime: PropTypes.object.isRequired
 	// customers: PropTypes.array.isRequired,
 	// services: PropTypes.array.isRequired,
 };
 TimeLine.contextTypes = {
-	router : PropTypes.object.isRequired
+	router: PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth        : state.auth,
-	myBusiness  : state.business.myBusiness,
-	appointment : state.appointment
+	auth: state.auth,
+	myBusiness: state.business.myBusiness,
+	appointment: state.appointment,
+	freeTime: state.appointment.freeTime
 	// customers: state.business.customers,
 	// services: state.business.businessServices
 });

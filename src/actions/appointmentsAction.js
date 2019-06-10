@@ -6,6 +6,7 @@ import {
 	GET_BUSINESS_APPOINTMENTS,
 	APPOINTMENT_LOADING,
 	TODAY_READY_APPOINTMENTS,
+	GET_FREE_TIME_SUGGESTION,
 	// NEXT_APPOINTMENT_ALERT,
 	SET_APPOINTMENT_ACTIVE
 } from './types';
@@ -97,6 +98,25 @@ export const updateAppointmentStatus = (appointment_id) => (dispatch) => {
 			dispatch({
 				type: TODAY_READY_APPOINTMENTS,
 				payload: []
+			});
+		});
+};
+
+export const getFreeTime = (data) => (dispatch) => {
+	// dispatch(setAppointmentLoading());
+	axios
+		.post(`${API}/algorithms/freetime`, data)
+		.then((result) => {
+			console.log(result.data);
+			dispatch({
+				type: GET_FREE_TIME_SUGGESTION,
+				payload: result.data.dates[0]
+			});
+		})
+		.catch((err) => {
+			dispatch({
+				type: GET_FREE_TIME_SUGGESTION,
+				payload: {}
 			});
 		});
 };

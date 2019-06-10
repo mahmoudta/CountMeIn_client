@@ -92,3 +92,23 @@
 .modal {
 	background-color: #00000096;
 }
+
+.card .bg-primary {
+	background-color: #467fcf !important;
+	color: #fff;
+}
+
+.closed {
+	max-height: 0;
+	position: relative;
+	padding: 0 !important;
+	visibility: hidden;
+	transition: max-height 300ms linear;
+}
+
+.opened {
+	max-height: 300px;
+	position: relative;
+	visibility: visible;
+	padding: 1.25rem !important;
+}

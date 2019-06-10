@@ -2,6 +2,7 @@ import {
 	APPOINTMENT_LOADING,
 	GET_BUSINESS_APPOINTMENTS,
 	TODAY_READY_APPOINTMENTS,
+	GET_FREE_TIME_SUGGESTION,
 	// NEXT_APPOINTMENT_ALERT,
 	SET_APPOINTMENT_ACTIVE
 } from '../actions/types';
@@ -9,6 +10,7 @@ const initialState = {
 	appointments: [],
 	inProgress: {},
 	ready_appointments: [],
+	freeTime: {},
 	loading: false
 };
 
@@ -34,6 +36,11 @@ export default function(state = initialState, action) {
 			return {
 				...state,
 				inProgress: action.payload
+			};
+		case GET_FREE_TIME_SUGGESTION:
+			return {
+				...state,
+				freeTime: action.payload
 			};
 		// case NEXT_APPOINTMENT_ALERT:
 		// 	console.log(action.payload.timeout);
