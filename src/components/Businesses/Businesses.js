@@ -17,6 +17,9 @@ import BusinessList from "../Dashboard/ClientView/BusinessList";
 import GridContainer from "../Interface/Grid/GridContainer";
 import { connect } from "react-redux";
 import { getAllCategories } from "../../actions/categoryActions";
+import CustomInput from "../Interface/CustomInput/CustomInput.jsx";
+import GridItem from "../Interface/Grid/GridItem"
+
 
 const styles = theme => ({
   root: {
@@ -37,7 +40,15 @@ const styles = theme => ({
   },
   noLabel: {
     marginTop: theme.spacing.unit * 3
-  }
+  }, select: {
+    '&:before': {
+      //borderColor: color,
+    },
+    '&:after': {
+      borderColor: '#353A40',
+    }
+  },
+
 });
 
 const ITEM_HEIGHT = 48;
@@ -66,21 +77,50 @@ class Businesses extends Component {
     value: [],
     names: [],
     values: [],
-    businesses: []
+    businesses: [],
+    allBusinesses: [],
+    search: "",
+    filteredBusinesses: [],
+    catCount: 0
   };
 
   componentWillMount() {
+    axios
+      .get(`${API}/business/getAllbusinesses`)
+      .then(response => {
+        //	this.setState({ dates: response.data });
+        console.log("responseB", response.data);
+        response.data.businesses.map(businessProfile => {
+          this.setState(
+            {
+              allBusinesses: [...this.state.allBusinesses, { Name: "all", businessProfile }]
+            },
+            () => console.log("callback1", this.state.allBusinesses)
+          );
+
+
+        });
+
+
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .then(() => {
+        //this.setState({ filteredBusinesses: this.state.allBusinesses })
+      });
     //get all catagories names and ids
     this.props.getAllCategories();
   }
   SearchBusinesses = item => {
     const Name = item.title;
+    this.setState({ catCount: this.state.catCount + 1 })
     axios
       .get(`${API}/business/getBusinessesByCatagory/${item.values}`)
       .then(response => {
         //	this.setState({ dates: response.data });
         console.log("response", response.data.business);
-
+        //const tmpaa = response.data.business.filter(business_ => business_.profile.name.toLowerCase().includes(this.state.search))
         response.data.business.map(businessProfile => {
           this.setState(
             {
@@ -88,13 +128,59 @@ class Businesses extends Component {
             },
             () => console.log("callback", this.state.businesses)
           );
+
+
         });
       })
       .catch(err => {
         console.log(err);
       })
-      .then(() => {});
+      .then(() => {
+        if (this.state.search.length != 0) {
+          const tmp = this.state.businesses.filter(business => business.businessProfile.profile.name.toLowerCase().includes(this.state.search))
+          this.setState({ filteredBusinesses: tmp })
+          console.log("tmp", tmp)
+        } else {
+          this.setState({ filteredBusinesses: this.state.businesses })
+
+        }
+      });
   };
+
+
+  searchChange = (event, num) => {
+    console.log("statecount", this.state.catCount)
+    var LowerSearch;
+    if (num === 0) {
+      LowerSearch = event.target.value.toLowerCase();
+      this.setState({ search: LowerSearch })
+      console.log(LowerSearch)
+    }
+    if (num === 1) {
+      LowerSearch = this.state.search
+      //this.setState({ search: LowerSearch })
+      console.log(LowerSearch)
+
+    }
+    if (this.state.catCount === 0) {
+      if (LowerSearch === "") { this.setState({ filteredBusinesses: [] }) }
+      const tmpS = this.state.allBusinesses.filter(business => business.businessProfile.profile.name.toLowerCase().includes(this.state.search))
+      this.setState({ filteredBusinesses: tmpS })
+
+    } else {
+      const tmpS = this.state.businesses.filter(business => business.businessProfile.profile.name.toLowerCase().includes(this.state.search))
+      this.setState({ filteredBusinesses: tmpS })
+    } if (LowerSearch === "") {
+      console.log("emoty")
+      if (this.state.catCount === 0) this.setState({ filteredBusinesses: [] })
+      if (this.state.catCount > 0) {
+        this.setState({ filteredBusinesses: this.state.businesses })
+
+      }
+    }
+    console.log(this.state.filteredBusinesses, "FILTERED")
+
+  }
 
   handleChange = event => {
     const item = event.target.value;
@@ -113,15 +199,23 @@ class Businesses extends Component {
       return;
     }
     if (index > -1) {
+      this.setState({ catCount: this.state.catCount - 1 })
       console.log("thisstatebusinesses", this.state.businesses);
-
       const arrayfilter = this.state.businesses.filter(xwx => {
-        return xwx.Name != this.state.name[index];
+        return (xwx.Name != this.state.name[index]);
+      });
+
+      const arrayfilter2 = this.state.filteredBusinesses.filter(xwx => {
+        return (xwx.Name != "all");
       });
       console.log("array", arrayfilter);
       this.setState({
         businesses: arrayfilter
       });
+      this.setState({
+        filteredBusinesses: arrayfilter2
+      });
+      this.searchChange(null, 1);
 
       const tmpvalue = this.state.value;
       tmpvalue.splice(index, 1);
@@ -130,7 +224,8 @@ class Businesses extends Component {
       this.setState({ value: tmpvalue, name: tmpname });
       // this.state.value.splice(index, 1);
       // this.state.name.splice(index, 1);
-      console.log("thisstatebusinesses", this.state.businesses);
+      console.log("thisstatebusinesses", this.state.filteredBusinesses);
+
     }
     //console.log(event.target.selectedOptions[0].getAttributes("title"));
   };
@@ -145,12 +240,12 @@ class Businesses extends Component {
 
     var flags = [],
       output = [],
-      l = this.state.businesses.length,
+      l = this.state.filteredBusinesses.length,
       i;
     for (i = 0; i < l; i++) {
-      if (flags[this.state.businesses[i].businessProfile._id]) continue;
-      flags[this.state.businesses[i].businessProfile._id] = true;
-      output.push(this.state.businesses[i]);
+      if (flags[this.state.filteredBusinesses[i].businessProfile._id]) continue;
+      flags[this.state.filteredBusinesses[i].businessProfile._id] = true;
+      output.push(this.state.filteredBusinesses[i]);
     }
 
     console.log("distinct", flags);
@@ -162,36 +257,54 @@ class Businesses extends Component {
     return (
       <div className="col-12">
         <div className={classes.root}>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="select-multiple-chip">
-              select catagory
+
+          <GridItem xs={12} sm={12} md={4}>
+            <CustomInput
+              labelText="Search"
+              id="float"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                onChange: event => this.searchChange(event, 0),
+
+              }}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <FormControl className={classes.formControl}>
+
+              <InputLabel htmlFor="select-multiple-chip">
+                All Categories
             </InputLabel>
-            <Select
-              multiple
-              value={this.state.name}
-              onChange={this.handleChange}
-              input={<Input id="select-multiple-chip" />}
-              renderValue={selected => (
-                <div className={classes.chips}>
-                  {selected.map(nname => (
-                    <Chip key={nname} label={nname} className={classes.chip} />
-                  ))}
-                </div>
-              )}
-              MenuProps={MenuProps}
-            >
-              {categoriess.map((category, i) => (
-                <MenuItem
-                  key={category._id}
-                  title={category._id}
-                  value={{ values: category._id, title: category.name }}
-                  style={getStyles(category._id, this)}
-                >
-                  {category.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <Select
+                multiple
+                className={classes.select}
+                value={this.state.name}
+                onChange={this.handleChange}
+                input={<Input id="select-multiple-chip" />}
+                renderValue={selected => (
+                  <div className={classes.chips}>
+                    {selected.map(nname => (
+                      <Chip key={nname} label={nname} className={classes.chip} />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}
+              >
+                {categoriess.map((category, i) => (
+                  <MenuItem
+                    key={category._id}
+                    title={category._id}
+                    value={{ values: category._id, title: category.name }}
+                    style={getStyles(category._id, this)}
+                  >
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </GridItem>
         </div>
         <div>
           <GridContainer>{PrintIt}</GridContainer>
