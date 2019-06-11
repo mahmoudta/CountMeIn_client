@@ -11,41 +11,52 @@ import TimeLine from './TimeLine';
 
 /* UTILS */
 import { getCurrentDate } from '../../../utils/date';
-import { getBusinessAppointmentsByDate, getFreeTime } from '../../../actions/appointmentsAction';
+import {
+	getBusinessAppointmentsByDate,
+	getFreeTime,
+	businessNewAppointment
+} from '../../../actions/appointmentsAction';
 import { getBusinessByOwner } from '../../../actions/businessActions';
 
 import { FaAngleDown } from 'react-icons/fa';
+import moment from 'moment';
 
 /* STYLES */
 import './Schedule.css';
+import UpComing from './UpComing';
 
 class Schedule extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dateNow: getCurrentDate(),
-			date: '',
-			customer_id: '',
-			services: [],
-			customer: '',
-			newAppointment: false
+			dateNow        : getCurrentDate(),
+			date           : '',
+
+			services       : [],
+			customer       : '',
+			newAppointment : false
 		};
 		this.changeDate = this.changeDate.bind(this);
 		this.handleSelectChange = this.handleSelectChange.bind(this);
 		this.handleFreeTime = this.handleFreeTime.bind(this);
+		this.newAppointment = this.newAppointment.bind(this);
 	}
 
 	handleFreeTime(e) {
 		e.preventDefault();
+		const valid = moment().format('YYYY-MM-DD') <= moment(this.state.date).format('YYYY-MM-DD');
+
+		if (!valid) return;
+
 		const services = this.state.services.map((service) => {
 			return service.value;
 		});
 
 		this.props.getFreeTime({
-			business: this.props.myBusiness._id,
-			services: services,
-			date_from: this.state.date,
-			date_until: this.state.date
+			business   : this.props.myBusiness._id,
+			services   : services,
+			date_from  : this.state.date,
+			date_until : this.state.date
 		});
 	}
 
@@ -70,6 +81,17 @@ class Schedule extends Component {
 			this.setState({ [name]: value });
 		}
 	}
+	newAppointment(date, _start, _end) {
+		let data = {
+			client_id   : this.state.customer.value,
+			business_id : this.props.myBusiness._id,
+			services    : this.state.services,
+			date,
+			_start,
+			_end
+		};
+		this.props.businessNewAppointment(data);
+	}
 	render() {
 		const { myBusiness } = this.props;
 
@@ -79,11 +101,7 @@ class Schedule extends Component {
 				<div className="container">
 					<div className="row">
 						<div className="col-12 col-lg-8">
-							<div className="card border-0 shadow">
-								<div className="card-header text-center bg-secondary text-white">
-									<h6 className="card-title w-100 text-center">Up Coming</h6>
-								</div>
-							</div>
+							<UpComing />
 						</div>
 
 						<div className="col-12 col-lg-4">
@@ -112,8 +130,8 @@ class Schedule extends Component {
 															!isEmpty(myBusiness) ? (
 																myBusiness.services.map((service) => {
 																	return {
-																		value: service.service_id._id,
-																		label: service.service_id.title
+																		value : service.service_id._id,
+																		label : service.service_id.title
 																	};
 																})
 															) : (
@@ -136,8 +154,8 @@ class Schedule extends Component {
 															!isEmpty(myBusiness) ? (
 																myBusiness.customers.map((customer) => {
 																	return {
-																		value: customer.customer_id._id,
-																		label: `${customer.customer_id.profile.name
+																		value : customer.customer_id._id,
+																		label : `${customer.customer_id.profile.name
 																			.first}`
 																	};
 																})
@@ -167,6 +185,7 @@ class Schedule extends Component {
 				<TimeLine
 					date={this.state.date}
 					changeDate={this.changeDate}
+					newAppointment={this.newAppointment}
 					handleNewAppointmentForm={this.state.handleNewAppointmentForm}
 				/>
 			</section>
@@ -175,21 +194,26 @@ class Schedule extends Component {
 }
 
 Schedule.propTypes = {
-	auth: PropTypes.object.isRequired,
-	getBusinessByOwner: PropTypes.func.isRequired,
-	myBusiness: PropTypes.object.isRequired,
-	getFreeTime: PropTypes.func.isRequired,
-	// customers: PropTypes.array.isRequired,
+	auth                          : PropTypes.object.isRequired,
+	getBusinessByOwner            : PropTypes.func.isRequired,
+	myBusiness                    : PropTypes.object.isRequired,
+	getFreeTime                   : PropTypes.func.isRequired,
+	businessNewAppointment        : PropTypes.func.isRequired,
 	// services: PropTypes.array.isRequired,
-	getBusinessAppointmentsByDate: PropTypes.func.isRequired
+	getBusinessAppointmentsByDate : PropTypes.func.isRequired
 };
 Schedule.contextTypes = {
-	router: PropTypes.object.isRequired
+	router : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth,
-	myBusiness: state.business.myBusiness
+	auth       : state.auth,
+	myBusiness : state.business.myBusiness
 	// customers: state.business.customers,
 	// services: state.business.businessServices
 });
-export default connect(mapStatetoProps, { getBusinessAppointmentsByDate, getBusinessByOwner, getFreeTime })(Schedule);
+export default connect(mapStatetoProps, {
+	getBusinessAppointmentsByDate,
+	getBusinessByOwner,
+	getFreeTime,
+	businessNewAppointment
+})(Schedule);

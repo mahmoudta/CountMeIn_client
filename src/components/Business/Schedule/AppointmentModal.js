@@ -1,23 +1,34 @@
 import React, { Component } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { FaBusinessTime, FaShekelSign } from 'react-icons/fa';
+import moment from 'moment';
 
 export default class AppointmentModal extends Component {
 	constructor(props) {
 		super(props);
 		this.setState = { show: false };
-	}
-	componentDidMount() {
-		document.addEventListener('mousedown', this.handleClickOutside);
+		this.renderAppointmentTime = this.renderAppointmentTime.bind(this);
 	}
 
-	componentWillUnmount() {
-		document.removeEventListener('mousedown', this.handleClickOutside);
+	renderAppointmentTime(time, status) {
+		switch (status) {
+			case 'ready':
+				let start = moment(time.date).set({ hour: time.start._hour, minute: time.start._minute }).fromNow();
+				return <p className="d-block w-100 text-center text-muted">{`starts  ${start}`}</p>;
+			case 'inProgress':
+				let end = moment(time.date).set({ hour: time.end._hour, minute: time.end._minute }).fromNow();
+				return <p className="d-block w-100 text-center text-muted">{`ends  ${end}`}</p>;
+			case 'passed':
+				let ended = moment(time.date).set({ hour: time.end._hour, minute: time.end._minute }).fromNow();
+				return <p className="d-block w-100 text-center text-muted">{`ended  ${ended}`}</p>;
+
+			default:
+				break;
+		}
 	}
 
-	handleClickOutside = (event) => {};
 	render() {
-		const { appointment } = this.props;
+		const { appointment, myBusiness } = this.props;
 		let total_cost = 0,
 			total_time = 0;
 		return (
@@ -33,7 +44,12 @@ export default class AppointmentModal extends Component {
 					{!isEmpty(appointment) ? (
 						<div className="modal-content">
 							<div className="modal-header border-0 bg-light">
-								<p className="d-block w-100 text-center text-muted">{appointment.status}</p>
+								<div className="w-100">
+									<p className="d-block w-100 text-center text-muted text-capitalize">
+										<strong>{appointment.status}</strong>
+									</p>
+									{this.renderAppointmentTime(appointment.time, appointment.status)}
+								</div>
 								<button
 									type="button"
 									className="close"
@@ -61,53 +77,60 @@ export default class AppointmentModal extends Component {
 										</h2>
 									</div>
 									<hr className="w-100 " />
-									<div className="col-12">
-										<div className="row">
-											<div className="col-4">
-												<h4 className="h6">Services:</h4>
-											</div>
-											<div className="col-8">
+
+									<div className="table-responsive">
+										<table className="table card-table mb-0 table-vcenter text-nowrap">
+											<thead>
+												<tr>
+													<th>service</th>
+													<th>time</th>
+													<th>cost</th>
+												</tr>
+											</thead>
+											<tbody>
 												{appointment.services.map((service) => {
-													total_cost += service.cost;
-													total_time += service.time;
+													const busniessService = myBusiness.services.find((bService) => {
+														return (
+															bService.service_id._id.toString() ===
+															service._id.toString()
+														);
+													});
+													total_cost += busniessService.cost;
+													total_time += busniessService.time;
 
 													return (
-														<div key={service._id}>
-															<h6 className="font-weight-normal">{service.title}</h6>
-															<span className="text-muted">
-																<FaBusinessTime />
-																{service.time}
-															</span>
-															<span className="text-muted mx-3">
-																<FaShekelSign />
-																{service.cost}
-															</span>
-														</div>
+														<tr
+															key={
+																service.title +
+																busniessService.time +
+																busniessService.cost
+															}
+														>
+															<td>{service.title}</td>
+															<td>{`${busniessService.time} minutes`}</td>
+															<td>{`${busniessService.cost} NIS`}</td>
+														</tr>
 													);
 												})}
-											</div>
-										</div>
-									</div>
-									<div className="col-12 my-3">
-										<div className="row">
-											<div className="col-4">
-												<h4 className="h6">Total:</h4>
-											</div>
-											<div className="col-8">
-												<span>
-													{total_cost} <FaShekelSign />
-												</span>
-												<span>
-													{total_time} <FaBusinessTime />
-												</span>
-											</div>
-										</div>
+												<tr key={'total' + total_time + total_cost}>
+													<td>
+														<strong>total</strong>
+													</td>
+													<td>
+														<strong>{`${total_time} minutes`}</strong>
+													</td>
+													<td>
+														<strong>{`${total_cost} NIS`}</strong>
+													</td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
 
 							<div className="modal-footer">
-								<div className="float-left">
+								{/* <div className="float-left">
 									<button
 										type="button"
 										className="btn btn-secondary float-left"
@@ -116,11 +139,21 @@ export default class AppointmentModal extends Component {
 									>
 										Close
 									</button>
-								</div>
-
-								<button type="button" className="btn btn-primary">
-									Save changes
-								</button>
+								</div> */}
+								{
+									{
+										['ready']      : (
+											<button type="button" className="btn btn-success text-uppercase">
+												check in
+											</button>
+										),
+										['inProgress'] : (
+											<button type="button" className="btn btn-danger text-uppercase">
+												check out
+											</button>
+										)
+									}[appointment.status]
+								}
 							</div>
 						</div>
 					) : (

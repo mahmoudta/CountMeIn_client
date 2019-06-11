@@ -5,8 +5,9 @@ import { Link, NavLink } from 'react-router-dom';
 
 import { logout } from '../../actions/authActions';
 
-import { FaSignOutAlt } from 'react-icons/fa';
+import { FaSignOutAlt, FaBell } from 'react-icons/fa';
 import logo from '../../images/logo.png';
+import appointmentReducer from '../../reducers/appointmentReducer';
 
 // import './global.css';
 
@@ -14,27 +15,27 @@ class Header extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			open: false
+			open : false
 		};
 		this.renderHeader = this.renderHeader.bind(this);
-		this.openDropdown = this.openDropdown.bind(this);
-		this.closeDropdown = this.closeDropdown.bind(this);
+		// this.openDropdown = this.openDropdown.bind(this);
+		// this.closeDropdown = this.closeDropdown.bind(this);
 	}
-	openDropdown = (e) => {
-		e.preventDefault();
-		// const { open } = this.state;
-		this.setState({ open: true }, () => {
-			document.addEventListener('click', this.closeDropdown);
-		});
-	};
+	// openDropdown = (e) => {
+	// 	e.preventDefault();
+	// 	// const { open } = this.state;
+	// 	this.setState({ open: true }, () => {
+	// 		document.addEventListener('click', this.closeDropdown);
+	// 	});
+	// };
 
-	closeDropdown = (e) => {
-		e.preventDefault();
-		// const { open } = this.state;
-		this.setState({ open: false }, () => {
-			document.removeEventListener('click', this.closeDropdown);
-		});
-	};
+	// closeDropdown = (e) => {
+	// 	e.preventDefault();
+	// 	// const { open } = this.state;
+	// 	this.setState({ open: false }, () => {
+	// 		document.removeEventListener('click', this.closeDropdown);
+	// 	});
+	// };
 
 	logOut = (e) => {
 		e.preventDefault();
@@ -51,9 +52,32 @@ class Header extends Component {
 							<img src={logo} alt="" />
 						</NavLink>
 					</div>
+
 					<ul className="nav ml-md-auto nav-user">
-						<li className={this.state.open ? ' "dropdown" open' : '"dropdown"'}>
-							<a href="#" onClick={this.openDropdown} className="dropdown-toggle" data-toggle="dropdown">
+						<li className="dropdown">
+							<a role="button" className="dropdown-toggle" data-toggle="dropdown">
+								<FaBell />
+							</a>
+							<ul className="dropdown-menu notifications-menu ">
+								<li className=" text-white arrow top" />
+								<h6 className="dropdown-header text-center">Notifications</h6>
+								{this.props.notifications.map((notification) => {
+									return (
+										<li className="dropdown-item">
+											<Link className="h6 font-weight-normal py-3" to="#">
+												{notification.title}
+											</Link>
+										</li>
+									);
+								})}
+								{/* <li className="dropdown-item">
+									<p className="text-muted w-100 text-center">No notifications</p>
+								</li> */}
+							</ul>
+						</li>
+
+						<li className="dropdown">
+							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 								<span className="thumb-sm avatar float-left">
 									<img
 										src="https://crm.megatam.net/resource/avatar/download.png"
@@ -87,11 +111,13 @@ class Header extends Component {
 	}
 }
 Header.propTypes = {
-	auth: PropTypes.object.isRequired,
-	logout: PropTypes.func.isRequired
+	auth          : PropTypes.object.isRequired,
+	logout        : PropTypes.func.isRequired,
+	notifications : PropTypes.array.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth,
-	user: state.auth.user
+	auth          : state.auth,
+	user          : state.auth.user,
+	notifications : state.auth.notifications
 });
 export default connect(mapStatetoProps, { logout })(Header);

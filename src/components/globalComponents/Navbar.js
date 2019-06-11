@@ -6,6 +6,8 @@ import { NavLink } from 'react-router-dom';
 import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } from 'react-icons/fa';
 
 import { MdDashboard } from 'react-icons/md';
+import { FaBell } from 'react-icons/fa';
+
 import isEmpty from 'lodash/isEmpty';
 
 // import { getBusinessByOwner, getBusinessCustomers, getBusinessServices } from '../../actions/businessActions';
@@ -14,9 +16,9 @@ class Navbar extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			width: 'aside-md',
-			loading: false,
-			business_id: ''
+			width       : 'aside-md',
+			loading     : false,
+			business_id : ''
 		};
 		this.renderNav = this.renderNav.bind(this);
 		this.menuToggler = this.menuToggler.bind(this);
@@ -101,7 +103,7 @@ class Navbar extends Component {
 				id="sidebar"
 				className={this.state.width}
 				style={{
-					display: this.props.auth.isAuthenticated ? 'table-cell' : 'none'
+					display : this.props.auth.isAuthenticated ? 'table-cell' : 'none'
 				}}
 			>
 				{this.props.auth.isAuthenticated ? this.renderNav() : ''}
@@ -111,13 +113,13 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-	auth: PropTypes.object.isRequired
+	auth : PropTypes.object.isRequired
 
 	// getBusinessCustomers: PropTypes.func.isRequired,
 	// getBusinessServices: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth
+	auth : state.auth
 	// myBusiness: state.business.myBusiness
 });
 export default connect(mapStatetoProps, {})(Navbar);

@@ -7,18 +7,21 @@ import { Link } from 'react-router-dom';
 /* UTILS */
 import { getBusinessTime, getAppointmentTime, objectTimeToString } from '../../../utils/date';
 import AppointmentModal from './AppointmentModal';
+import moment from 'moment';
+
 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
 class TimeLine extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			appointmentClicked: false,
-			appointment: {}
+			appointmentClicked : false,
+			appointment        : {}
 		};
 		this.eachAppointment = this.eachAppointment.bind(this);
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+		// this.setNewAppointment = this.setNewAppointment.bind(this);
 	}
 
 	closeModal = (e) => {
@@ -38,23 +41,30 @@ class TimeLine extends Component {
 	eachAppointmentSuggest(suggest, startTime, break_time) {
 		let date1 = new Date();
 		date1.setHours(suggest._end._hour, suggest._end._minute - break_time, 0, 0);
-		console.log('date1: ', date1);
-
 		const height = getAppointmentTime(suggest._start, suggest._end) - Math.round(break_time);
 		const top = getAppointmentTime({ _hour: startTime, _minute: 0 }, suggest._start);
+
 		return (
 			<div
-				key={suggest._start._hour + suggest._end._hour}
+				key={top}
 				className={`d-flex justify-content-center align-items-center appointment-event shadow-sm bg-warning `}
 				style={{
-					height: height * 2 + 'px',
-					top: top * 2 + 'px'
+					height : height * 2 + 'px',
+					top    : top * 2 + 'px'
 				}}
 			>
 				<span>
 					{objectTimeToString(suggest._start, { _hour: date1.getHours(), _minute: date1.getMinutes() })}
 				</span>
-				<button className="btn btn-sm btn-secondary ml-auto">set appointment</button>
+				<button
+					className="btn btn-sm btn-secondary ml-auto"
+					onClick={(e) => {
+						e.preventDefault();
+						this.props.newAppointment(this.props.freeTime['Date'], suggest._start, suggest._end);
+					}}
+				>
+					set appointment
+				</button>
 			</div>
 		);
 	}
@@ -72,8 +82,8 @@ class TimeLine extends Component {
 				className={`d-flex justify-content-center align-items-center appointment-event shadow-sm ${appointment.status}`}
 				onClick={(e) => this.openModal(e, appointment)}
 				style={{
-					height: height * 2 + 'px',
-					top: top * 2 + 'px'
+					height : height * 2 + 'px',
+					top    : top * 2 + 'px'
 				}}
 			>
 				<span>{objectTimeToString(appointment.time.start, appointment.time.end)}</span>
@@ -99,10 +109,11 @@ class TimeLine extends Component {
 					closeModal={this.closeModal}
 					show={this.state.appointmentClicked}
 					appointment={this.state.appointment}
+					myBusiness={myBusiness}
 				/>
 				<div className="container">
 					<div className="col-12 bg-white shadow-sm calendar-content pt-md-3">
-						<div className="col-12 claendar-Tools clear-fix my-2">
+						{/* <div className="col-12 claendar-Tools clear-fix my-2">
 							<Link
 								to="/business/mySchedule/new-appointment"
 								props={this.props.handleNewAppointmentForm}
@@ -110,7 +121,7 @@ class TimeLine extends Component {
 							>
 								New Appointment
 							</Link>
-						</div>
+						</div> */}
 						<div className="col-12 calendar-header">
 							<div className="row">
 								<div className="col-12 col-md-4 mx-auto">
@@ -134,7 +145,7 @@ class TimeLine extends Component {
 								</div>
 							</div>
 						</div>
-						<div className="col-12 calendar-body border-top mt-5 p-md-0">
+						<div className="col-12 calendar-body border-top mt-3 p-md-0">
 							<div className="calendar-content ">
 								{!isEmpty(freeTime) ? (
 									freeTime.Free.map((suggest) =>
@@ -182,21 +193,21 @@ class TimeLine extends Component {
 	}
 }
 TimeLine.propTypes = {
-	auth: PropTypes.object.isRequired,
-	myBusiness: PropTypes.object.isRequired,
-	appointment: PropTypes.object.isRequired,
-	freeTime: PropTypes.object.isRequired
-	// customers: PropTypes.array.isRequired,
+	auth        : PropTypes.object.isRequired,
+	myBusiness  : PropTypes.object.isRequired,
+	appointment : PropTypes.object.isRequired,
+	freeTime    : PropTypes.object.isRequired
+	// businessNewAppointment : PropTypes.func.isRequired
 	// services: PropTypes.array.isRequired,
 };
 TimeLine.contextTypes = {
-	router: PropTypes.object.isRequired
+	router : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth,
-	myBusiness: state.business.myBusiness,
-	appointment: state.appointment,
-	freeTime: state.appointment.freeTime
+	auth        : state.auth,
+	myBusiness  : state.business.myBusiness,
+	appointment : state.appointment,
+	freeTime    : state.appointment.freeTime
 	// customers: state.business.customers,
 	// services: state.business.businessServices
 });

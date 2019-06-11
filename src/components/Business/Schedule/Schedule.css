@@ -81,6 +81,11 @@
 	background-color: #b6b9bbc7;
 	border-color: #b6b9bbc7;
 }
+.passed {
+	color: #fff;
+	background-color: #dc3545;
+	border-color: #dc3545;
+}
 
 /* hover on */
 .appointment-event:hover {
