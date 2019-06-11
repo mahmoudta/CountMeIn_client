@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 /* UTILS */
 import { getBusinessTime, getAppointmentTime, objectTimeToString } from '../../../utils/date';
+import { appointmentCheck } from '../../../actions/appointmentsAction';
 import AppointmentModal from './AppointmentModal';
 import moment from 'moment';
 
@@ -21,7 +22,12 @@ class TimeLine extends Component {
 		this.eachAppointment = this.eachAppointment.bind(this);
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+		this.appointmentCheck = this.appointmentCheck.bind(this);
+
 		// this.setNewAppointment = this.setNewAppointment.bind(this);
+	}
+	appointmentCheck(appointment_id, action) {
+		this.props.appointmentCheck(appointment_id, action);
 	}
 
 	closeModal = (e) => {
@@ -110,6 +116,7 @@ class TimeLine extends Component {
 					show={this.state.appointmentClicked}
 					appointment={this.state.appointment}
 					myBusiness={myBusiness}
+					appointmentCheck={this.appointmentCheck}
 				/>
 				<div className="container">
 					<div className="col-12 bg-white shadow-sm calendar-content pt-md-3">
@@ -193,10 +200,11 @@ class TimeLine extends Component {
 	}
 }
 TimeLine.propTypes = {
-	auth        : PropTypes.object.isRequired,
-	myBusiness  : PropTypes.object.isRequired,
-	appointment : PropTypes.object.isRequired,
-	freeTime    : PropTypes.object.isRequired
+	auth             : PropTypes.object.isRequired,
+	myBusiness       : PropTypes.object.isRequired,
+	appointment      : PropTypes.object.isRequired,
+	freeTime         : PropTypes.object.isRequired,
+	appointmentCheck : PropTypes.func.isRequired
 	// businessNewAppointment : PropTypes.func.isRequired
 	// services: PropTypes.array.isRequired,
 };
@@ -211,4 +219,4 @@ const mapStatetoProps = (state) => ({
 	// customers: state.business.customers,
 	// services: state.business.businessServices
 });
-export default connect(mapStatetoProps, {})(TimeLine);
+export default connect(mapStatetoProps, { appointmentCheck })(TimeLine);

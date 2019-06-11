@@ -10,9 +10,9 @@ import {
 	GET_FREE_TIME_SUGGESTION,
 	SET_NEW_APPOINTMENT,
 	SET_FLASH_MESSAGE,
-	CHECK_OUT,
+
 	// NEXT_APPOINTMENT_ALERT,
-	SET_APPOINTMENT_ACTIVE
+	APPOINTMENT_CHECK
 } from './types';
 
 export const getBusinessAppointmentsByDate = (business_id, date) => (dispatch) => {
@@ -36,8 +36,9 @@ export const getBusinessAppointmentsByDate = (business_id, date) => (dispatch) =
 
 export const getUpcomingAppointments = (business_id) => (dispatch) => {
 	axios
-		.get(`${API}/appointments/getTodaysReadyAppointments/${business_id}`)
+		.get(`${API}/appointments/getTodayUpcomingAppointments/${business_id}`)
 		.then((result) => {
+			console.log(result.data);
 			dispatch({
 				type    : TODAY_UPCOMING_APPOINTMENTS,
 				payload : result.data.appointments
@@ -81,12 +82,12 @@ export const getUpcomingAppointments = (business_id) => (dispatch) => {
 			});
 		});
 };
-export const setAppointmentActive = (appointment_id) => (dispatch) => {
+export const appointmentCheck = (appointment_id, action) => (dispatch) => {
 	axios
-		.put(`${API}/appointments/setAppointmentActive/${appointment_id}`)
+		.put(`${API}/appointments/appointmentCheck/${appointment_id}/${action}`)
 		.then((result) => {
 			dispatch({
-				type    : SET_APPOINTMENT_ACTIVE,
+				type    : APPOINTMENT_CHECK,
 				payload : result.data.appointment
 			});
 			dispatch(getUpcomingAppointments(result.data.appointment.business_id));
@@ -95,26 +96,26 @@ export const setAppointmentActive = (appointment_id) => (dispatch) => {
 			console.log(err);
 		});
 };
-export const checkOutAppointment = (appointment_id) => (dispatch) => {
-	axios
-		.get(`${API}/appointments/getBusinessAppointmentsByDate/${appointment_id}`)
-		.then((result) => {
-			dispatch({
-				type    : CHECK_OUT,
-				payload : result.data.appointments
-			});
-			// dispatch({
-			// 	type: NEXT_APPOINTMENT_ALERT,
-			// 	payload: result.data.appointments[0]
-			// });
-		})
-		.catch((err) => {
-			dispatch({
-				type    : CHECK_OUT,
-				payload : []
-			});
-		});
-};
+// export const checkOutAppointment = (appointment_id) => (dispatch) => {
+// 	axios
+// 		.get(`${API}/appointments/getBusinessAppointmentsByDate/${appointment_id}`)
+// 		.then((result) => {
+// 			dispatch({
+// 				type    : CHECK_OUT,
+// 				payload : result.data.appointments
+// 			});
+// 			// dispatch({
+// 			// 	type: NEXT_APPOINTMENT_ALERT,
+// 			// 	payload: result.data.appointments[0]
+// 			// });
+// 		})
+// 		.catch((err) => {
+// 			dispatch({
+// 				type    : CHECK_OUT,
+// 				payload : []
+// 			});
+// 		});
+// };
 export const updateAppointmentStatus = (appointment_id) => (dispatch) => {
 	axios
 		.get(`${API}/appointments/getBusinessAppointmentsByDate/${appointment_id}`)
@@ -141,7 +142,7 @@ export const getFreeTime = (data) => (dispatch) => {
 	axios
 		.post(`${API}/algorithms/freetime`, data)
 		.then((result) => {
-			console.log(result);
+			console.log(result.data);
 			dispatch({
 				type    : GET_FREE_TIME_SUGGESTION,
 				payload : result.data.dates[0]

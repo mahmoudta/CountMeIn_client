@@ -143,12 +143,26 @@ export default class AppointmentModal extends Component {
 								{
 									{
 										['ready']      : (
-											<button type="button" className="btn btn-success text-uppercase">
+											<button
+												type="button"
+												className="btn btn-success text-uppercase"
+												onClick={(e) => {
+													e.preventDefault();
+													this.props.appointmentCheck(appointment._id, 'in');
+												}}
+											>
 												check in
 											</button>
 										),
 										['inProgress'] : (
-											<button type="button" className="btn btn-danger text-uppercase">
+											<button
+												type="button"
+												className="btn btn-danger text-uppercase"
+												onClick={(e) => {
+													e.preventDefault();
+													this.props.appointmentCheck(appointment._id, 'out');
+												}}
+											>
 												check out
 											</button>
 										)

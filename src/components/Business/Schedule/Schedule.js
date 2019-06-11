@@ -42,6 +42,7 @@ class Schedule extends Component {
 		this.newAppointment = this.newAppointment.bind(this);
 	}
 
+	appointmentCheckIn;
 	handleFreeTime(e) {
 		e.preventDefault();
 		const valid = moment().format('YYYY-MM-DD') <= moment(this.state.date).format('YYYY-MM-DD');
@@ -53,10 +54,11 @@ class Schedule extends Component {
 		});
 
 		this.props.getFreeTime({
-			business   : this.props.myBusiness._id,
-			services   : services,
-			date_from  : this.state.date,
-			date_until : this.state.date
+			business    : this.props.myBusiness._id,
+			services    : services,
+			date_from   : this.state.date,
+			date_until  : this.state.date,
+			customer_id : this.state.customer.value
 		});
 	}
 

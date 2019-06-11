@@ -5,7 +5,7 @@ import {
 	GET_FREE_TIME_SUGGESTION,
 	SET_NEW_APPOINTMENT,
 	// NEXT_APPOINTMENT_ALERT,
-	SET_APPOINTMENT_ACTIVE
+	APPOINTMENT_CHECK
 } from '../actions/types';
 const initialState = {
 	appointments       : [],
@@ -34,7 +34,7 @@ export default function(state = initialState, action) {
 				...state,
 				upComing : action.payload
 			};
-		case SET_APPOINTMENT_ACTIVE:
+		case APPOINTMENT_CHECK:
 			return {
 				...state,
 				inProgress : action.payload

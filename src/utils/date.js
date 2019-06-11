@@ -1,5 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
-const days = [ 'sunday', 'monday', 'tuesday', 'wedensday', 'thursday', 'friday', 'saturday' ];
+const days = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
 
 export function getCurrentDate(separator = '-') {
 	let newDate = new Date();

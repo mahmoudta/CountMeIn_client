@@ -129,7 +129,7 @@ class BusinessWizardForm extends Component {
 			this.setState({ working: schedule });
 			return;
 		}
-		const days = [ 'sunday', 'monday', 'tuesday', 'wedensday', 'thursday', 'friday', 'saturday' ];
+		const days = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
 		let Schedule = [];
 		for (let i in days) {
 			await Schedule.push({
