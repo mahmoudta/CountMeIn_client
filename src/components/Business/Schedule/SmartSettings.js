@@ -79,7 +79,7 @@ class SmartSettings extends Component {
 													</label>
 												</div>
 												<small class="form-text text-muted">
-													Give privilege to to customers with high experince value.
+													Give privileges to customers with high experience value.
 												</small>
 											</div>
 										</div>
@@ -100,7 +100,7 @@ class SmartSettings extends Component {
 												/>
 
 												<small class="form-text text-muted">
-													Give privilege to to customers with high experince value.
+												On a scale from 0 to 10 how much the business care about the continuity of the appointments.
 												</small>
 											</div>
 										</div>
@@ -114,7 +114,7 @@ class SmartSettings extends Component {
 													type="range"
 													name="distrbuted_time"
 													min="1"
-													max="10"
+													max="20"
 													step="0.5"
 													className="custom-range"
 													value={this.state.distrbuted_time}
@@ -122,7 +122,7 @@ class SmartSettings extends Component {
 												/>
 
 												<small class="form-text text-muted">
-													Give privilege to to customers with high experince value.
+												On a scale from 1 to 10 how much the business care about distributing the appointments as much as possible equally among the working hourse.
 												</small>
 											</div>
 										</div>
@@ -135,16 +135,16 @@ class SmartSettings extends Component {
 												<input
 													type="range"
 													name="days_calculate_length"
-													min="0"
-													max="10"
-													step="0.5"
+													min="2"
+													max="30"
+													step="1"
 													className="custom-range"
 													value={this.state.days_calculate_length}
 													onChange={this.handleChange}
 												/>
 
 												<small class="form-text text-muted">
-													Give privilege to to customers with high experince value.
+													How many days in advance the Smart algorithms can book.
 												</small>
 											</div>
 										</div>
@@ -157,16 +157,16 @@ class SmartSettings extends Component {
 												<input
 													type="range"
 													name="max_working_days_response"
-													min="0"
-													max="10"
-													step="0.5"
+													min="1"
+													max="30"
+													step="1"
 													value={this.state.max_working_days_response}
 													onChange={this.handleChange}
 													className="custom-range"
 												/>
 
 												<small class="form-text text-muted">
-													Give privilege to to customers with high experince value.
+													How many different days the Smart algorithms allow the user to choose from.
 												</small>
 											</div>
 										</div>
