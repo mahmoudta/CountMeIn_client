@@ -27,11 +27,11 @@ class UpComing extends Component {
 								<tbody>
 									{upComing.map((appointment) => {
 										return (
-											<tr>
+											<tr key={appointment._id}>
 												<td>{appointment.client_id.profile.name.first}</td>
 												<td>
 													{appointment.services.map((service) => {
-														return <span>{service.title}</span>;
+														return <span key={service._id}>{service.title}</span>;
 													})}
 												</td>
 												<td>

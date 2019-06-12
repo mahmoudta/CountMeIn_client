@@ -17,6 +17,7 @@ import {
 	businessNewAppointment
 } from '../../../actions/appointmentsAction';
 import { getBusinessByOwner } from '../../../actions/businessActions';
+import { getStatisticsHeader } from '../../../actions/StatisticsActions';
 
 import { FaAngleDown } from 'react-icons/fa';
 import moment from 'moment';
@@ -67,6 +68,7 @@ class Schedule extends Component {
 		const { user } = this.props.auth;
 		this.props.getBusinessByOwner(user.sub);
 		this.props.getBusinessAppointmentsByDate(user.business_id, dateNow);
+		this.props.getStatisticsHeader(user.business_id);
 		this.setState({ date: dateNow });
 	}
 	handleSelectChange(value, action) {
@@ -202,7 +204,8 @@ Schedule.propTypes = {
 	getFreeTime                   : PropTypes.func.isRequired,
 	businessNewAppointment        : PropTypes.func.isRequired,
 	// services: PropTypes.array.isRequired,
-	getBusinessAppointmentsByDate : PropTypes.func.isRequired
+	getBusinessAppointmentsByDate : PropTypes.func.isRequired,
+	getStatisticsHeader           : PropTypes.func.isRequired
 };
 Schedule.contextTypes = {
 	router : PropTypes.object.isRequired
@@ -217,5 +220,6 @@ export default connect(mapStatetoProps, {
 	getBusinessAppointmentsByDate,
 	getBusinessByOwner,
 	getFreeTime,
-	businessNewAppointment
+	businessNewAppointment,
+	getStatisticsHeader
 })(Schedule);

@@ -39,7 +39,6 @@ export const getUpcomingAppointments = (business_id) => (dispatch) => {
 	axios
 		.get(`${API}/appointments/getTodayUpcomingAppointments/${business_id}`)
 		.then((result) => {
-			console.log(result.data);
 			dispatch({
 				type    : TODAY_UPCOMING_APPOINTMENTS,
 				payload : result.data.appointments
