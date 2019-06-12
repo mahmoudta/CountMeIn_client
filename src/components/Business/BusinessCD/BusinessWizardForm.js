@@ -155,7 +155,6 @@ class BusinessWizardForm extends Component {
 			.getBusinessByOwner(this.props.user.sub)
 			.then(async (result) => {
 				if (!result.payload.error) {
-					console.log("i'm hereee");
 					const categories = await this.props.categories;
 					const business = result.payload;
 					const selectedItems = await this.selectedItems(business, categories);

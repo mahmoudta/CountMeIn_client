@@ -130,16 +130,6 @@ export default class AppointmentModal extends Component {
 							</div>
 
 							<div className="modal-footer">
-								{/* <div className="float-left">
-									<button
-										type="button"
-										className="btn btn-secondary float-left"
-										data-dismiss="modal"
-										onClick={this.props.closeModal}
-									>
-										Close
-									</button>
-								</div> */}
 								{
 									{
 										['ready']      : (
@@ -148,6 +138,7 @@ export default class AppointmentModal extends Component {
 												className="btn btn-success text-uppercase"
 												onClick={(e) => {
 													e.preventDefault();
+													this.props.closeModal(e);
 													this.props.appointmentCheck(appointment._id, 'in');
 												}}
 											>
@@ -160,6 +151,7 @@ export default class AppointmentModal extends Component {
 												className="btn btn-danger text-uppercase"
 												onClick={(e) => {
 													e.preventDefault();
+													this.props.closeModal(e);
 													this.props.appointmentCheck(appointment._id, 'out');
 												}}
 											>

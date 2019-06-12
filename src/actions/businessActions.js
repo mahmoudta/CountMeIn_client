@@ -15,7 +15,8 @@ import {
 	FOLLOW_BUSINESS,
 	UNFOLLOW_BUSINESS,
 	SET_FLASH_MESSAGE,
-	UPDATE_BUSINESS
+	UPDATE_BUSINESS,
+	SMART_ALGS_UPDATE
 } from './types';
 export const updateBusiness = (data) => (dispatch) => {
 	dispatch(setBusinessLoading());
@@ -123,6 +124,38 @@ export const getBusinessCustomers = () => (dispatch) => {
 		});
 };
 
+export const UpdateSmartAlgorithmsSettings = (data) => (dispatch) => {
+	dispatch(setBusinessLoading());
+	axios
+		.put(`${API}/business/UpdateSmartAlgorithmsSettings`, data)
+		.then((result) => {
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : {
+					type   : 'success',
+					text   : 'Successfully updated',
+					action : {
+						next : 'REDIRECT_TO_PAGE',
+						path : `/business/pages/mySchedule/${result.data.business._id}`
+					}
+				}
+			});
+			return dispatch({
+				type    : SMART_ALGS_UPDATE,
+				payload : result.data.business
+			});
+		})
+		.catch((err) => {
+			dispatch({
+				type    : SMART_ALGS_UPDATE,
+				payload : {}
+			});
+			return dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : { type: 'error', text: err.response.data.error }
+			});
+		});
+};
 export const getBusinessServices = (id) => (dispatch) => {
 	axios
 		.get(`${API}/business/services/${id}`)

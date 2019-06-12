@@ -35,9 +35,15 @@ export default function(state = initialState, action) {
 				upComing : action.payload
 			};
 		case APPOINTMENT_CHECK:
+			let newUpComing = state.upComing;
+			newUpComing.find((appointment, i) => {
+				if (appointment._id.toString() === action.payload._id.toString()) {
+					newUpComing[i] = action.payload;
+				}
+			});
 			return {
 				...state,
-				inProgress : action.payload
+				upComing : newUpComing
 			};
 		case SET_NEW_APPOINTMENT:
 			const new_appointments = state.appointments;

@@ -20,6 +20,7 @@ import BusinessCD from '../components/Business/BusinessCD/BusinessCD';
 import FlashMessage from '../components/FlashMessages/FlashMessage';
 import Businesses from '../components/Businesses/Businesses';
 import BusinessProfile from '../components/Business/Profile/BusinessProfile';
+import SmartSettings from '../components/Business/Schedule/SmartSettings';
 
 const ReactRouter = () => {
 	return (
@@ -43,6 +44,10 @@ const ReactRouter = () => {
 								<Route exact path="/business/pages/create" component={requireAuth(BusinessCD)} />
 								<Route path="/business/view/testview/:id" component={requireAuth(BusinessProfile)} />
 								<Route exact path="/business/view/:id" component={requireAuth(ClientView)} />
+								<Route
+									path="/business/advanced/smart-algorithms-settings"
+									component={requireAuth(SmartSettings)}
+								/>
 
 								<Route
 									path="/business/mySchedule/new-appointment"

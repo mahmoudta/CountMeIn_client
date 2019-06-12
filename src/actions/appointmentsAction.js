@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API } from '../consts';
 import isEmpty from 'lodash/isEmpty';
 import { appendNotification } from './authActions';
+import moment from 'moment';
 
 import {
 	GET_BUSINESS_APPOINTMENTS,
@@ -90,9 +91,20 @@ export const appointmentCheck = (appointment_id, action) => (dispatch) => {
 				type    : APPOINTMENT_CHECK,
 				payload : result.data.appointment
 			});
-			dispatch(getUpcomingAppointments(result.data.appointment.business_id));
+			dispatch(getBusinessAppointmentsByDate(result.data.appointment.business_id, moment().format('YYYY-MM-DD')));
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : {
+					type : 'success',
+					text : `Your appointment successfully checked-${action}`
+				}
+			});
 		})
 		.catch((err) => {
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : { type: 'error', text: err.response.data.error }
+			});
 			console.log(err);
 		});
 };

@@ -7,6 +7,7 @@ import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } fro
 
 import { MdDashboard } from 'react-icons/md';
 import { FaBell } from 'react-icons/fa';
+import { GiBrain } from 'react-icons/gi';
 
 import isEmpty from 'lodash/isEmpty';
 
@@ -70,6 +71,14 @@ class Navbar extends Component {
 										>
 											<NavLink to={'/business/view/' + this.props.auth.user.business_id}>
 												<FaPalette /> Page View
+											</NavLink>
+										</li>,
+										<li
+											key={`Smart${this.props.auth.user.business_id}`}
+											className="nav-item text-uppercase"
+										>
+											<NavLink to="/business/advanced/smart-algorithms-settings">
+												<GiBrain /> smart settings
 											</NavLink>
 										</li>
 									]
