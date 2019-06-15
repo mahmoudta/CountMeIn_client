@@ -21,6 +21,7 @@ import FlashMessage from '../components/FlashMessages/FlashMessage';
 import Businesses from '../components/Businesses/Businesses';
 import BusinessProfile from '../components/Business/Profile/BusinessProfile';
 import SmartSettings from '../components/Business/Schedule/SmartSettings';
+import BappointmentReview from '../components/Business/Schedule/BappointmentReview';
 
 const ReactRouter = () => {
 	return (
@@ -48,12 +49,16 @@ const ReactRouter = () => {
 									path="/business/advanced/smart-algorithms-settings"
 									component={requireAuth(SmartSettings)}
 								/>
-
 								<Route
+									path="/business/appointment-review/:appointment_id-:page"
+									component={requireAuth(BappointmentReview)}
+								/>
+
+								{/* <Route
 									path="/business/mySchedule/new-appointment"
 									component={requireAuth(BnewAppointment)}
-								/>
-								<Route excat path="/business/pages/mySchedule/:id" component={requireAuth(Schedule)} />
+								/> */}
+								<Route excat path="/business/pages/mySchedule" component={requireAuth(Schedule)} />
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />

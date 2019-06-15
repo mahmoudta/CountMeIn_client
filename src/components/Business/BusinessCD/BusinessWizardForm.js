@@ -202,7 +202,8 @@ class BusinessWizardForm extends Component {
 			services,
 			working_edits
 		} = this.state;
-		if (myBusiness.error) {
+
+		if (isEmpty(myBusiness)) {
 			this.props.createNewBusiness({
 				street,
 				city,

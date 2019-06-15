@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { Link } from 'react-router-dom';
+import { setFlashMessage } from '../../../actions/flashMessageActions';
 
 /* UTILS */
 import { getBusinessTime, getAppointmentTime, objectTimeToString } from '../../../utils/date';
 import { appointmentCheck } from '../../../actions/appointmentsAction';
 import AppointmentModal from './AppointmentModal';
 import moment from 'moment';
+import { GiConsoleController } from 'react-icons/gi';
 
 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
@@ -26,8 +28,71 @@ class TimeLine extends Component {
 
 		// this.setNewAppointment = this.setNewAppointment.bind(this);
 	}
-	appointmentCheck(appointment_id, action) {
-		this.props.appointmentCheck(appointment_id, action);
+	appointmentCheck(appointment, action) {
+		var timeNow = moment();
+		let data = {
+			appointment_id : appointment._id,
+			action,
+			client_id      : appointment.client_id._id,
+			business_id    : appointment.business_id,
+			time           : timeNow
+		};
+
+		if (action === 'in') {
+			let appointment_time = moment(appointment.date).set({
+				hour   : appointment.time.start._hour,
+				minute : appointment.time.start._minute
+			});
+			/* check the difference between check_in time and the real time */
+			let difference = moment.duration(appointment_time.diff(timeNow)).asMinutes();
+			console.log(difference);
+
+			if (difference <= -15) {
+				data['isLate'] = { late: true, minutes: difference };
+				console.log('late check');
+
+				this.props.setFlashMessage({
+					type   : 'warning',
+					text   : `${appointment.client_id.profile.name.first} ${difference} Minutes Late!
+					Set this appointment as late?`,
+					action : {
+						CancelButton : true,
+						cancelText   : 'NO',
+						confirmText  : 'LATE CHECK IN',
+						next         : 'LATE_CHECK_IN',
+						data
+					}
+				});
+				return;
+
+				//Show a message for the business
+			} else if (difference > 15) {
+				console.log('early & special');
+				data['isLate'] = { late: '', minutes: 0 };
+			} else {
+				console.log('good timing');
+				data['isLate'] = { late: 'false', minutes: 0 };
+			}
+		} else {
+			/* THE CHECK OUT SECTION */
+			/* CHECK FOR THE NEXT BUSINESS TIME , IF IT IN THE RANGE OF LATENESS */
+			let end_time = moment(appointment.date).set({
+				hour   : appointment.time.end._hour,
+				minute : appointment.time.end._minute
+			});
+			/* check the difference between check_in time and the real time */
+			let difference = moment.duration(end_time.diff(timeNow)).asMinutes();
+			/* making sure that this will not harm the next appointment */
+			if (this.props.appointment.upComing[2]) {
+				let next = this.props.appointment.upComing[2];
+				let time = moment()
+					.set({ hour: next.time.start._hour, minute: next.time.start._minute })
+					.add(difference, 'minutes');
+			}
+			// if (difference)
+			data['isLate'] = { late: 'false', minutes: 0 };
+		}
+		this.props.appointmentCheck(data);
 	}
 
 	closeModal = (e) => {
@@ -204,7 +269,8 @@ TimeLine.propTypes = {
 	myBusiness       : PropTypes.object.isRequired,
 	appointment      : PropTypes.object.isRequired,
 	freeTime         : PropTypes.object.isRequired,
-	appointmentCheck : PropTypes.func.isRequired
+	appointmentCheck : PropTypes.func.isRequired,
+	setFlashMessage  : PropTypes.func.isRequired
 	// businessNewAppointment : PropTypes.func.isRequired
 	// services: PropTypes.array.isRequired,
 };
@@ -216,7 +282,8 @@ const mapStatetoProps = (state) => ({
 	myBusiness  : state.business.myBusiness,
 	appointment : state.appointment,
 	freeTime    : state.appointment.freeTime
+
 	// customers: state.business.customers,
 	// services: state.business.businessServices
 });
-export default connect(mapStatetoProps, { appointmentCheck })(TimeLine);
+export default connect(mapStatetoProps, { appointmentCheck, setFlashMessage })(TimeLine);

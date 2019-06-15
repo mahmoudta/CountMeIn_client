@@ -28,7 +28,7 @@ class StatsticsScheduleHeader extends Component {
 										</div>
 										<div className="card-footer bg-white">
 											<div className="h6 mb-0 font-weight-light text-success">
-												{header[day].done / header[day].total * 100} %
+												{(header[day].done / header[day].total * 100).toFixed(2)} %
 											</div>
 										</div>
 									</div>

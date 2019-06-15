@@ -78,7 +78,7 @@ class SmartSettings extends Component {
 														{this.state.customers_exp ? 'TRUE' : 'FALSE'}
 													</label>
 												</div>
-												<small class="form-text text-muted">
+												<small className="form-text text-muted">
 													Give privileges to customers with high experience value.
 												</small>
 											</div>
@@ -99,8 +99,9 @@ class SmartSettings extends Component {
 													onChange={this.handleChange}
 												/>
 
-												<small class="form-text text-muted">
-												On a scale from 0 to 10 how much the business care about the continuity of the appointments.
+												<small className="form-text text-muted">
+													On a scale from 0 to 10 how much the business care about the
+													continuity of the appointments.
 												</small>
 											</div>
 										</div>
@@ -121,8 +122,10 @@ class SmartSettings extends Component {
 													onChange={this.handleChange}
 												/>
 
-												<small class="form-text text-muted">
-												On a scale from 1 to 10 how much the business care about distributing the appointments as much as possible equally among the working hourse.
+												<small className="form-text text-muted">
+													On a scale from 1 to 10 how much the business care about
+													distributing the appointments as much as possible equally among the
+													working hourse.
 												</small>
 											</div>
 										</div>
@@ -143,7 +146,7 @@ class SmartSettings extends Component {
 													onChange={this.handleChange}
 												/>
 
-												<small class="form-text text-muted">
+												<small className="form-text text-muted">
 													How many days in advance the Smart algorithms can book.
 												</small>
 											</div>
@@ -165,8 +168,9 @@ class SmartSettings extends Component {
 													className="custom-range"
 												/>
 
-												<small class="form-text text-muted">
-													How many different days the Smart algorithms allow the user to choose from.
+												<small className="form-text text-muted">
+													How many different days the Smart algorithms allow the user to
+													choose from.
 												</small>
 											</div>
 										</div>

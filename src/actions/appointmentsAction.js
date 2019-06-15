@@ -46,45 +46,36 @@ export const getUpcomingAppointments = (business_id) => (dispatch) => {
 			if (!isEmpty(result.data.appointments)) {
 				const now = new Date();
 				let time = new Date();
-				new Date(
-					time.setHours(
-						result.data.appointments[0].time.start._hour,
-						result.data.appointments[0].time.start._minute,
-						0,
-						0
-					)
-				);
+				const filtered = result.data.appointments.filter((e) => {
+					return e.status === 'ready';
+				});
+				if (!isEmpty(filtered)) {
+					new Date(time.setHours(filtered[0].time.start._hour, filtered[0].time.start._minute, 0, 0));
 
-				setTimeout(() => {
-					dispatch(
-						appendNotification({
-							type           : 'reminder',
-							title          : 'appointment should Start',
-							my_business    : true,
-							appointment_id : result.data.appointments[0]._id
-						})
-					);
-					// dispatch(setAppointmentActive(result.data.appointments[0]._id));
-				}, time - now);
+					setTimeout(() => {
+						dispatch(
+							appendNotification({
+								type           : 'reminder',
+								title          : 'appointment should Start',
+								my_business    : true,
+								appointment_id : filtered[0]._id,
+								status         : 'in'
+							})
+						);
+					}, time - now);
+				}
 			}
-			// dispatch({
-			// 	type: NEXT_APPOINTMENT_ALERT,
-			// 	payload: {
-			// 		appointment: result.data.appointments[0],
-			// 		timeout: time - now
-			// 	}
 		})
 		.catch((err) => {
-			console.log('error');
 			dispatch({
 				type    : TODAY_UPCOMING_APPOINTMENTS,
 				payload : []
 			});
 		});
 };
-export const appointmentCheck = (appointment_id, action) => (dispatch) => {
-	axios
-		.put(`${API}/appointments/appointmentCheck/${appointment_id}/${action}`)
+export const appointmentCheck = (data) => (dispatch) => {
+	return axios
+		.put(`${API}/appointments/appointmentCheck`, data)
 		.then((result) => {
 			dispatch({
 				type    : APPOINTMENT_CHECK,
@@ -95,7 +86,7 @@ export const appointmentCheck = (appointment_id, action) => (dispatch) => {
 				type    : SET_FLASH_MESSAGE,
 				message : {
 					type : 'success',
-					text : `Your appointment successfully checked-${action}`
+					text : `Your appointment successfully checked-${data.action}`
 				}
 			});
 		})
@@ -104,29 +95,33 @@ export const appointmentCheck = (appointment_id, action) => (dispatch) => {
 				type    : SET_FLASH_MESSAGE,
 				message : { type: 'error', text: err.response.data.error }
 			});
-			console.log(err);
 		});
 };
-// export const checkOutAppointment = (appointment_id) => (dispatch) => {
-// 	axios
-// 		.get(`${API}/appointments/getBusinessAppointmentsByDate/${appointment_id}`)
-// 		.then((result) => {
-// 			dispatch({
-// 				type    : CHECK_OUT,
-// 				payload : result.data.appointments
-// 			});
-// 			// dispatch({
-// 			// 	type: NEXT_APPOINTMENT_ALERT,
-// 			// 	payload: result.data.appointments[0]
-// 			// });
-// 		})
-// 		.catch((err) => {
-// 			dispatch({
-// 				type    : CHECK_OUT,
-// 				payload : []
-// 			});
-// 		});
-// };
+export const setBusinessReview = (data) => (dispatch) => {
+	const page = Number(data.page);
+	console.log('page', page);
+	axios
+		.put(`${API}/appointments/setBusinessReview`, data)
+		.then((result) => {
+			if (page === 1) {
+				dispatch({
+					type    : SET_FLASH_MESSAGE,
+					message : {
+						type   : 'success',
+						text   : `Your Review successfully saved`,
+						action : { next: 'REDIRECT_TO_MYSCHEDULE' }
+					}
+				});
+			}
+		})
+		.catch((err) => {
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : { type: 'error', text: err.response.data.error }
+			});
+		});
+};
+
 export const updateAppointmentStatus = (appointment_id) => (dispatch) => {
 	axios
 		.get(`${API}/appointments/getBusinessAppointmentsByDate/${appointment_id}`)

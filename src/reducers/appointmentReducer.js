@@ -12,6 +12,7 @@ const initialState = {
 	inProgress         : {},
 	ready_appointments : [],
 	upComing           : [],
+	reviews            : [],
 	freeTime           : {},
 	loading            : false
 };

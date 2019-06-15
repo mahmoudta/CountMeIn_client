@@ -6,6 +6,8 @@ import isEmpty from 'lodash/isEmpty';
 import Swal from 'sweetalert2';
 import { deleteFlashMessage } from '../../actions/flashMessageActions';
 import { unFollowBusiness } from '../../actions/businessActions';
+import { appointmentCheck } from '../../actions/appointmentsAction';
+
 import { Redirect } from 'react-router';
 class FlashMessage extends Component {
 	constructor(props) {
@@ -13,13 +15,10 @@ class FlashMessage extends Component {
 		this.makeAction = this.makeAction.bind(this);
 	}
 
-	makeAction = (action) => {
-		console.log('makeaction');
+	makeAction = (action, value = true) => {
 		// const action = this.props.flashMessage[0].action;
 		switch (action.next) {
 			case 'UNFOLLOW_BUSINESS':
-				console.log('here');
-				console.log(action.business_id);
 				this.props.unFollowBusiness(action.business_id);
 				break;
 			case 'REDIRECT_TO_PAGE':
@@ -28,7 +27,13 @@ class FlashMessage extends Component {
 			case 'REDIRECT_TO_DASHBAORD':
 				this.context.router.history.push('/dashboard');
 				break;
-			case 'FIRE_ANOTHER_ALERT':
+			case 'LATE_CHECK_IN':
+				let reqData = action.data;
+				reqData.isLate['late'] = value;
+				this.props.appointmentCheck(reqData);
+				break;
+			case 'REDIRECT_TO_MYSCHEDULE':
+				this.context.router.history.push('/business/pages/mySchedule');
 				break;
 			default:
 				this.props.deleteFlashMessage();
@@ -42,25 +47,30 @@ class FlashMessage extends Component {
 				{!isEmpty(flashMessage) &&
 					flashMessage.map((message) => {
 						Swal.fire({
-							title: message.type,
-							text: message.text,
-							type: message.type,
-							confirmButtonText: message.action.confirmText ? message.action.confirmText : 'Done',
-							showCancelButton: message.action.CancelButton ? message.action.CancelButton : false,
-							buttonsStyling: false,
-							customClass: {
-								confirmButton: `btn mx-5 shadow ${message.type.toLowerCase() === 'warning'
+							title             : message.type,
+							text              : message.text,
+							type              : message.type,
+							confirmButtonText : message.action.confirmText ? message.action.confirmText : 'Done',
+							cancelButtonText  : message.action.cancelText ? message.action.cancelText : 'cancel',
+							showCancelButton  : message.action.CancelButton ? message.action.CancelButton : false,
+							buttonsStyling    : false,
+							customClass       : {
+								confirmButton : `btn mx-5 shadow ${message.type.toLowerCase() === 'warning'
 									? 'btn-danger'
 									: 'btn-primary'}`,
-								cancelButton: 'btn mx-5 btn-secondary shadow'
+								cancelButton  : 'btn mx-5 btn-secondary shadow'
 							}
 						}).then((res) => {
+							console.log(res);
 							this.props.deleteFlashMessage();
+
 							if (res.value) {
-								console.log('res');
 								this.makeAction(message.action);
-							} else {
-								console.log('else');
+							} else if (res.dismiss === 'cancel') {
+								this.props.deleteFlashMessage();
+								if (message.action.next === 'LATE_CHECK_IN') {
+									this.makeAction(message.action, false);
+								}
 							}
 						});
 					})}
@@ -70,14 +80,15 @@ class FlashMessage extends Component {
 }
 
 FlashMessage.propTypes = {
-	flashMessage: PropTypes.array.isRequired,
-	deleteFlashMessage: PropTypes.func.isRequired,
-	unFollowBusiness: PropTypes.func.isRequired
+	flashMessage       : PropTypes.array.isRequired,
+	deleteFlashMessage : PropTypes.func.isRequired,
+	unFollowBusiness   : PropTypes.func.isRequired,
+	appointmentCheck   : PropTypes.func.isRequired
 };
 FlashMessage.contextTypes = {
-	router: PropTypes.object.isRequired
+	router : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	flashMessage: state.flashMessage
+	flashMessage : state.flashMessage
 });
-export default connect(mapStatetoProps, { deleteFlashMessage, unFollowBusiness })(FlashMessage);
+export default connect(mapStatetoProps, { appointmentCheck, deleteFlashMessage, unFollowBusiness })(FlashMessage);

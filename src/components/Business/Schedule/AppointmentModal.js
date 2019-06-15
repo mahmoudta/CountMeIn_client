@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { FaBusinessTime, FaShekelSign } from 'react-icons/fa';
 import moment from 'moment';
+import { NavLink } from 'react-router-dom';
 
 export default class AppointmentModal extends Component {
 	constructor(props) {
@@ -132,33 +133,51 @@ export default class AppointmentModal extends Component {
 							<div className="modal-footer">
 								{
 									{
-										['ready']      : (
+										['ready-']      : (
 											<button
 												type="button"
 												className="btn btn-success text-uppercase"
 												onClick={(e) => {
 													e.preventDefault();
 													this.props.closeModal(e);
-													this.props.appointmentCheck(appointment._id, 'in');
+													this.props.appointmentCheck(appointment, 'in');
 												}}
 											>
 												check in
 											</button>
 										),
-										['inProgress'] : (
+										['inProgress-'] : (
 											<button
 												type="button"
 												className="btn btn-danger text-uppercase"
 												onClick={(e) => {
 													e.preventDefault();
 													this.props.closeModal(e);
-													this.props.appointmentCheck(appointment._id, 'out');
+													this.props.appointmentCheck(appointment, 'out');
 												}}
 											>
 												check out
 											</button>
+										),
+										['done-false']  : (
+											<NavLink
+												to={`/business/appointment-review/${appointment._id}-1`}
+												role="button"
+												className="btn btn-primary text-uppercase"
+												// onClick={(e) => {
+												// 	e.preventDefault();
+												// 	this.props.closeModal(e);
+												// 	this.props.appointmentCheck(appointment, 'out');
+												// }}
+											>
+												give your feedback
+											</NavLink>
 										)
-									}[appointment.status]
+									}[
+										`${appointment.status}-${appointment.review
+											? appointment.review.business_review.isRated
+											: ''}`
+									]
 								}
 							</div>
 						</div>
