@@ -11,7 +11,7 @@ import {
 	GET_FREE_TIME_SUGGESTION,
 	SET_NEW_APPOINTMENT,
 	SET_FLASH_MESSAGE,
-
+	GET_REVIEW_BY_BUSINESS,
 	// NEXT_APPOINTMENT_ALERT,
 	APPOINTMENT_CHECK
 } from './types';
@@ -99,7 +99,6 @@ export const appointmentCheck = (data) => (dispatch) => {
 };
 export const setBusinessReview = (data) => (dispatch) => {
 	const page = Number(data.page);
-	console.log('page', page);
 	axios
 		.put(`${API}/appointments/setBusinessReview`, data)
 		.then((result) => {
@@ -115,6 +114,30 @@ export const setBusinessReview = (data) => (dispatch) => {
 			}
 		})
 		.catch((err) => {
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : { type: 'error', text: err.response.data.error }
+			});
+		});
+};
+
+export const getReviewsByBusiness = (business_id) => (dispatch) => {
+	dispatch(setAppointmentLoading());
+
+	axios
+		.get(`${API}/appointments/getReviewByBusinessId/${business_id}`)
+		.then((result) => {
+			console.log(result.data);
+			dispatch({
+				type    : GET_REVIEW_BY_BUSINESS,
+				payload : result.data.reviews
+			});
+		})
+		.catch((err) => {
+			dispatch({
+				type    : GET_REVIEW_BY_BUSINESS,
+				payload : []
+			});
 			dispatch({
 				type    : SET_FLASH_MESSAGE,
 				message : { type: 'error', text: err.response.data.error }

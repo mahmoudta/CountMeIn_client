@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } from 'react-icons/fa';
 
 import { MdDashboard } from 'react-icons/md';
-import { FaBell, FaChartBar } from 'react-icons/fa';
+import { FaBell, FaChartBar, FaStickyNote } from 'react-icons/fa';
 import { GiBrain } from 'react-icons/gi';
 
 import isEmpty from 'lodash/isEmpty';
@@ -102,6 +102,12 @@ class Navbar extends Component {
 									</li>
 								)}
 							</ul>
+						</li>
+						<li className="">
+							<NavLink to="/appointments-review" activeClassName="active">
+								<FaStickyNote className="icon" />
+								<span>Reviews</span>
+							</NavLink>
 						</li>
 					</ul>
 				</aside>

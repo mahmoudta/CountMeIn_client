@@ -91,6 +91,8 @@ export const createNewBusiness = (data) => (dispatch) => {
 };
 
 export const getBusinessByOwner = (id) => (dispatch) => {
+	dispatch(setBusinessLoading());
+
 	return axios
 		.get(`${API}/business/owner/${id}`)
 		.then((result) => {

@@ -5,7 +5,8 @@ import {
 	GET_FREE_TIME_SUGGESTION,
 	SET_NEW_APPOINTMENT,
 	// NEXT_APPOINTMENT_ALERT,
-	APPOINTMENT_CHECK
+	APPOINTMENT_CHECK,
+	GET_REVIEW_BY_BUSINESS
 } from '../actions/types';
 const initialState = {
 	appointments       : [],
@@ -29,6 +30,12 @@ export default function(state = initialState, action) {
 			return {
 				...state,
 				loading : true
+			};
+		case GET_REVIEW_BY_BUSINESS:
+			return {
+				...state,
+				reviews : action.payload,
+				loading : false
 			};
 		case TODAY_UPCOMING_APPOINTMENTS:
 			return {

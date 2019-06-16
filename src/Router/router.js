@@ -22,6 +22,7 @@ import Businesses from '../components/Businesses/Businesses';
 import BusinessProfile from '../components/Business/Profile/BusinessProfile';
 import SmartSettings from '../components/Business/Schedule/SmartSettings';
 import BappointmentReview from '../components/Business/Schedule/BappointmentReview';
+import ReviewsMain from '../components/Reviews/ReviewsMain';
 
 const ReactRouter = () => {
 	return (
@@ -41,6 +42,7 @@ const ReactRouter = () => {
 
 								<Route path="/dashboard" component={requireAuth(Dashboard)} />
 								<Route path="/businesses" component={requireAuth(Businesses)} />
+								<Route path="/appointments-review" component={requireAuth(ReviewsMain)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
 								<Route exact path="/business/pages/create" component={requireAuth(BusinessCD)} />
 								<Route path="/business/view/testview/:id" component={requireAuth(BusinessProfile)} />

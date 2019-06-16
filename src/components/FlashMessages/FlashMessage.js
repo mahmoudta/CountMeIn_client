@@ -61,7 +61,6 @@ class FlashMessage extends Component {
 								cancelButton  : 'btn mx-5 btn-secondary shadow'
 							}
 						}).then((res) => {
-							console.log(res);
 							this.props.deleteFlashMessage();
 
 							if (res.value) {
