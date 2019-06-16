@@ -116,6 +116,12 @@ header .navbar-brand {
 	color: #717171;
 	text-decoration: none;
 }
+
+.nav > li > .notifications-menu {
+	width: 450px;
+	left: unset;
+	right: 0;
+}
 /* .animated {
 	-webkit-animation-fill-mode: both;
 	-moz-animation-fill-mode: both;
@@ -134,6 +140,9 @@ header .navbar-brand {
 	-o-animation-name: fadeInRight;
 	animation-name: fadeInRight;
 } */
+.notifications-menu .arrow.top {
+	left: 93%;
+}
 .arrow.top {
 	left: 50%;
 	margin-left: -8px;

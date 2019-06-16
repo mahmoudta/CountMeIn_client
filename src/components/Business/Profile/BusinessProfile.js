@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { getBusinessById, followBusiness, unFollowBusiness } from '../../../actions/businessActions';
 import { setFlashMessage } from '../../../actions/flashMessageActions';
 import { B_IMAGES } from '../../../consts';
+import { NavLink } from 'react-router-dom';
 
 import isEmpty from 'lodash.isempty';
 
@@ -16,13 +17,74 @@ import { GoThumbsup } from 'react-icons/go';
 import '../Business.css';
 
 class BusinessProfile extends Component {
+	constructor(props) {
+		super(props);
+		this.showButtons = this.showButtons.bind(this);
+	}
+
 	componentDidMount() {
 		const id = this.props.match.params.id;
 		this.props.getBusinessById(id);
 	}
 
+	showButtons = () => {
+		const { business, loading } = this.props;
+		const isOwner = business.owner_id === this.props.auth.user.sub;
+		if (isOwner) {
+			return [
+				<NavLink
+					key={`editProfile${business._id}`}
+					to={'/business/edit'}
+					className=" mx-2 btn btn-sm btn-secondary"
+					// onClick={() => this.unfollowBusiness(business._id)}
+				>
+					Edit Profile
+				</NavLink>,
+				<NavLink
+					key={`editView${business._id}`}
+					to={'/business/edit'}
+					className=" mx-2 btn btn-sm btn-secondary"
+					// onClick={() => this.unfollowBusiness(business._id)}
+				>
+					Customize View
+				</NavLink>
+			];
+		}
+		if (business.isFollower) {
+			return [
+				<button
+					key={`unfollow${business._id}`}
+					className="btn btn-sm btn-secondary"
+					disabled={loading}
+					onClick={() => this.unfollowBusiness(business._id)}
+				>
+					{loading ? (
+						<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
+					) : (
+						'UnFollow'
+					)}
+				</button>
+			];
+		}
+		return [
+			<button
+				key={`follow${business._id}`}
+				className="btn btn-sm btn-primary"
+				disabled={loading}
+				onClick={() => this.followBusiness(business._id)}
+			>
+				{loading ? (
+					<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
+				) : (
+					'Follow'
+				)}
+			</button>
+		];
+	};
+
 	render() {
 		const { business, loading } = this.props;
+		const buttons = this.showButtons();
 		return (
 			<section className="my-5">
 				{!loading ? (
@@ -35,9 +97,14 @@ class BusinessProfile extends Component {
 											<div className="col-12 col-md-10 col-lg-8">
 												<div className="row">
 													<div className="col-12">
-														<h1 className="h1 font-weight-light">
+														<h1 className="h1 mb-2 font-weight-light">
 															{business.profile.name}
 														</h1>
+														<div className="mb-3">
+															{buttons.map((button) => {
+																return button;
+															})}
+														</div>
 													</div>
 													<div className="col-12 border-top py-3">
 														<div className="row">
@@ -68,7 +135,11 @@ class BusinessProfile extends Component {
 															</div>
 														</div>
 													</div>
-													<div className="col-12 border-top py-3" />
+													<div className="col-12 border-top py-3">
+														{buttons.map((button) => {
+															return button;
+														})}
+													</div>
 												</div>
 											</div>
 
@@ -233,17 +304,17 @@ class BusinessProfile extends Component {
 	}
 }
 BusinessProfile.propTypes = {
-	auth: PropTypes.object.isRequired,
-	business: PropTypes.object.isRequired,
-	getBusinessById: PropTypes.func.isRequired,
-	followBusiness: PropTypes.func.isRequired,
-	unFollowBusiness: PropTypes.func.isRequired,
-	setFlashMessage: PropTypes.func.isRequired
+	auth             : PropTypes.object.isRequired,
+	business         : PropTypes.object.isRequired,
+	getBusinessById  : PropTypes.func.isRequired,
+	followBusiness   : PropTypes.func.isRequired,
+	unFollowBusiness : PropTypes.func.isRequired,
+	setFlashMessage  : PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth,
-	business: state.business.business,
-	loading: state.business.loading
+	auth     : state.auth,
+	business : state.business.business,
+	loading  : state.business.loading
 });
 
 export default connect(mapStatetoProps, { getBusinessById, followBusiness, setFlashMessage, unFollowBusiness })(

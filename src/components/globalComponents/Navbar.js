@@ -6,6 +6,9 @@ import { NavLink } from 'react-router-dom';
 import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } from 'react-icons/fa';
 
 import { MdDashboard } from 'react-icons/md';
+import { FaBell, FaChartBar, FaStickyNote } from 'react-icons/fa';
+import { GiBrain } from 'react-icons/gi';
+
 import isEmpty from 'lodash/isEmpty';
 
 // import { getBusinessByOwner, getBusinessCustomers, getBusinessServices } from '../../actions/businessActions';
@@ -14,9 +17,9 @@ class Navbar extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			width: 'aside-md',
-			loading: false,
-			business_id: ''
+			width       : 'aside-md',
+			loading     : false,
+			business_id : ''
 		};
 		this.renderNav = this.renderNav.bind(this);
 		this.menuToggler = this.menuToggler.bind(this);
@@ -56,9 +59,7 @@ class Navbar extends Component {
 											key={`Schedule${this.props.auth.user.business_id}`}
 											className="nav-item text-uppercase"
 										>
-											<NavLink
-												to={'/business/pages/mySchedule/' + this.props.auth.user.business_id}
-											>
+											<NavLink to={'/business/pages/mySchedule'} activeClassName="active">
 												<FaCalendarAlt /> my schedule
 											</NavLink>
 										</li>,
@@ -66,8 +67,30 @@ class Navbar extends Component {
 											key={`View${this.props.auth.user.business_id}`}
 											className="nav-item text-uppercase"
 										>
-											<NavLink to={'/business/view/' + this.props.auth.user.business_id}>
+											<NavLink
+												to={'/business/view/' + this.props.auth.user.business_id}
+												activeClassName="active"
+											>
 												<FaPalette /> Page View
+											</NavLink>
+										</li>,
+										<li
+											key={`Smart${this.props.auth.user.business_id}`}
+											className="nav-item text-uppercase"
+										>
+											<NavLink
+												to="/business/advanced/smart-algorithms-settings"
+												activeClassName="active"
+											>
+												<GiBrain /> smart settings
+											</NavLink>
+										</li>,
+										<li
+											key={`Report${this.props.auth.user.business_id}`}
+											className="nav-item text-uppercase"
+										>
+											<NavLink to="#" activeClassName="active">
+												<FaChartBar /> report
 											</NavLink>
 										</li>
 									]
@@ -79,6 +102,12 @@ class Navbar extends Component {
 									</li>
 								)}
 							</ul>
+						</li>
+						<li className="">
+							<NavLink to="/appointments-review" activeClassName="active">
+								<FaStickyNote className="icon" />
+								<span>Reviews</span>
+							</NavLink>
 						</li>
 					</ul>
 				</aside>
@@ -101,7 +130,7 @@ class Navbar extends Component {
 				id="sidebar"
 				className={this.state.width}
 				style={{
-					display: this.props.auth.isAuthenticated ? 'table-cell' : 'none'
+					display : this.props.auth.isAuthenticated ? 'table-cell' : 'none'
 				}}
 			>
 				{this.props.auth.isAuthenticated ? this.renderNav() : ''}
@@ -111,13 +140,13 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-	auth: PropTypes.object.isRequired
+	auth : PropTypes.object.isRequired
 
 	// getBusinessCustomers: PropTypes.func.isRequired,
 	// getBusinessServices: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth
+	auth : state.auth
 	// myBusiness: state.business.myBusiness
 });
 export default connect(mapStatetoProps, {})(Navbar);

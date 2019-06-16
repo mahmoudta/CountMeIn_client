@@ -41,38 +41,39 @@ class BusinessWizardForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			step: 1,
-			mainCategories: [],
+			step           : 1,
+			mainCategories : [],
 			/* STEP 1 */
-			step1Errors: {
-				name: '',
-				category: '',
-				phone: ''
+			step1Errors    : {
+				name     : '',
+				category : '',
+				phone    : ''
 				// postal_code: ''
 			},
 
 			/* Location */
-			street: '',
-			city: '',
-			building: '',
-			postal_code: '',
+			street         : '',
+			city           : '',
+			building       : '',
+			postal_code    : '',
 
-			imgLoading: false,
-			categories: [] /* required */,
-			description: '',
-			name: '' /* required */,
-			img: '',
-			phone: 0 /* required */,
+			imgLoading     : false,
+			categories     : [] /* required */,
+			description    : '',
+			name           : '' /* required */,
+			img            : '',
+			phone          : 0 /* required */,
 
 			/* STEP 2 */
-			step2Errors: {},
-			breakTime: 10,
-			working: [],
+			step2Errors    : {},
+			breakTime      : 10,
+			working        : [],
+			working_edits  : [ false, false, false, false, false, false, false ],
 
 			/* STEP 3 */
-			step3Errors: {},
+			step3Errors    : {},
 
-			services: []
+			services       : []
 		};
 		this.nextStep = this.nextStep.bind(this);
 		this.prevStep = this.prevStep.bind(this);
@@ -91,17 +92,17 @@ class BusinessWizardForm extends Component {
 			const selectedCategories = myBusiness.categories.map((category) => {
 				console.log(category);
 				return {
-					value: category._id,
-					label: category.name
+					value : category._id,
+					label : category.name
 				};
 			});
 
 			const services = myBusiness.services.map((service) => {
 				return {
-					label: service.service_id.title,
-					value: service.service_id._id,
-					cost: service.cost,
-					time: service.time
+					label : service.service_id.title,
+					value : service.service_id._id,
+					cost  : service.cost,
+					time  : service.time
 				};
 			});
 
@@ -114,32 +115,32 @@ class BusinessWizardForm extends Component {
 		if (!myBusiness.error && !isEmpty(myBusiness)) {
 			const schedule = await myBusiness.working_hours.map((day) => {
 				return {
-					day: day.day,
-					opened: day.opened,
-					from: dateToStringTime(day.from),
-					until: dateToStringTime(day.until),
-					break: {
-						isBreak: day.break.isBreak,
-						from: dateToStringTime(day.break.from),
-						until: dateToStringTime(day.break.until)
+					day    : day.day,
+					opened : day.opened,
+					from   : dateToStringTime(day.from),
+					until  : dateToStringTime(day.until),
+					break  : {
+						isBreak : day.break.isBreak,
+						from    : dateToStringTime(day.break.from),
+						until   : dateToStringTime(day.break.until)
 					}
 				};
 			});
 			this.setState({ working: schedule });
 			return;
 		}
-		const days = [ 'sunday', 'monday', 'tuesday', 'wedensday', 'thursday', 'friday', 'saturday' ];
+		const days = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
 		let Schedule = [];
 		for (let i in days) {
 			await Schedule.push({
-				day: days[i],
-				opened: false,
-				from: '00:00',
-				until: '00:00',
-				break: {
-					isBreak: false,
-					from: '00:00',
-					until: '00:00'
+				day    : days[i],
+				opened : false,
+				from   : '00:00',
+				until  : '00:00',
+				break  : {
+					isBreak : false,
+					from    : '00:00',
+					until   : '00:00'
 				}
 			});
 		}
@@ -154,25 +155,24 @@ class BusinessWizardForm extends Component {
 			.getBusinessByOwner(this.props.user.sub)
 			.then(async (result) => {
 				if (!result.payload.error) {
-					console.log("i'm hereee");
 					const categories = await this.props.categories;
 					const business = result.payload;
 					const selectedItems = await this.selectedItems(business, categories);
 					// const working = this.
 					this.setState({
 						// mainCategories: categories,
-						categories: selectedItems.categories,
-						description: business.profile.description,
-						phone: business.profile.phone,
-						name: business.profile.name,
+						categories  : selectedItems.categories,
+						description : business.profile.description,
+						phone       : business.profile.phone,
+						name        : business.profile.name,
 						// working: working,
-						img: business.profile.img,
-						breakTime: business.break_time,
-						services: selectedItems.services,
-						street: business.profile.location.street,
-						city: business.profile.location.city,
-						building: business.profile.location.building,
-						postal_code: business.profile.location.postal_code
+						img         : business.profile.img,
+						breakTime   : business.break_time,
+						services    : selectedItems.services,
+						street      : business.profile.location.street,
+						city        : business.profile.location.city,
+						building    : business.profile.location.building,
+						postal_code : business.profile.location.postal_code
 					});
 					this.scheduleBuilder();
 					return;
@@ -199,9 +199,11 @@ class BusinessWizardForm extends Component {
 			img,
 			phone,
 			working,
-			services
+			services,
+			working_edits
 		} = this.state;
-		if (myBusiness.error) {
+
+		if (isEmpty(myBusiness)) {
 			this.props.createNewBusiness({
 				street,
 				city,
@@ -220,7 +222,7 @@ class BusinessWizardForm extends Component {
 		}
 
 		this.props.updateBusiness({
-			business_id: myBusiness._id,
+			business_id   : myBusiness._id,
 			street,
 			city,
 			building,
@@ -232,7 +234,8 @@ class BusinessWizardForm extends Component {
 			img,
 			phone,
 			working,
-			services
+			services,
+			working_edits
 		});
 	};
 
@@ -257,6 +260,7 @@ class BusinessWizardForm extends Component {
 	handleSchedule = (e, index) => {
 		const { name, value } = e.target;
 		let working = this.state.working;
+		let working_edits = this.state.working_edits;
 		let step2Errors = this.state.step2Errors;
 
 		switch (name) {
@@ -278,6 +282,7 @@ class BusinessWizardForm extends Component {
 
 			default:
 				working[index].opened = !working[index].opened;
+
 				break;
 		}
 
@@ -290,8 +295,8 @@ class BusinessWizardForm extends Component {
 					? 'invalid range'
 					: '';
 		}
-
-		this.setState({ step2Errors, working });
+		working_edits[index] = true;
+		this.setState({ step2Errors, working, working_edits });
 	};
 
 	handleChange = (e) => {
@@ -333,17 +338,17 @@ class BusinessWizardForm extends Component {
 		switch (step) {
 			case 1:
 				obj = {
-					stepErros: step1Errors,
-					name: state.name,
+					stepErros : step1Errors,
+					name      : state.name,
 					// category: state.category,
-					phone: state.phone
+					phone     : state.phone
 				};
 				// if (validForm(obj)) this.setState({ step: step + 1 });
 				break;
 			case 2:
 				obj = {
-					stepErros: step2Errors,
-					working: state.working
+					stepErros : step2Errors,
+					working   : state.working
 				};
 				break;
 			default:
@@ -440,18 +445,18 @@ class BusinessWizardForm extends Component {
 }
 // export default BusinessWizardForm;
 BusinessWizardForm.propTypes = {
-	user: PropTypes.object.isRequired,
-	getAllCategories: PropTypes.func.isRequired,
-	getBusinessByOwner: PropTypes.func.isRequired,
-	updateBusiness: PropTypes.func.isRequired,
-	myBusiness: PropTypes.object.isRequired,
-	categories: PropTypes.array.isRequired,
-	createNewBusiness: PropTypes.func.isRequired
+	user               : PropTypes.object.isRequired,
+	getAllCategories   : PropTypes.func.isRequired,
+	getBusinessByOwner : PropTypes.func.isRequired,
+	updateBusiness     : PropTypes.func.isRequired,
+	myBusiness         : PropTypes.object.isRequired,
+	categories         : PropTypes.array.isRequired,
+	createNewBusiness  : PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	categories: state.category.categories,
-	myBusiness: state.business.myBusiness,
-	user: state.auth.user
+	categories : state.category.categories,
+	myBusiness : state.business.myBusiness,
+	user       : state.auth.user
 });
 export default connect(mapStatetoProps, { getAllCategories, getBusinessByOwner, createNewBusiness, updateBusiness })(
 	BusinessWizardForm
