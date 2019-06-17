@@ -14,7 +14,7 @@ class ReviewsMain extends Component {
 	}
 
 	componentDidMount() {
-		this.props.getReviewsByBusiness(this.props.auth.user.business_id);
+		if (this.props.auth.user.isBusinessOwner) this.props.getReviewsByBusiness(this.props.auth.user.business_id);
 	}
 	render() {
 		return (

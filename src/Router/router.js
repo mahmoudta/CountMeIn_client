@@ -23,6 +23,7 @@ import BusinessProfile from '../components/Business/Profile/BusinessProfile';
 import SmartSettings from '../components/Business/Schedule/SmartSettings';
 import BappointmentReview from '../components/Business/Schedule/BappointmentReview';
 import ReviewsMain from '../components/Reviews/ReviewsMain';
+import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 
 const ReactRouter = () => {
 	return (
@@ -51,6 +52,7 @@ const ReactRouter = () => {
 									path="/business/advanced/smart-algorithms-settings"
 									component={requireAuth(SmartSettings)}
 								/>
+								<Route path="/insights" component={requireAuth(StatisticsMain)} />
 								<Route
 									path="/business/appointment-review/:appointment_id-:page"
 									component={requireAuth(BappointmentReview)}
