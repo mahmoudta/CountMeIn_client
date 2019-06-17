@@ -27,6 +27,7 @@ import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 
 
 import SignUpForm from "../components/Landing/SignUpForm/SignUpForm"
+import ReviewForm from '../components/globalComponents/ReviewForm.jsx';
 
 const ReactRouter = () => {
 	return (
@@ -70,6 +71,7 @@ const ReactRouter = () => {
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
 								<Route path="/SignUp" component={SignUpForm} />
+								<Route path="/ReviewForm" component={ReviewForm} />
 							</section>
 						</section>
 					</section>
