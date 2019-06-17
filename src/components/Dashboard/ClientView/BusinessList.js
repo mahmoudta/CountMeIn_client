@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import Card from "../../Interface/Card/Card.jsx";
 import GridItem from "../../Interface/Grid/GridItem.jsx";
 import CardHeader from "../../Interface/Card/CardHeader.jsx";
-import CardIcon from "../../Interface/Card/CardIcon.jsx";
 import CardFooter from "../../Interface/Card/CardFooter.jsx";
 import dashboardStyle from "../../Interface/Assets/dashboardStyle";
 import axios from "axios";
@@ -13,7 +11,6 @@ import { B_IMAGES } from "../../../consts";
 import { Link } from "react-router-dom";
 
 import Phone from "@material-ui/icons/Phone";
-import Store from "@material-ui/icons/Store";
 import Icon from "@material-ui/core/Icon";
 
 import PropTypes from "prop-types";

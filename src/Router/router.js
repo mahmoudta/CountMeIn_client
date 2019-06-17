@@ -25,6 +25,9 @@ import BappointmentReview from '../components/Business/Schedule/BappointmentRevi
 import ReviewsMain from '../components/Reviews/ReviewsMain';
 import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 
+
+import SignUpForm from "../components/Landing/SignUpForm/SignUpForm"
+
 const ReactRouter = () => {
 	return (
 		<React.Fragment>
@@ -66,6 +69,7 @@ const ReactRouter = () => {
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
+								<Route path="/SignUp" component={SignUpForm} />
 							</section>
 						</section>
 					</section>

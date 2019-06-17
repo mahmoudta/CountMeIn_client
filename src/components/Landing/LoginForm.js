@@ -3,6 +3,30 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { localSignIn } from '../../actions/authActions';
+import logo from '../../images/logo.png';
+
+
+// @material-ui/core components
+import withStyles from "@material-ui/core/styles/withStyles";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Icon from "@material-ui/core/Icon";
+
+// @material-ui/icons
+import Email from "@material-ui/icons/Email";
+
+// core
+import GridContainer from "../Interface/Grid/GridContainer.jsx";
+import GridItem from "../Interface/Grid/GridItem.jsx";
+import CustomInput from "../Interface/CustomInput/CustomInput.jsx";
+import Button from "../Interface/CustomButtons/Button.jsx"
+import Card from "../Interface/Card/Card.jsx"
+import CardBody from "../Interface/Card/CardBody.jsx"
+import CardHeader from "../Interface/Card/CardHeader.jsx"
+import CardFooter from "../Interface/Card/CardFooter.jsx";
+
+
+import loginPageStyle from "../Interface/Assets/loginPageStyle";
+
 
 class LoginForm extends Component {
 	constructor(props) {
@@ -11,15 +35,28 @@ class LoginForm extends Component {
 			email: '',
 			password: '',
 			loading: false,
-			error: ''
+			error: '',
+			cardAnimaton: "cardHidden"
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
-	componentDidMount() {}
+	componentDidMount() {
+		this.timeOutFunction = setTimeout(
+			function () {
+				this.setState({ cardAnimaton: "" });
+			}.bind(this),
+			700
+		);
+	}
+	componentWillUnmount() {
+		clearTimeout(this.timeOutFunction);
+		this.timeOutFunction = null;
+	}
 
-	handleChange = (e) => {
-		this.setState({ [e.target.name]: e.target.value });
+	handleChange = (e, d) => {
+		if (d === 'email') this.setState({ 'email': e.target.value });
+		if (d === 'password') this.setState({ 'password': e.target.value });
 	};
 	handleSubmit = (e) => {
 		e.preventDefault();
@@ -27,7 +64,6 @@ class LoginForm extends Component {
 		this.props.localSignIn({ email, password }).then((result) => {
 			const { error } = this.props;
 			if (error === '') {
-				// return <Redirect to="/dashboard" />;
 				this.context.router.history.push('/dashboard');
 			} else {
 				this.setState({ error });
@@ -36,35 +72,91 @@ class LoginForm extends Component {
 	};
 	render() {
 		const { isAuthenticated } = this.props;
+		const { classes } = this.props;
+
 		if (!isAuthenticated) {
 			return (
-				<form className="border-right p-lg-2" onSubmit={(e) => this.handleSubmit(e)}>
-					<div className="alert alert-danger">{this.props.error}</div>
-					<div className="form-group">
-						<label htmlFor="email">Email address</label>
-						<input
-							type="email"
-							className="form-control"
-							name="email"
-							placeholder="name@example.com"
-							value={this.state.email}
-							onChange={(e) => this.handleChange(e)}
-						/>
-					</div>
-					<div className="form-group">
-						<label htmlFor="password">Password</label>
-						<input
-							type="password"
-							className="form-control"
-							name="password"
-							value={this.state.password}
-							onChange={this.handleChange}
-						/>
-					</div>
-					<button type="submit" className="btn btn-primary my-2">
-						Sign in
-					</button>
-				</form>
+
+				<div className={classes.container}>
+					<GridContainer justify="center">
+						<GridItem xs={12} sm={6} md={4}>
+							<form>
+								<Card login className={classes[this.state.cardAnimaton]}>
+									<CardHeader
+										className={`${classes.cardHeader} ${classes.textCenter}`}
+										color="CMI"
+									>
+										<img src={logo} alt="" className="img-fluid" />
+										<h4 className={classes.cardTitle}>Log in</h4>
+										<div className={classes.socialLine}>
+											{[
+												"fab fa-facebook-square",
+												"fab fa-twitter",
+												"fab fa-google-plus"
+											].map((prop, key) => {
+												return (
+													<Button
+														color="transparent"
+														justIcon
+														key={key}
+														className={classes.customButtonClass}
+													>
+														<i className={prop} />
+													</Button>
+												);
+											})}
+										</div>
+									</CardHeader>
+									<CardBody>
+										{(this.props.error) ? <div className="alert alert-danger">{this.props.error}</div> : <div />}
+										<CustomInput
+											labelText="Email..."
+											id="email"
+											formControlProps={{
+												fullWidth: true
+											}}
+											inputProps={{
+												onChange: event => this.handleChange(event, 'email'),
+												endAdornment: (
+													<InputAdornment position="end">
+														<Email className={classes.inputAdornmentIcon} />
+													</InputAdornment>
+												)
+											}}
+										/>
+										<CustomInput
+											labelText="Password"
+											id="password"
+											formControlProps={{
+												fullWidth: true
+											}}
+											inputProps={{
+												type: "password",
+												onChange: event => this.handleChange(event, 'password'),
+												endAdornment: (
+													<InputAdornment position="end">
+														<Icon className={classes.inputAdornmentIcon}>
+															lock_outline
+													  </Icon>
+													</InputAdornment>
+												)
+											}}
+										/>
+									</CardBody>
+									<CardFooter className={classes.justifyContentCenter}>
+										<Button color="success" simple size="lg" block onClick={(e) => this.handleSubmit(e)}>
+											Let's Go
+						 				 </Button>
+										<Button color="info" simple size="lg" block href="/signup">
+											Join Us
+						 				 </Button>
+									</CardFooter>
+								</Card>
+							</form>
+						</GridItem>
+					</GridContainer>
+				</div>
+
 			);
 		} else {
 			this.context.router.history.push('/dashboard');
@@ -83,4 +175,4 @@ const mapStatetoProps = (state) => ({
 	isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStatetoProps, { localSignIn })(LoginForm);
+export default connect(mapStatetoProps, { localSignIn })(withStyles(loginPageStyle)(LoginForm));

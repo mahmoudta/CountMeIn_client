@@ -5,6 +5,7 @@ import {
   infoCardHeader,
   primaryCardHeader,
   roseCardHeader,
+  CMICardHeader,
   whiteColor,
   blackColor,
   hexToRgb
@@ -16,7 +17,7 @@ const cardHeaderStyle = {
     borderBottom: "none",
     background: "transparent",
     zIndex: "3 !important",
-    "&$cardHeaderPlain,&$cardHeaderImage,&$cardHeaderContact,&$cardHeaderSignup,&$cardHeaderIcon,&$cardHeaderStats,&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader": {
+    "&$cardHeaderPlain,&$cardHeaderImage,&$cardHeaderContact,&$cardHeaderSignup,&$cardHeaderIcon,&$cardHeaderStats,&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader,&$CMICardHeader": {
       margin: "0 15px",
       padding: "0",
       position: "relative",
@@ -25,7 +26,7 @@ const cardHeaderStyle = {
     "&:first-child": {
       borderRadius: "calc(.25rem - 1px) calc(.25rem - 1px) 0 0"
     },
-    "&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader": {
+    "&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader,&$CMICardHeader": {
       "&:not($cardHeaderIcon):not($cardHeaderImage):not($cardHeaderText)": {
         borderRadius: "3px",
         marginTop: "-20px",
@@ -109,7 +110,7 @@ const cardHeaderStyle = {
     }
   },
   cardHeaderIcon: {
-    "&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader": {
+    "&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader,&$CMICardHeader": {
       background: "transparent",
       boxShadow: "none"
     },
@@ -162,6 +163,12 @@ const cardHeaderStyle = {
     color: whiteColor,
     "&:not($cardHeaderText):not($cardHeaderIcon)": {
       ...roseCardHeader
+    }
+  },
+  CMICardHeader: {
+    color: whiteColor,
+    "&:not($cardHeaderText):not($cardHeaderIcon)": {
+      ...CMICardHeader
     }
   }
 };
