@@ -33,10 +33,6 @@ class ServicesForm extends Component {
 			});
 		}
 
-		// console.log(servicesOptions);
-
-		// // const options = [];
-
 		return (
 			<form className="p-md-4">
 				<h4 className="text-center font-weight-light mb-3">SetUp Your Business Categories And services</h4>
@@ -139,9 +135,9 @@ class ServicesForm extends Component {
 	}
 }
 ServicesForm.propTypes = {
-	categories: PropTypes.array.isRequired
+	categories : PropTypes.array.isRequired
 };
 const mapStatetoProps = (state) => ({
-	categories: state.category.categories
+	categories : state.category.categories
 });
 export default connect(mapStatetoProps, {})(ServicesForm);

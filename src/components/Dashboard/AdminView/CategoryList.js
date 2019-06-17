@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getAllCategories, deleteCategory } from '../../../actions/categoryActions';
+import { getAllCategories, deleteCategory, deleteService } from '../../../actions/categoryActions';
 
 /* Icons */
 import { FaPlusCircle } from 'react-icons/fa';
@@ -21,21 +21,16 @@ class CategoryList extends Component {
 		this.eachService = this.eachService.bind(this);
 		this.handleDeleteCategory = this.handleDeleteCategory.bind(this);
 	}
-	Alert = async (redirect, text) => {
-		Swal.fire({
-			title              : redirect ? 'Success' : 'Error!',
-			text               : text,
-			type               : redirect ? 'success' : 'error',
-			focusConfirm       : false,
-			confirmButtonText  : redirect ? 'done' : 'back',
-			confirmButtonColor : redirect ? '#5eba00' : '#495057'
-		}).then((res) => {
-			if (redirect) this.context.router.history.push('/dashboard');
-		});
-	};
+
 	componentDidMount() {
 		this.props.getAllCategories();
 	}
+
+	handleDeleteService = (e, service_id) => {
+		e.stopPropagation();
+		e.preventDefault();
+		this.props.deleteService(service_id);
+	};
 
 	handleDeleteCategory = (e, category_id) => {
 		e.stopPropagation();
@@ -58,11 +53,7 @@ class CategoryList extends Component {
 				</td>
 				<td>{service.cost} NIS</td>
 				<td>
-					<button
-						name={service}
-						className="btn btn-sm btn-danger"
-						onClick={(e) => this.handleDeleteCategory(e, service._id)}
-					>
+					<button className="btn btn-sm btn-danger" onClick={(e) => this.handleDeleteService(e, service._id)}>
 						<FaTrashAlt />
 					</button>
 					<button name={service._id} className="btn btn-sm btn-primary mx-2">
@@ -87,7 +78,6 @@ class CategoryList extends Component {
 
 				<td>
 					<button
-						name={category._id}
 						className="btn btn-sm btn-danger"
 						onClick={(e) => this.handleDeleteCategory(e, category._id)}
 					>
@@ -162,4 +152,4 @@ const mapStatetoProps = (state) => ({
 	categories : state.category.categories,
 	loading    : state.category.loading
 });
-export default connect(mapStatetoProps, { getAllCategories, deleteCategory })(CategoryList);
+export default connect(mapStatetoProps, { getAllCategories, deleteCategory, deleteService })(CategoryList);
