@@ -15,20 +15,20 @@ class CategoryList extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			loading: props.loading
+			loading : props.loading
 		};
 		this.eachCategory = this.eachCategory.bind(this);
-		this.eachSubCategory = this.eachSubCategory.bind(this);
+		this.eachService = this.eachService.bind(this);
 		this.handleDeleteCategory = this.handleDeleteCategory.bind(this);
 	}
 	Alert = async (redirect, text) => {
 		Swal.fire({
-			title: redirect ? 'Success' : 'Error!',
-			text: text,
-			type: redirect ? 'success' : 'error',
-			focusConfirm: false,
-			confirmButtonText: redirect ? 'done' : 'back',
-			confirmButtonColor: redirect ? '#5eba00' : '#495057'
+			title              : redirect ? 'Success' : 'Error!',
+			text               : text,
+			type               : redirect ? 'success' : 'error',
+			focusConfirm       : false,
+			confirmButtonText  : redirect ? 'done' : 'back',
+			confirmButtonColor : redirect ? '#5eba00' : '#495057'
 		}).then((res) => {
 			if (redirect) this.context.router.history.push('/dashboard');
 		});
@@ -40,25 +40,34 @@ class CategoryList extends Component {
 	handleDeleteCategory = (e, category_id) => {
 		e.stopPropagation();
 		e.preventDefault();
-		console.log(category_id);
 		this.props.deleteCategory(category_id);
 	};
-	eachSubCategory(parent, category, i) {
+	eachService(parent, service, i) {
 		return (
-			<tr>
+			<tr key={service._id}>
 				<td>
-					<span>category.sub</span>
+					<span>{service.title}</span>
 				</td>
 				<td>
-					<span>parent</span>
+					<span>
+						<strong>{parent}</strong>
+					</span>
 				</td>
 				<td>
-					{/* <button value={category._id} className="btn btn-sm btn-danger">
+					<span>{service.time} Mins</span>
+				</td>
+				<td>{service.cost} NIS</td>
+				<td>
+					<button
+						name={service}
+						className="btn btn-sm btn-danger"
+						onClick={(e) => this.handleDeleteCategory(e, service._id)}
+					>
 						<FaTrashAlt />
 					</button>
-					<button value={category._id} className="btn btn-sm btn-primary mx-2">
+					<button name={service._id} className="btn btn-sm btn-primary mx-2">
 						<FaEdit />
-					</button> */}
+					</button>
 				</td>
 			</tr>
 		);
@@ -66,13 +75,15 @@ class CategoryList extends Component {
 
 	eachCategory(category, i) {
 		return (
-			<tr key={i + category._id}>
+			<tr key={i + category._id} className="bg-light">
 				<td>
 					<span>{category.name}</span>
 				</td>
 				<td>
-					<span>{category.services.length > 0 ? category.services.length : '-'}</span>
+					<span>-</span>
 				</td>
+				<td>-</td>
+				<td>-</td>
 
 				<td>
 					<button
@@ -108,18 +119,30 @@ class CategoryList extends Component {
 							<tr>
 								<th>name</th>
 								<th>parent</th>
+								<th>time</th>
+								<th>cost</th>
 								<th>managment</th>
 							</tr>
 						</thead>
-						<tbody>
-							{categories.length > 0 ? (
-								categories.map(this.eachCategory)
-							) : (
+
+						{categories.length > 0 ? (
+							categories.map((category, i) => {
+								return (
+									<tbody key={category._id} className="border-top-0 border-bottom">
+										{this.eachCategory(category, i)}
+										{category.services.map((service, i) => {
+											return this.eachService(category.name, service, i);
+										})}
+									</tbody>
+								);
+							})
+						) : (
+							<tbody>
 								<tr>
 									<td colSpan="3">no categories to show</td>
 								</tr>
-							)}
-						</tbody>
+							</tbody>
+						)}
 					</table>
 				</div>
 			</div>
@@ -128,15 +151,15 @@ class CategoryList extends Component {
 }
 
 CategoryList.propTypes = {
-	getAllCategories: PropTypes.func.isRequired,
-	deleteCategory: PropTypes.func.isRequired,
-	categories: PropTypes.array.isRequired
+	getAllCategories : PropTypes.func.isRequired,
+	deleteCategory   : PropTypes.func.isRequired,
+	categories       : PropTypes.array.isRequired
 };
 CategoryList.contextTypes = {
-	router: PropTypes.object.isRequired
+	router : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	categories: state.category.categories,
-	loading: state.category.loading
+	categories : state.category.categories,
+	loading    : state.category.loading
 });
 export default connect(mapStatetoProps, { getAllCategories, deleteCategory })(CategoryList);

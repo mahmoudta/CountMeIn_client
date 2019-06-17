@@ -20,6 +20,7 @@
 		"react-bootstrap-sweetalert": "^4.4.1",
 		"react-chartist": "^0.13.3",
 		"react-dom": "^16.8.6",
+		"react-google-charts": "^3.0.13",
 		"react-icons": "^3.7.0",
 		"react-jvectormap": "0.0.10",
 		"react-redux": "^6.0.1",

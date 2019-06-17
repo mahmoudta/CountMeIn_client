@@ -89,8 +89,8 @@ class Navbar extends Component {
 											key={`Report${this.props.auth.user.business_id}`}
 											className="nav-item text-uppercase"
 										>
-											<NavLink to="#" activeClassName="active">
-												<FaChartBar /> report
+											<NavLink to="/insights" activeClassName="active">
+												<FaChartBar /> insights
 											</NavLink>
 										</li>
 									]
