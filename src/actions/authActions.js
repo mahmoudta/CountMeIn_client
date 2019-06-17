@@ -48,7 +48,6 @@ export const appendNotification = (data) => (dispatch) => {
 			});
 		})
 		.catch((err) => {
-			console.log('error');
 			dispatch({
 				type    : APPEND_NOTIFICATION,
 				payload : []

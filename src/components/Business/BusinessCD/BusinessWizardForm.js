@@ -90,7 +90,6 @@ class BusinessWizardForm extends Component {
 	selectedItems(myBusiness, categories) {
 		if (!isEmpty(myBusiness) && !isEmpty(categories)) {
 			const selectedCategories = myBusiness.categories.map((category) => {
-				console.log(category);
 				return {
 					value : category._id,
 					label : category.name

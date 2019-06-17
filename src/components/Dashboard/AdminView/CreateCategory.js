@@ -28,17 +28,12 @@ class CreateCategory extends Component {
 		this.onChange = this.onChange.bind(this);
 		this.formSubmit = this.formSubmit.bind(this);
 	}
-	componentDidMount() {
-		if (isEmpty(this.props.categories)) {
-			this.props.getAllCategories();
-		}
-	}
+	componentDidMount() {}
 	onChange = (e) => {
 		const target = e.target;
 		var { isService } = this.state;
 		if (target.name === 'parent_category') {
 			if (!isEmpty(target.value)) {
-				console.log('here');
 				isService = true;
 			} else {
 				isService = false;
@@ -48,43 +43,18 @@ class CreateCategory extends Component {
 		this.setState({ [target.name]: target.value, isService: isService });
 	};
 
-	Alert = async (redirect, text) => {
-		Swal.fire({
-			title              : redirect ? 'Success' : 'Error!',
-			text               : text,
-			type               : redirect ? 'success' : 'error',
-			focusConfirm       : false,
-			confirmButtonText  : redirect ? 'done' : 'back',
-			confirmButtonColor : redirect ? '#5eba00' : '#495057'
-		}).then((res) => {
-			if (redirect) this.context.router.history.push('/dashboard');
-		});
-	};
-
 	formSubmit = (e) => {
 		e.preventDefault();
 		const { isService, name, time, parent_category, cost } = this.state;
 		this.setState({ loading: true });
 		if (!isService) {
-			this.props.createCategory({ name }).then((res) => {
-				const redirect = res.type === 'CREATE_CATEGORY' ? true : false;
-				this.setState({ loading: false });
-				this.Alert(redirect, res.payload);
-			});
+			this.props.createCategory({ name });
 		} else {
-			this.props.addService({ parent_category, name, time, cost }).then((res) => {
-				console.log('service');
-				const redirect = res.type === 'CREATE_CATEGORY' ? true : false;
-				this.setState({ loading: false });
-				this.Alert(redirect, res.payload);
-			});
+			this.props.addService({ parent_category, name, time, cost });
 		}
 	};
 
 	render() {
-		if (isEmpty(this.props.categories)) {
-			this.props.getAllCategories();
-		}
 		return (
 			<section className="mt-5">
 				<div className="container">

@@ -213,7 +213,6 @@ export const followBusiness = (business_id) => (dispatch) => {
 
 export const unFollowBusiness = (business_id) => (dispatch) => {
 	dispatch(setBusinessLoading());
-	console.log(business_id);
 	axios
 		.put(`${API}/business/unfollow`, { business_id })
 		.then((result) => {

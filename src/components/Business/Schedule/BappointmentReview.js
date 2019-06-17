@@ -48,8 +48,6 @@ class BappointmentReview extends Component {
 		const { appointments } = this.props;
 		const appointment_id = this.props.match.params.appointment_id;
 		const page = this.props.match.params.page;
-		console.log(appointment_id);
-		console.log(appointments);
 		const selected = await appointments.find((appointment) => {
 			return appointment._id.toString() === appointment_id.toString();
 		});

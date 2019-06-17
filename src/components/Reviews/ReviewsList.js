@@ -5,15 +5,13 @@ import Loading from '../globalComponents/Loading';
 import moment from 'moment';
 import ReviewHeader from './ReviewHeader';
 import ReviewBody from './ReviewBody';
+import UserReviewBody from './UserReviewBody';
 
 class ReviewsList extends Component {
 	constructor(props) {
 		super(props);
 	}
-	eachBusinessReview(review, i) {
-		return [ <td key={'details'}>Hello World</td> ];
-	}
-	eachCustomerReview(review, i) {}
+
 	render() {
 		const { page } = this.props;
 		return (
@@ -30,15 +28,25 @@ class ReviewsList extends Component {
 										<th>action</th>
 									</tr>
 								</thead>
-
-								{this.props.reviews.map((review, i) => {
-									return (
-										<tbody key={review._id}>
-											<ReviewHeader>{review.time}</ReviewHeader>
-											<ReviewBody>{{ review, page }}</ReviewBody>
-										</tbody>
-									);
-								})}
+								{page === 'business' ? (
+									this.props.reviews.map((review, i) => {
+										return (
+											<tbody key={review._id}>
+												<ReviewHeader>{review.time}</ReviewHeader>
+												<ReviewBody>{{ review, page }}</ReviewBody>
+											</tbody>
+										);
+									})
+								) : (
+									this.props.myReview.map((review, i) => {
+										return (
+											<tbody key={review._id}>
+												<ReviewHeader>{review.time}</ReviewHeader>
+												<UserReviewBody>{{ review, page }}</UserReviewBody>
+											</tbody>
+										);
+									})
+								)}
 							</table>
 						</div>
 					</div>
@@ -51,15 +59,17 @@ class ReviewsList extends Component {
 }
 
 ReviewsList.propTypes = {
-	auth    : PropTypes.object.isRequired,
-	reviews : PropTypes.array.isRequired
+	auth     : PropTypes.object.isRequired,
+	reviews  : PropTypes.array.isRequired,
+	myReview : PropTypes.array.isRequired
 
 	// getBusinessCustomers: PropTypes.func.isRequired,
 };
 const mapStatetoProps = (state) => ({
-	auth    : state.auth,
-	loading : state.appointment.loading,
-	reviews : state.appointment.reviews
+	auth     : state.auth,
+	loading  : state.appointment.loading,
+	reviews  : state.appointment.reviews,
+	myReview : state.appointment.myReview
 	// myBusiness: state.business.myBusiness
 });
 export default connect(mapStatetoProps, {})(ReviewsList);
