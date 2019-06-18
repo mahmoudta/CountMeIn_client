@@ -182,10 +182,15 @@ header .navbar-brand {
 	display: block;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
 	.nav > li > a {
 		padding-top: 15px;
 		padding-bottom: 15px;
+	}
+}
+@media (max-width: 900px) {
+	body {
+		overflow: scroll;
 	}
 }
 .thumb-sm img {
@@ -282,34 +287,6 @@ aside a.active {
 	.scrollable {
 		-webkit-overflow-scrolling: touch;
 	}
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
-	margin-bottom: 0.66em;
-	font-family: inherit;
-	font-weight: 600;
-	line-height: 1.1;
-	color: inherit;
-}
-
-/* .wrapper {
-	display: flex;
-	max-height: 100vh;
-	overflow: hidden;
-} */
-
-@media (min-width: 768px) {
 	.wrapper {
 		display: table;
 		border-spacing: 0;
@@ -339,9 +316,26 @@ h6,
 		transition: width 0.3s;
 	}
 }
-/* #sidebar {
-	background-color: #38354a;
-} */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	margin-bottom: 0.66em;
+	font-family: inherit;
+	font-weight: 600;
+	line-height: 1.1;
+	color: inherit;
+}
+
 #sidebar {
 	background-color: #38354a;
 	height: 100%;
