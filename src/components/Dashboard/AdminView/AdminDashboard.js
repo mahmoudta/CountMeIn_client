@@ -4,15 +4,6 @@ import React, { Component } from 'react';
 
 import CategoryList from './CategoryList';
 class AdminDashboard extends Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
-	// 		category: '',
-	// 		categories: [],
-	// 		subCategory: ''
-	// 	};
-	// }
-
 	render() {
 		return (
 			<div className="container">

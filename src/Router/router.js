@@ -14,7 +14,6 @@ import ClientView from '../components/Business/ClientView';
 import Schedule from '../components/Business/Schedule/Schedule';
 import NewAppointment from '../components/Business/NewAppointment';
 
-import BnewAppointment from '../components/Business/Schedule/BnewAppointment';
 import BusinessCD from '../components/Business/BusinessCD/BusinessCD';
 
 import FlashMessage from '../components/FlashMessages/FlashMessage';
@@ -51,8 +50,7 @@ const ReactRouter = () => {
 								<Route path="/appointments-review" component={requireAuth(ReviewsMain)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
 								<Route exact path="/business/pages/create" component={requireAuth(BusinessCD)} />
-								<Route path="/business/view/testview/:id" component={requireAuth(BusinessProfile)} />
-								<Route exact path="/business/view/:id" component={requireAuth(ClientView)} />
+								<Route exact path="/business/view/:id" component={requireAuth(BusinessProfile)} />
 								<Route
 									path="/business/advanced/smart-algorithms-settings"
 									component={requireAuth(SmartSettings)}
@@ -63,10 +61,6 @@ const ReactRouter = () => {
 									component={requireAuth(BappointmentReview)}
 								/>
 
-								{/* <Route
-									path="/business/mySchedule/new-appointment"
-									component={requireAuth(BnewAppointment)}
-								/> */}
 								<Route excat path="/business/pages/mySchedule" component={requireAuth(Schedule)} />
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}

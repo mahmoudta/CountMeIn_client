@@ -16,7 +16,9 @@ import {
 	UNFOLLOW_BUSINESS,
 	SET_FLASH_MESSAGE,
 	UPDATE_BUSINESS,
-	SMART_ALGS_UPDATE
+	SMART_ALGS_UPDATE,
+	REVIEWS_OF_BUSINESS_PROFILE,
+	REVIEW_LOADING
 } from './types';
 export const updateBusiness = (data) => (dispatch) => {
 	dispatch(setBusinessLoading());
@@ -193,8 +195,7 @@ export const getBusinessById = (id) => (dispatch) => {
 		});
 };
 export const followBusiness = (business_id) => (dispatch) => {
-	dispatch(setBusinessLoading());
-	axios
+	return axios
 		.put(`${API}/business/follow`, { business_id })
 		.then((result) => {
 			return dispatch({
@@ -207,12 +208,10 @@ export const followBusiness = (business_id) => (dispatch) => {
 				type    : SET_FLASH_MESSAGE,
 				message : { type: 'error', text: err.response.data.error }
 			});
-			return dispatch(setBusinessLoading(false));
 		});
 };
 
 export const unFollowBusiness = (business_id) => (dispatch) => {
-	dispatch(setBusinessLoading());
 	axios
 		.put(`${API}/business/unfollow`, { business_id })
 		.then((result) => {
@@ -230,7 +229,26 @@ export const unFollowBusiness = (business_id) => (dispatch) => {
 				type    : SET_FLASH_MESSAGE,
 				message : { type: 'error', text: err.response.data.error }
 			});
-			dispatch(setBusinessLoading(false));
+		});
+};
+export const getReviewsForProfilePage = (business_id, page) => (dispatch) => {
+	dispatch({
+		type    : REVIEW_LOADING,
+		payload : true
+	});
+	axios
+		.get(`${API}/business/reviews/${business_id}/${page}`)
+		.then((result) => {
+			dispatch({
+				type    : REVIEWS_OF_BUSINESS_PROFILE,
+				payload : result.data.reviews
+			});
+		})
+		.catch((err) => {
+			dispatch({
+				type    : REVIEWS_OF_BUSINESS_PROFILE,
+				message : {}
+			});
 		});
 };
 
