@@ -31,13 +31,12 @@ class ReviewsMain extends Component {
 								<li className="nav-item">
 									<NavLink
 										to="#"
-										name=""
 										className={`nav-link text-uppercase ${this.state.page == 'customer'
 											? 'active'
 											: ''}`}
 										onClick={(e) => {
 											e.preventDefault();
-											this.selectPage('customer');
+											this.selectPage(e, 'customer');
 										}}
 									>
 										my reviews
@@ -51,7 +50,7 @@ class ReviewsMain extends Component {
 											: ''}`}
 										onClick={(e) => {
 											e.preventDefault();
-											this.selectPage('business');
+											this.selectPage(e, 'business');
 										}}
 									>
 										my business reviews
