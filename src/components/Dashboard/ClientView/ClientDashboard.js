@@ -9,7 +9,7 @@ export class ClientDashboard extends Component {
   render() {
     return (
       <div className="col-12">
-        <StatsPanel />
+        {/* <StatsPanel /> */}
         <Upcomming />
         <BusinessListContainer />
       </div>
