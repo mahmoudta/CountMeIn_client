@@ -62,6 +62,7 @@ const ReactRouter = () => {
 									component={requireAuth(BappointmentReview)}
 								/>
 
+
 								{/* <Route
 									path="/business/mySchedule/new-appointment"
 									component={requireAuth(BnewAppointment)}
@@ -71,7 +72,7 @@ const ReactRouter = () => {
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
 								<Route path="/SignUp" component={SignUpForm} />
-								<Route path="/ReviewForm" component={ReviewForm} />
+								<Route exact path="/sms/CustomerReview/:appointment_id" component={requireAuth(ReviewForm)} />
 							</section>
 						</section>
 					</section>

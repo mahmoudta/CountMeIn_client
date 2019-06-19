@@ -144,7 +144,7 @@ class Upcomming extends React.Component {
       .catch(err => {
         console.log(err);
       })
-      .then(() => {});
+      .then(() => { });
 
     this.setState({
       alert: (
@@ -318,7 +318,6 @@ class Upcomming extends React.Component {
   }
 }
 
-//export default withStyles(extendedTablesStyle)(Upcomming);
 const mapStateToProps = state => ({
   Id: state.auth.user.sub
 });
