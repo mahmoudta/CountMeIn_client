@@ -17,13 +17,13 @@ class CreateCategory extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: '',
-			parent_category: '',
-			time: 10,
-			isService: false,
-			loading: false,
-			alert: '',
-			cost: 0
+			name            : '',
+			parent_category : '',
+			time            : 10,
+			isService       : false,
+			loading         : false,
+			alert           : '',
+			cost            : 0
 		};
 		this.onChange = this.onChange.bind(this);
 		this.formSubmit = this.formSubmit.bind(this);
@@ -50,12 +50,12 @@ class CreateCategory extends Component {
 
 	Alert = async (redirect, text) => {
 		Swal.fire({
-			title: redirect ? 'Success' : 'Error!',
-			text: text,
-			type: redirect ? 'success' : 'error',
-			focusConfirm: false,
-			confirmButtonText: redirect ? 'done' : 'back',
-			confirmButtonColor: redirect ? '#5eba00' : '#495057'
+			title              : redirect ? 'Success' : 'Error!',
+			text               : text,
+			type               : redirect ? 'success' : 'error',
+			focusConfirm       : false,
+			confirmButtonText  : redirect ? 'done' : 'back',
+			confirmButtonColor : redirect ? '#5eba00' : '#495057'
 		}).then((res) => {
 			if (redirect) this.context.router.history.push('/dashboard');
 		});
@@ -93,7 +93,7 @@ class CreateCategory extends Component {
 							<div className="card">
 								<div className="card-header">
 									<h3 className="card-title">
-										new category <span className="text-muted"> OR </span> sub category{' '}
+										new category <span className="text-muted"> AND </span> service
 									</h3>
 								</div>
 								<div className="card-body">
@@ -102,7 +102,7 @@ class CreateCategory extends Component {
 											<div className="col-md-6">
 												<div className="form-group">
 													<label className="form-label">
-														category name
+														{this.state.isService ? 'Service Name' : 'Category Name'}
 														<span className="form-required" />
 													</label>
 													<input
@@ -228,15 +228,15 @@ class CreateCategory extends Component {
 }
 
 CreateCategory.propTypes = {
-	categories: PropTypes.array.isRequired,
-	getAllCategories: PropTypes.func.isRequired,
-	createCategory: PropTypes.func.isRequired,
-	addService: PropTypes.func.isRequired
+	categories       : PropTypes.array.isRequired,
+	getAllCategories : PropTypes.func.isRequired,
+	createCategory   : PropTypes.func.isRequired,
+	addService       : PropTypes.func.isRequired
 };
 CreateCategory.contextTypes = {
-	router: PropTypes.object.isRequired
+	router : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	categories: state.category.categories
+	categories : state.category.categories
 });
 export default connect(mapStatetoProps, { getAllCategories, createCategory, addService })(CreateCategory);

@@ -7,15 +7,16 @@ import {
 	BUSNIESS_LOADING,
 	FOLLOW_BUSINESS,
 	UNFOLLOW_BUSINESS,
-	UPDATE_BUSINESS
+	UPDATE_BUSINESS,
+	SMART_ALGS_UPDATE
 } from '../actions/types';
 // import isEmpty from 'lodash/isEmpty';
 
 const initialState = {
-	myBusiness: {},
-	business: {},
-	loading: false,
-	success: ''
+	myBusiness : {},
+	business   : {},
+	loading    : false,
+	success    : ''
 };
 
 export default function(state = initialState, action) {
@@ -23,40 +24,46 @@ export default function(state = initialState, action) {
 		case CREATE_BUSINESS:
 			return {
 				...state,
-				success: ' business successfully added',
-				loading: false
+				success : ' business successfully added',
+				loading : false
 			};
 
 		case UPDATE_BUSINESS:
 			return {
 				...state,
-				myBusiness: action.payload,
-				loading: false
+				myBusiness : action.payload,
+				loading    : false
 			};
 
 		case GET_BUSINESS_BY_OWNER:
 			return {
 				...state,
-				myBusiness: action.payload,
-				loading: false
+				myBusiness : action.payload,
+				loading    : false
 			};
 		case GET_BUSINESS_BY_ID:
 			return {
 				...state,
-				business: action.payload,
-				loading: false
+				business : action.payload,
+				loading  : false
 			};
 		case GET_CUREENT_BUSINESS_CUSTOMERS:
 			return {
 				...state,
-				customers: action.payload,
-				loading: false
+				customers : action.payload,
+				loading   : false
+			};
+		case SMART_ALGS_UPDATE:
+			return {
+				...state,
+				myBusiness : action.payload,
+				loading    : false
 			};
 		case GET_CUREENT_BUSINESS_SERVICES:
 			return {
 				...state,
-				businessServices: action.payload,
-				loading: false
+				businessServices : action.payload,
+				loading          : false
 			};
 
 		case FOLLOW_BUSINESS:
@@ -65,8 +72,8 @@ export default function(state = initialState, action) {
 			newBusiness.followers = Number(newBusiness.followers) + 1;
 			return {
 				...state,
-				business: newBusiness,
-				loading: false
+				business : newBusiness,
+				loading  : false
 			};
 		case UNFOLLOW_BUSINESS:
 			const BusinessEdit = { ...state.business };
@@ -74,14 +81,14 @@ export default function(state = initialState, action) {
 			BusinessEdit.followers = Number(BusinessEdit.followers) - 1;
 			return {
 				...state,
-				business: BusinessEdit,
-				loading: false
+				business : BusinessEdit,
+				loading  : false
 			};
 
 		case BUSNIESS_LOADING: {
 			return {
 				...state,
-				loading: action.payload
+				loading : action.payload
 			};
 		}
 

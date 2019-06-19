@@ -20,9 +20,14 @@ import BusinessCD from '../components/Business/BusinessCD/BusinessCD';
 import FlashMessage from '../components/FlashMessages/FlashMessage';
 import Businesses from '../components/Businesses/Businesses';
 import BusinessProfile from '../components/Business/Profile/BusinessProfile';
+import SmartSettings from '../components/Business/Schedule/SmartSettings';
+import BappointmentReview from '../components/Business/Schedule/BappointmentReview';
+import ReviewsMain from '../components/Reviews/ReviewsMain';
+import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 
 
 import SignUpForm from "../components/Landing/SignUpForm/SignUpForm"
+import ReviewForm from '../components/globalComponents/ReviewForm.jsx';
 
 const ReactRouter = () => {
 	return (
@@ -42,20 +47,32 @@ const ReactRouter = () => {
 
 								<Route path="/dashboard" component={requireAuth(Dashboard)} />
 								<Route path="/businesses" component={requireAuth(Businesses)} />
+								<Route path="/appointments-review" component={requireAuth(ReviewsMain)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
 								<Route exact path="/business/pages/create" component={requireAuth(BusinessCD)} />
 								<Route path="/business/view/testview/:id" component={requireAuth(BusinessProfile)} />
 								<Route exact path="/business/view/:id" component={requireAuth(ClientView)} />
-
 								<Route
+									path="/business/advanced/smart-algorithms-settings"
+									component={requireAuth(SmartSettings)}
+								/>
+								<Route path="/insights" component={requireAuth(StatisticsMain)} />
+								<Route
+									path="/business/appointment-review/:appointment_id-:page"
+									component={requireAuth(BappointmentReview)}
+								/>
+
+
+								{/* <Route
 									path="/business/mySchedule/new-appointment"
 									component={requireAuth(BnewAppointment)}
-								/>
-								<Route excat path="/business/pages/mySchedule/:id" component={requireAuth(Schedule)} />
+								/> */}
+								<Route excat path="/business/pages/mySchedule" component={requireAuth(Schedule)} />
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
 								<Route path="/SignUp" component={SignUpForm} />
+								<Route exact path="/sms/CustomerReview/:appointment_id" component={requireAuth(ReviewForm)} />
 							</section>
 						</section>
 					</section>

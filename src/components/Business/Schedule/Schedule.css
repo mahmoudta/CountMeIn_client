@@ -24,11 +24,14 @@
 	border-left: .25rem solid #1cc88a !important;
 }
 
+.calendar-body {
+	overflow: hidden;
+}
 .timeSlot-group {
 	border-bottom: 1px solid #ddd;
-	min-height: 60px;
+	min-height: 120px;
 	border-right: 1px solid #ddd;
-	min-width: 60px;
+	min-width: 80px;
 	/* display: flex;
 	flex-flow: column nowrap; */
 }
@@ -42,7 +45,6 @@
 	position: absolute;
 	top: 50%;
 	width: 100%;
-
 	border: 1px dotted #f4f4f4;
 }
 .calendar-content {
@@ -51,6 +53,67 @@
 .appointment-event {
 	position: absolute;
 	z-index: 5;
-	left: 80px;
-	width: 100%;
+	padding: 0 15px;
+	left: 100px;
+	width: 90%;
+	text-align: center;
+	vertical-align: middle;
+	letter-spacing: .03em;
+	font-size: 0.8125rem;
+	color: #fff;
+	cursor: pointer;
+	transition: all 0.5s ease;
+}
+
+/* appointment status style */
+
+.ready {
+	background-color: #467fcf;
+	border-color: #467fcf;
+}
+
+.inProgress {
+	background-color: #1cc88a;
+	border-color: #1cc88a;
+}
+.done,
+.canceled {
+	background-color: #b6b9bbc7;
+	border-color: #b6b9bbc7;
+}
+.passed {
+	color: #fff;
+	background-color: #dc3545;
+	border-color: #dc3545;
+}
+
+/* hover on */
+.appointment-event:hover {
+	opacity: 0.83;
+	color: #00000091;
+}
+
+/*appointment windows -  appointment onclick modal style*/
+.modal {
+	background-color: #00000096;
+}
+
+.card .bg-primary {
+	background-color: #467fcf !important;
+	color: #fff;
+}
+
+.closed {
+	max-height: 0;
+	position: relative;
+	padding: 0 !important;
+	visibility: hidden;
+	transition: max-height 300ms linear;
+}
+
+.opened {
+	max-height: 300px;
+	position: relative;
+	visibility: visible;
+	padding: 1.25rem !important;
 }
