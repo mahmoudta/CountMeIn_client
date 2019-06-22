@@ -224,7 +224,10 @@ class Upcomming extends React.Component {
           .get(`${API}/appointments/CheckEdit/${appointment[1]}`)
           .then(response => {
             console.log("r", response);
-            this.setState({ Allowedtime: response.data.FreeTimeTotal, FreeTimeAfter: response.data.FreeTimeAfter, FreeTimeBefore: response.data.FreeTimeBefore })
+            const hoursBeforeTmp = Math.floor(response.data.FreeTimeBefore / 60);
+            const minutesBeforeTmp = response.data.FreeTimeBefore % 60;
+
+            this.setState({ Allowedtime: response.data.FreeTimeTotal, FreeTimeAfter: response.data.FreeTimeAfter, FreeTimeBefore: response.data.FreeTimeBefore, hoursBefore: hoursBeforeTmp, minutesBefore: minutesBeforeTmp, oldNeededTime: response.data.oldNeededTime })
           })
           .catch(err => {
             console.log(err);
@@ -284,6 +287,15 @@ class Upcomming extends React.Component {
               minHeight: "200px",
             }}>
               <div className="col-12 my-3">
+
+                {(sumTime < this.state.FreeTimeAfter) ?
+                  <Success>Time Needed:{sumTime} Minutes</Success> :
+                  (sumTime < this.state.Allowedtime) ?
+                    <Warning>No enough time ,<Success>fortunately you can come {this.state.hoursBefore}hours and {this.state.minutesBefore} Minutes earlier  <br /> Or rescudule {ChangeTime} <Button color="success">{this.state.FreeTimeBefore - this.state.oldNeededTime} Minutes earlier  </Button></Success></Warning> :
+                    <Warning>Unfortunately we dont have time , would yout like to rescudule?<br /> {ChangeTime} </Warning>}
+
+                Price : {sumCost} ₪<br />
+
                 <label className="text-uppercase" htmlFor="purposes">
                   Modify Services
 							<span className="form-required" />
@@ -298,15 +310,6 @@ class Upcomming extends React.Component {
                   onChange={this.handleChange}
                 />
                 <br />
-                {(sumTime < this.state.FreeTimeAfter) ?
-                  <Success>Time Needed:{sumTime} Minutes</Success> :
-                  (sumTime < this.state.Allowedtime) ?
-                    <Warning>No enough time ,<Success>fortunately you can come {this.state.FreeTimeBefore} Minutes earlier  <br /> Or rescudule {ChangeTime} <Button color="success">{this.state.FreeTimeBefore} Minutes earlier</Button></Success></Warning> :
-                    <Warning>Unfortunately we dont have time , would yout like to rescudule?<br /> {ChangeTime} </Warning>}
-
-                Price : {sumCost}
-
-
               </div>
             </GridItem>
           </SweetAlert>
@@ -594,9 +597,9 @@ class Upcomming extends React.Component {
                   tableHead={[
                     "#",
                     "Business",
-                    "Start Time",
+                    "Time",
                     "Date",
-                    "Service",
+                    "Services",
                     "Actions"
                   ]}
                   tableData={this.state.tableContent}
