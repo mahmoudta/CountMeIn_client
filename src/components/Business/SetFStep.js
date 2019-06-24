@@ -2,18 +2,30 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import isEmpty from "lodash/isEmpty";
+import Select from 'react-select';
+import makeAnimated from 'react-select/lib/animated';
+
+
 
 class SetFStep extends Component {
   constructor(props) {
+
     super(props);
+
   }
+  // componentDidMount() {
+  //   this.props.fillServices();
+  // }
 
   render() {
+    const { values, selectedOptions } = this.props;
+
+
     //console.log(this.props);
-    const { values, business, businessLoading } = this.props;
-    console.log(values.onBusiness);
-    const empty = isEmpty(business);
-    console.log("empty", values);
+    // console.log(values.onBusiness);
+    const empty = isEmpty(values.Options);
+    console.log("Options", values.Options)
+    // console.log("empty", values);
     return (
       <section className="mt-5">
         <div className="container">
@@ -31,25 +43,15 @@ class SetFStep extends Component {
                         Services
                         <span className="form-required" />
                       </label>
-                      <select
-                        className="form-control"
-                        name="subCategory"
-                        onChange={this.props.handlePickedService}
-                        value={values.service}
-                      >
-                        <option>choose one</option>
-                        {business.services.map(service => {
-                          return (
-                            <option
-                              key={service.service_id._id}
-                              value={service.service_id._id}
-                            >
-                              {service.service_id.title + " "} - {service.time}{" "}
-                              Minutes
-                            </option>
-                          );
-                        })}
-                      </select>
+                      <Select
+                        options={values.Options}
+                        value={selectedOptions}
+                        isMulti
+                        name="services"
+                        components={makeAnimated()}
+                        closeMenuOnSelect={false}
+                        onChange={this.handleChange}
+                      />
                     </div>
                   </form>
                   <div className="col-12">
@@ -79,8 +81,8 @@ class SetFStep extends Component {
               </div>
             </div>
           ) : (
-            <div>Loading</div>
-          )}
+              <div>Loading</div>
+            )}
         </div>
       </section>
     );

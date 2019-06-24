@@ -28,6 +28,7 @@ import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 
 import SignUpForm from "../components/Landing/SignUpForm/SignUpForm"
 import ReviewForm from '../components/globalComponents/ReviewForm.jsx';
+import NewAppointmentContainer from '../components/Business/NewAppointment/NewAppointmentContainer';
 
 const ReactRouter = () => {
 	return (
@@ -71,6 +72,7 @@ const ReactRouter = () => {
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
+								<Route path="/business/new/new-appointment/:id" component={requireAuth(NewAppointmentContainer)} />
 								<Route path="/SignUp" component={SignUpForm} />
 								<Route exact path="/sms/CustomerReview/:appointment_id" component={requireAuth(ReviewForm)} />
 							</section>

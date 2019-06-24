@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { convertToUtcTime } from "../../../utils/date";
 import Typography from "@material-ui/core/Typography";
 import { zeroPad } from "../../../utils/padding";
+import { setFlashMessage } from "../../../actions/flashMessageActions";
+
 
 
 // core components
@@ -78,6 +80,7 @@ class Upcomming extends React.Component {
   }
 
   hideAlert() {
+    console.log("HideAlert")
     this.setState({
       alert: null
     });
@@ -130,9 +133,10 @@ class Upcomming extends React.Component {
   }
 
   getSmart = async (e, appointment) => {
-    const { business } = this.props;
+    const { business, setFlashMessage } = this.props;
     const timescope = await e.currentTarget.dataset.timescope
-    const Services = appointment[6].map(service => { return service._id })
+
+    const Services = this.state.selectedOptions.map(service => { return service.value })
     console.log(
       "businessId",
       appointment[0],
@@ -160,11 +164,11 @@ class Upcomming extends React.Component {
       })
       .catch(err => {
         console.log(err);
-        this.props.setFlashMessage({
-          type: "error",
-          text: "Some error accured , Please try later",
-          action: { next: "REDIRECT_TO_DASHBAORD" }
-        });
+        // this.props.setFlashMessage({
+        //   type: "error",
+        //   text: "Some error accured , Please try later",
+        //   action: { next: "REDIRECT_TO_DASHBAORD" }
+        // });
       });
   };
 
@@ -210,7 +214,7 @@ class Upcomming extends React.Component {
       .then(response => {
         console.log('response', response)
         const Opt = response.data.ids.map(service => {
-          return { label: service.title, value: service._id, time: service.time, cost: service.cost };
+          return { label: service.title, value: service.id, time: service.time, cost: service.cost };
         })
         console.log(Opt)
         this.setState({ Options: Opt })
@@ -397,6 +401,7 @@ class Upcomming extends React.Component {
                 })
                 return (
                   <CustomDropdown
+                    key={m}
                     buttonText={(new Date(smart.Date) + " ").slice(0, 15)}
                     dropdownList={Content}
                     buttonProps={{
@@ -630,7 +635,9 @@ const mapStateToProps = state => ({
 });
 
 Upcomming.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  setFlashMessage: PropTypes.func.isRequired
+
 };
 
 export default connect(mapStateToProps)(
