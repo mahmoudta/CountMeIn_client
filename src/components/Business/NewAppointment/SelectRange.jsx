@@ -16,35 +16,45 @@ export class SelectRange extends Component {
                 alignItems="center"
                 justify="center"
             >
-
-
-                <button
-                    type="button"
-                    className="btn btn-secondary  d-block"
-                    onClick={this.props.getSmart}
-                    data-timescope={0}
+                <Grid container spacing={0}
+                    direction="row"
+                    alignItems="center"
+                    justify="center"
                 >
-                    Morning
+                    <small className={"text-muted"}>I prefer my appointment in the</small>
+                </Grid>
+                <Grid container spacing={0}
+                    direction="row"
+                    alignItems="center"
+                    justify="center"
+                >
+                    <button
+                        type="button"
+                        className="btn btn-secondary  d-block"
+                        onClick={this.props.getSmart}
+                        data-timescope={0}
+                    >
+                        Morning
                       </button>
 
-                <button
-                    type="button"
-                    className="btn btn-secondary d-block "
-                    onClick={this.props.getSmart}
-                    data-timescope={1}
-                >
-                    Afternoon
+                    <button
+                        type="button"
+                        className="btn btn-secondary d-block "
+                        onClick={this.props.getSmart}
+                        data-timescope={1}
+                    >
+                        Afternoon
                       </button>
 
-                <button
-                    type="button"
-                    className="btn btn-secondary  d-block"
-                    onClick={this.props.getSmart}
-                    data-timescope={2}
-                >
-                    Evening
+                    <button
+                        type="button"
+                        className="btn btn-secondary  d-block"
+                        onClick={this.props.getSmart}
+                        data-timescope={2}
+                    >
+                        Evening
                       </button>
-
+                </Grid>
             </Grid>
 
         )

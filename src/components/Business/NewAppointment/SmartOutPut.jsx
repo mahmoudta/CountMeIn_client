@@ -17,12 +17,12 @@ export class SmartOutPut extends Component {
         const { values } = this.props;
         return (
             <Grid container spacing={0}
-            direction="row"
-            alignItems="center"
-            justify="center">
+                direction="row"
+                alignItems="center"
+                justify="center">
                 {values.Smartdata.smartData.map((smart, m) => {
-                    console.log("smart",smart)
-                    if(isEmpty(smart.Free)){return null}
+                    console.log("smart", smart)
+                    if (isEmpty(smart.Free)) { return null }
                     const Content = smart.Free.map((free, i) => {
                         const thisKey = `${m.toString()}${i.toString()}`
                         return (
@@ -30,7 +30,7 @@ export class SmartOutPut extends Component {
                                 color="CMI"
                                 simple
                                 block
-                                onClick={this.setAppointment}
+                                onClick={this.props.setAppointment}
                                 date={smart.Date}
                                 shour={free._start._hour}
                                 sminute={free._start._minute}

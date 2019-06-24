@@ -7,6 +7,7 @@ import FilledStar from "@material-ui/icons/Star";
 import EmptyStar from "@material-ui/icons/StarBorder";
 import HalfStar from "@material-ui/icons/StarHalf";
 import Amber from '@material-ui/core/colors/amber';
+import { setFlashMessage } from "../../actions/flashMessageActions";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
 import GridContainer from "../Interface/Grid/GridContainer";
@@ -23,6 +24,7 @@ import CardFooter from "../Interface/Card/CardFooter.jsx";
 import loginPageStyle from "../Interface/Assets/loginPageStyle";
 import axios from "axios";
 import { API } from "../../consts";
+import { Grid } from '@material-ui/core';
 
 
 
@@ -125,14 +127,22 @@ export class ReviewForm extends Component {
                 hideName: this.state.hideName,
             })
             .then(() => {
-                this.context.router.history.push('/dashboard');
+                this.props.setFlashMessage({
+                    type: "success",
+                    text: "Thanks for the feedbacl",
+                    action: { next: "REDIRECT_TO_DASHBAORD" }
+                });
             })
             .then(() => {
 
             })
             .catch(err => {
                 console.log(err);
-
+                this.props.setFlashMessage({
+                    type: "error",
+                    text: "error occured",
+                    action: { next: "REDIRECT_TO_DASHBAORD" }
+                });
             });
     }
 
@@ -246,9 +256,9 @@ export class ReviewForm extends Component {
                                                     }}
                                                 /> Hide my name
 </GridItem>
-
-                                            <Button color="success" simple size="lg" onClick={() => this.Sub(appointmentId)}>Submit Review</Button>
-                                        </GridContainer>
+                                            <Grid container direction="row" justify="center">
+                                                <Button color="success" size="md" onClick={() => this.Sub(appointmentId)}>Submit Review</Button>
+                                            </Grid> </GridContainer>
                                         : "Already reviewed")}
 
                                 </CardBody>
@@ -268,10 +278,11 @@ const mapStateToProps = state => ({
     Id: state.auth.user.sub
 });
 ReviewForm.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    setFlashMessage: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps)(withStyles(
+export default connect(mapStateToProps, { setFlashMessage })(withStyles(
     styles)(ReviewForm));
 
 
