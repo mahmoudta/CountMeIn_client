@@ -87,17 +87,15 @@ class SetFStep extends Component {
       </section>
     );
   }
+
 }
 SetFStep.propTypes = {
   business: PropTypes.object.isRequired
 };
 
-const mapStatetoProps = state => ({
+const mapStatetoProps = (state) => ({
   business: state.business.business,
   businessLoading: state.business.loading
 });
 
-export default connect(
-  mapStatetoProps,
-  {}
-)(SetFStep);
+export default connect(mapStatetoProps, {})(SetFStep);

@@ -9,10 +9,7 @@ export default class SetSecStep extends Component {
 	}
 
 	render() {
-		//console.log(this.props);
-
 		const { values } = this.props;
-		console.log(values);
 		return (
 			<section className="mt-5">
 				<div className="container">

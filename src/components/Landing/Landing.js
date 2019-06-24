@@ -11,9 +11,7 @@ class Landing extends Component {
 	render() {
 		return (
 			<section className="landing">
-				<div className="container">
-					<LoginForm />
-				</div>
+				<LoginForm />
 			</section>
 		);
 	}

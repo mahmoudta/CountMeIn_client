@@ -14,7 +14,6 @@ import ClientView from '../components/Business/ClientView';
 import Schedule from '../components/Business/Schedule/Schedule';
 import NewAppointment from '../components/Business/NewAppointment';
 
-import BnewAppointment from '../components/Business/Schedule/BnewAppointment';
 import BusinessCD from '../components/Business/BusinessCD/BusinessCD';
 
 import FlashMessage from '../components/FlashMessages/FlashMessage';
@@ -25,8 +24,7 @@ import BappointmentReview from '../components/Business/Schedule/BappointmentRevi
 import ReviewsMain from '../components/Reviews/ReviewsMain';
 import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 
-
-import SignUpForm from "../components/Landing/SignUpForm/SignUpForm"
+import SignUpForm from '../components/Landing/SignUpForm/SignUpForm';
 import ReviewForm from '../components/globalComponents/ReviewForm.jsx';
 import NewAppointmentContainer from '../components/Business/NewAppointment/NewAppointmentContainer';
 
@@ -39,11 +37,13 @@ const ReactRouter = () => {
 				<section id="main">
 					<Navbar />
 					<section id="content">
+						<Route path="/SignUp" component={SignUpForm} />
+						<Route exact path="/" component={Landing} />
 						<section className="vbox">
 							{/* <section className="scrollable padder"> */}
 							<section className="scrollable">
 								<FlashMessage />
-								<Route exact path="/" component={Landing} />
+
 								{/* <Route exact path="/" render=({}})=>{ */}
 
 								<Route path="/dashboard" component={requireAuth(Dashboard)} />
@@ -51,8 +51,7 @@ const ReactRouter = () => {
 								<Route path="/appointments-review" component={requireAuth(ReviewsMain)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
 								<Route exact path="/business/pages/create" component={requireAuth(BusinessCD)} />
-								<Route path="/business/view/testview/:id" component={requireAuth(BusinessProfile)} />
-								<Route exact path="/business/view/:id" component={requireAuth(ClientView)} />
+								<Route exact path="/business/view/:id" component={requireAuth(BusinessProfile)} />
 								<Route
 									path="/business/advanced/smart-algorithms-settings"
 									component={requireAuth(SmartSettings)}
@@ -64,10 +63,6 @@ const ReactRouter = () => {
 								/>
 
 
-								{/* <Route
-									path="/business/mySchedule/new-appointment"
-									component={requireAuth(BnewAppointment)}
-								/> */}
 								<Route excat path="/business/pages/mySchedule" component={requireAuth(Schedule)} />
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
@@ -75,6 +70,7 @@ const ReactRouter = () => {
 								<Route path="/business/new/new-appointment/:id" component={requireAuth(NewAppointmentContainer)} />
 								<Route path="/SignUp" component={SignUpForm} />
 								<Route exact path="/sms/CustomerReview/:appointment_id" component={requireAuth(ReviewForm)} />
+								<Route path="/ReviewForm" component={ReviewForm} />
 							</section>
 						</section>
 					</section>

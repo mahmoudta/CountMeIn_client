@@ -13,7 +13,8 @@ import {
 	SET_FLASH_MESSAGE,
 	GET_REVIEW_BY_BUSINESS,
 	// NEXT_APPOINTMENT_ALERT,
-	APPOINTMENT_CHECK
+	APPOINTMENT_CHECK,
+	GET_REVIEW_AS_CUSTOMER
 } from './types';
 
 export const getBusinessAppointmentsByDate = (business_id, date) => (dispatch) => {
@@ -127,7 +128,6 @@ export const getReviewsByBusiness = (business_id) => (dispatch) => {
 	axios
 		.get(`${API}/appointments/getReviewByBusinessId/${business_id}`)
 		.then((result) => {
-			console.log(result.data);
 			dispatch({
 				type    : GET_REVIEW_BY_BUSINESS,
 				payload : result.data.reviews
@@ -138,31 +138,34 @@ export const getReviewsByBusiness = (business_id) => (dispatch) => {
 				type    : GET_REVIEW_BY_BUSINESS,
 				payload : []
 			});
-			dispatch({
-				type    : SET_FLASH_MESSAGE,
-				message : { type: 'error', text: err.response.data.error }
-			});
+
+			// dispatch({
+			// 	type    : SET_FLASH_MESSAGE,
+			// 	message : { type: 'error', text: 'No Reviews found' }
+			// });
 		});
 };
 
-export const updateAppointmentStatus = (appointment_id) => (dispatch) => {
+export const getReviewAsCustomer = () => (dispatch) => {
+	dispatch(setAppointmentLoading());
 	axios
-		.get(`${API}/appointments/getBusinessAppointmentsByDate/${appointment_id}`)
+		.get(`${API}/appointments/getReviewAsCustomer`)
 		.then((result) => {
 			dispatch({
-				type    : TODAY_UPCOMING_APPOINTMENTS,
-				payload : result.data.appointments
+				type    : GET_REVIEW_AS_CUSTOMER,
+				payload : result.data.reviews
 			});
-			// dispatch({
-			// 	type: NEXT_APPOINTMENT_ALERT,
-			// 	payload: result.data.appointments[0]
-			// });
 		})
 		.catch((err) => {
 			dispatch({
-				type    : TODAY_UPCOMING_APPOINTMENTS,
+				type    : GET_REVIEW_AS_CUSTOMER,
 				payload : []
 			});
+
+			// dispatch({
+			// 	type    : SET_FLASH_MESSAGE,
+			// 	message : { type: 'error', text: 'No Reviews found' }
+			// });
 		});
 };
 
@@ -171,7 +174,6 @@ export const getFreeTime = (data) => (dispatch) => {
 	axios
 		.post(`${API}/algorithms/freetime`, data)
 		.then((result) => {
-			console.log(result.data);
 			dispatch({
 				type    : GET_FREE_TIME_SUGGESTION,
 				payload : result.data.dates[0]

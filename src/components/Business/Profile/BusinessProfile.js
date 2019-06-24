@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { getBusinessById, followBusiness, unFollowBusiness } from '../../../actions/businessActions';
+import {
+	getBusinessById,
+	followBusiness,
+	unFollowBusiness,
+	getReviewsForProfilePage
+} from '../../../actions/businessActions';
 import { setFlashMessage } from '../../../actions/flashMessageActions';
 import { B_IMAGES } from '../../../consts';
 import { NavLink } from 'react-router-dom';
@@ -15,76 +20,107 @@ import StarRatings from 'react-star-ratings';
 import { GoThumbsup } from 'react-icons/go';
 
 import '../Business.css';
+import Loading from '../../globalComponents/Loading';
+import ReviewsComponents from './ReviewsComponents';
+import { throws } from 'assert';
 
 class BusinessProfile extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			review_page   : 1,
+
+			business      : false,
+			loading       : false,
+
+			loadingFollow : false
+		};
 		this.showButtons = this.showButtons.bind(this);
 	}
 
 	componentDidMount() {
 		const id = this.props.match.params.id;
 		this.props.getBusinessById(id);
+		this.props.getReviewsForProfilePage(id, 1);
 	}
 
 	showButtons = () => {
 		const { business, loading } = this.props;
 		const isOwner = business.owner_id === this.props.auth.user.sub;
 		if (isOwner) {
-			return [
+			return (
 				<NavLink
 					key={`editProfile${business._id}`}
 					to={'/business/edit'}
 					className=" mx-2 btn btn-sm btn-secondary"
-					// onClick={() => this.unfollowBusiness(business._id)}
 				>
 					Edit Profile
-				</NavLink>,
-				<NavLink
-					key={`editView${business._id}`}
-					to={'/business/edit'}
-					className=" mx-2 btn btn-sm btn-secondary"
-					// onClick={() => this.unfollowBusiness(business._id)}
-				>
-					Customize View
 				</NavLink>
-			];
+			);
 		}
 		if (business.isFollower) {
-			return [
+			return (
 				<button
 					key={`unfollow${business._id}`}
 					className="btn btn-sm btn-secondary"
-					disabled={loading}
+					disabled={this.state.loading}
 					onClick={() => this.unfollowBusiness(business._id)}
 				>
-					{loading ? (
+					{this.state.loading ? (
 						<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
 					) : (
 						'UnFollow'
 					)}
 				</button>
-			];
+			);
 		}
-		return [
+		return (
 			<button
 				key={`follow${business._id}`}
 				className="btn btn-sm btn-primary"
 				disabled={loading}
 				onClick={() => this.followBusiness(business._id)}
 			>
-				{loading ? (
+				{this.state.loading ? (
 					<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
 				) : (
 					'Follow'
 				)}
 			</button>
-		];
+		);
+	};
+	followBusiness = (business_id) => {
+		this.setState({ loading: true });
+		this.props.followBusiness(business_id).then((res) => {
+			this.setState({ loading: false });
+		});
 	};
 
+	unfollowBusiness = (business_id) => {
+		this.props.setFlashMessage({
+			type   : 'warning',
+			text   : 'Are You sure You want to UnFollow?',
+			action : {
+				CancelButton : true,
+				confirmText  : 'UnFollow',
+				next         : 'UNFOLLOW_BUSINESS',
+				business_id
+			}
+		});
+	};
 	render() {
 		const { business, loading } = this.props;
-		const buttons = this.showButtons();
+		var recommend = 0,
+			avg = 0;
+
+		if (!isEmpty(business)) {
+			const { rating } = this.props.business.profile;
+
+			recommend =
+				rating.rating_count > 0 ? (rating.recommendation_sum / rating.rating_count * 100).toFixed(2) : 0;
+			avg = rating.rating_count > 0 ? rating.rating_sum / rating.rating_count : 0;
+		}
+		// const buttons = this.showButtons();
 		return (
 			<section className="my-5">
 				{!loading ? (
@@ -97,48 +133,72 @@ class BusinessProfile extends Component {
 											<div className="col-12 col-md-10 col-lg-8">
 												<div className="row">
 													<div className="col-12">
-														<h1 className="h1 mb-2 font-weight-light">
-															{business.profile.name}
+														<h1 className="h1 mb-2 font-weight-light d-flex justify-content-between align-items-center">
+															<span>{business.profile.name}</span>
+															<span>{this.showButtons()}</span>
 														</h1>
-														<div className="mb-3">
-															{buttons.map((button) => {
-																return button;
-															})}
-														</div>
 													</div>
-													<div className="col-12 border-top py-3">
+													<div className="col-12">
 														<div className="row">
-															<div className="col-12 col-md-6 border-right text-center">
-																<h6>
-																	<strong>Rate</strong>
-																</h6>
-																<h6>2.4/5</h6>
+															<div className="col-12 col-md-6 border border-left-0 py-3 text-center">
+																{this.props.business.profile.rating.rating_count > 0 ? (
+																	<h6>
+																		{avg.toFixed(2)}/<span className="font-weight-normal">5</span>
+																	</h6>
+																) : (
+																	''
+																)}
 
 																<StarRatings
-																	rating={2.05}
-																	starRatedColor="#ED8600"
+																	rating={avg}
+																	starRatedColor="#F8CE28"
 																	starDimension="26px"
 																	starSpacing="1px"
-																	// changeRating={}
 																	numberOfStars={5}
-																	name="rating"
 																/>
-															</div>
-															<div className="col-12 col-md-6 text-center">
-																<h6>
-																	<strong>Recommendation</strong>
+																<h6 className="text-muted mt-2">
+																	{this.props.business.profile.rating.rating_count}{' '}
+																	Reviews
 																</h6>
-																<h6>2.4/5</h6>
-																<p className="text-success">
+															</div>
+															<div className="col-12 col-md-6 border border-left-0 border-right-0 py-3 text-center">
+																<h6>
+																	<strong>
+																		{recommend > 0 ? recommend > 50 ? (
+																			<span>
+																				{recommend}
+																				{'% '} recommend
+																			</span>
+																		) : (
+																			''
+																		) : (
+																			'No recommendation'
+																		)}
+																	</strong>
+																</h6>
+
+																<p
+																	className={`${recommend > 50
+																		? 'text-success'
+																		: 'text-muted'}`}
+																>
 																	<GoThumbsup />
 																</p>
 															</div>
 														</div>
 													</div>
-													<div className="col-12 border-top py-3">
-														{buttons.map((button) => {
-															return button;
-														})}
+													<div className="col-12 py-3 text-center text-lg-left">
+														{this.props.auth.user.business != business._id ? (
+															<NavLink
+																to={`/business/new-appointment/${this.props.business
+																	._id}`}
+																className="btn btn-sm btn-primary"
+															>
+																Set new Appointment
+															</NavLink>
+														) : (
+															''
+														)}
 													</div>
 												</div>
 											</div>
@@ -195,9 +255,13 @@ class BusinessProfile extends Component {
 																</table>
 															</div>
 															<div className="col-12 border-top pt-2">
-																<button className="btn btn-sm btn-primary w-100">
+																<NavLink
+																	to={`/business/new-appointment/${this.props.business
+																		._id}`}
+																	className="btn btn-sm btn-primary w-100"
+																>
 																	Set new Appointment
-																</button>
+																</NavLink>
 															</div>
 														</div>
 													</div>
@@ -247,7 +311,7 @@ class BusinessProfile extends Component {
 															return (
 																<li
 																	key={service.service_id._id}
-																	className="list-group-item"
+																	className="list-group-item justofy content"
 																>
 																	{service.service_id.title}
 																</li>
@@ -257,59 +321,31 @@ class BusinessProfile extends Component {
 												</div>
 											</div>
 										</div>
-										<div className="col-12 col-md-10 col-lg-8 my-4 ">
-											<div className="row">
-												<div className="col-12">
-													<h5>
-														<strong>{`Clients Review`}</strong>
-													</h5>
-												</div>
-												<div className=" col-12 border bg-light mt-3 p-md-3">
-													<div className="col-12 col-12 d-flex flex-row justify-content-between">
-														<p className="text-muted">
-															<strong className="text-dark">30%</strong>
-															Recommened
-														</p>
-														<p className="text-muted">
-															<strong className="text-dark">3</strong>
-															/5
-														</p>
-														{/* <div className="position-absolute">
-															<StarRatings
-																rating={2.05}
-																starRatedColor="#ED8600"
-																starDimension="22px"
-																starSpacing="1px"
-																// changeRating={}
-																numberOfStars={5}
-																name="rating"
-															/>
-														</div> */}
-													</div>
-												</div>
-											</div>
-										</div>
 									</div>
+								</section>,
+								<section key={`${business._id}-ClientReview`}>
+									<ReviewsComponents />
 								</section>
 							]
 						) : (
-							<div>no nusiness found</div>
+							<div>no business found</div>
 						)}
 					</section>
 				) : (
-					<div>...Loading</div>
+					<Loading />
 				)}
 			</section>
 		);
 	}
 }
 BusinessProfile.propTypes = {
-	auth             : PropTypes.object.isRequired,
-	business         : PropTypes.object.isRequired,
-	getBusinessById  : PropTypes.func.isRequired,
-	followBusiness   : PropTypes.func.isRequired,
-	unFollowBusiness : PropTypes.func.isRequired,
-	setFlashMessage  : PropTypes.func.isRequired
+	auth                     : PropTypes.object.isRequired,
+	business                 : PropTypes.object.isRequired,
+	getBusinessById          : PropTypes.func.isRequired,
+	followBusiness           : PropTypes.func.isRequired,
+	unFollowBusiness         : PropTypes.func.isRequired,
+	setFlashMessage          : PropTypes.func.isRequired,
+	getReviewsForProfilePage : PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
 	auth     : state.auth,
@@ -317,6 +353,10 @@ const mapStatetoProps = (state) => ({
 	loading  : state.business.loading
 });
 
-export default connect(mapStatetoProps, { getBusinessById, followBusiness, setFlashMessage, unFollowBusiness })(
-	BusinessProfile
-);
+export default connect(mapStatetoProps, {
+	getBusinessById,
+	followBusiness,
+	setFlashMessage,
+	unFollowBusiness,
+	getReviewsForProfilePage
+})(BusinessProfile);

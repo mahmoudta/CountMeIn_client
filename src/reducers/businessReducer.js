@@ -8,15 +8,19 @@ import {
 	FOLLOW_BUSINESS,
 	UNFOLLOW_BUSINESS,
 	UPDATE_BUSINESS,
-	SMART_ALGS_UPDATE
+	SMART_ALGS_UPDATE,
+	REVIEWS_OF_BUSINESS_PROFILE,
+	REVIEW_LOADING
 } from '../actions/types';
 // import isEmpty from 'lodash/isEmpty';
 
 const initialState = {
-	myBusiness : {},
-	business   : {},
-	loading    : false,
-	success    : ''
+	myBusiness    : {},
+	business      : {},
+	loading       : false,
+	success       : '',
+	reviews       : {},
+	reviewLoading : false
 };
 
 export default function(state = initialState, action) {
@@ -85,6 +89,19 @@ export default function(state = initialState, action) {
 				loading  : false
 			};
 
+		case REVIEWS_OF_BUSINESS_PROFILE: {
+			return {
+				...state,
+				reviews       : action.payload,
+				reviewLoading : false
+			};
+		}
+		case REVIEW_LOADING: {
+			return {
+				...state,
+				reviewLoading : action.payload
+			};
+		}
 		case BUSNIESS_LOADING: {
 			return {
 				...state,

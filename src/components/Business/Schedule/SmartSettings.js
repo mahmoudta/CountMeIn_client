@@ -27,7 +27,6 @@ class SmartSettings extends Component {
 			return;
 		}
 		this.setState({ [name]: value });
-		console.log(value);
 	};
 
 	handleSubmit = (e) => {

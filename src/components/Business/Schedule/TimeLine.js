@@ -49,7 +49,6 @@ class TimeLine extends Component {
 
 			if (difference <= -15) {
 				data['isLate'] = { late: true, minutes: difference };
-				console.log('late check');
 
 				this.props.setFlashMessage({
 					type   : 'warning',
@@ -67,10 +66,8 @@ class TimeLine extends Component {
 
 				//Show a message for the business
 			} else if (difference > 15) {
-				console.log('early & special');
 				data['isLate'] = { late: '', minutes: 0 };
 			} else {
-				console.log('good timing');
 				data['isLate'] = { late: 'false', minutes: 0 };
 			}
 		} else {
