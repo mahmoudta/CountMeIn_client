@@ -27,6 +27,7 @@ import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 import SignUpForm from '../components/Landing/SignUpForm/SignUpForm';
 import ReviewForm from '../components/globalComponents/ReviewForm.jsx';
 import NewAppointmentContainer from '../components/Business/NewAppointment/NewAppointmentContainer';
+import SetRemider from '../components/Business/SetRemider';
 
 const ReactRouter = () => {
 	return (
@@ -56,6 +57,7 @@ const ReactRouter = () => {
 									path="/business/advanced/smart-algorithms-settings"
 									component={requireAuth(SmartSettings)}
 								/>
+								<Route path="/business/setreminder/:id" component={requireAuth(SetRemider)} />
 								<Route path="/insights" component={requireAuth(StatisticsMain)} />
 								<Route
 									path="/business/appointment-review/:appointment_id-:page"
