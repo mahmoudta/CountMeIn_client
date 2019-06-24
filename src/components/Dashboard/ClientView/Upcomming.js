@@ -30,10 +30,8 @@ import userProfileStyles from "../../Interface/Assets/userProfileStyles";
 import CardAvatar from "../../Interface/Card/CardAvatar.jsx";
 import avatar from "../../Interface/marc.jpg";
 import dashboardStyle from "../../Interface/Assets/dashboardStyle";
-import Danger from "../../Interface/Typography/Danger.jsx"
 import Success from "../../Interface/Typography/Success"
 import Warning from "../../Interface/Typography/Warning"
-import Quote from "../../Interface/Typography/Quote"
 import CustomDropdown from '../../Interface/CustomDropdown/CustomDropdown.jsx';
 
 
@@ -84,49 +82,49 @@ class Upcomming extends React.Component {
   }
 
 
-	showbusiness(id, name) {
-		const { classes } = this.props;
+  showbusiness(id, name) {
+    const { classes } = this.props;
 
-		this.setState({
-			alert : (
-				<GridContainer>
-					<SweetAlert
-						style={{
-							display    : 'block',
-							marginTop  : '-230px',
-							paddingTop : ' 30px'
-						}}
-						title=""
-						onConfirm={() => this.hideAlert()}
-						onCancel={() => this.hideAlert()}
-						confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
-					>
-						<GridItem xs={12} sm={12} md={12}>
-							<Card profile>
-								<CardAvatar profile>
-									<a href="#pablo" onClick={(e) => e.preventDefault()}>
-										<img src={avatar} alt="..." />
-									</a>
-								</CardAvatar>
-								<CardBody profile>
-									<Button color="secondary" round>
-										Follow
+    this.setState({
+      alert: (
+        <GridContainer>
+          <SweetAlert
+            style={{
+              display: 'block',
+              marginTop: '-230px',
+              paddingTop: ' 30px'
+            }}
+            title=""
+            onConfirm={() => this.hideAlert()}
+            onCancel={() => this.hideAlert()}
+            confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
+          >
+            <GridItem xs={12} sm={12} md={12}>
+              <Card profile>
+                <CardAvatar profile>
+                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                    <img src={avatar} alt="..." />
+                  </a>
+                </CardAvatar>
+                <CardBody profile>
+                  <Button color="secondary" round>
+                    Follow
 									</Button>
-									<h4 className={classes.cardTitle}>{name}</h4>
-									<p>
-										Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio sunt veniam
+                  <h4 className={classes.cardTitle}>{name}</h4>
+                  <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio sunt veniam
 										libero ut iste? Inventore, aspernatur aut repellendus corporis voluptas
 										consequatur,
 									</p>
-								</CardBody>
-								<h6 className={classes.cardCategory}>{id}</h6>
-							</Card>
-						</GridItem>
-					</SweetAlert>
-				</GridContainer>
-			)
-		});
-	}
+                </CardBody>
+                <h6 className={classes.cardCategory}>{id}</h6>
+              </Card>
+            </GridItem>
+          </SweetAlert>
+        </GridContainer>
+      )
+    });
+  }
 
   getSmart = async (e, appointment) => {
     const { business, setFlashMessage } = this.props;
@@ -450,50 +448,50 @@ class Upcomming extends React.Component {
       .then(() => { });
 
 
-		this.setState({
-			alert : (
-				<SweetAlert
-					success
-					style={{ display: 'block', marginTop: '-100px' }}
-					title="Deleted!"
-					onConfirm={() => this.hideAlert()}
-					onCancel={() => this.hideAlert()}
-					confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
-				>
-					Your appointment has been deleted, dont worry about the business we will notify them for you
+    this.setState({
+      alert: (
+        <SweetAlert
+          success
+          style={{ display: 'block', marginTop: '-100px' }}
+          title="Deleted!"
+          onConfirm={() => this.hideAlert()}
+          onCancel={() => this.hideAlert()}
+          confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
+        >
+          Your appointment has been deleted, dont worry about the business we will notify them for you
 				</SweetAlert>
-			)
-		});
-	}
+      )
+    });
+  }
 
-	cancelDetele() {
-		this.setState({
-			alert : (
-				<SweetAlert
-					danger
-					style={{ display: 'block', marginTop: '-100px' }}
-					title="Cancelled"
-					onConfirm={() => this.hideAlert()}
-					onCancel={() => this.hideAlert()}
-					confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
-				>
-					Nothing happend :)
+  cancelDetele() {
+    this.setState({
+      alert: (
+        <SweetAlert
+          danger
+          style={{ display: 'block', marginTop: '-100px' }}
+          title="Cancelled"
+          onConfirm={() => this.hideAlert()}
+          onCancel={() => this.hideAlert()}
+          confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
+        >
+          Nothing happend :)
 				</SweetAlert>
-			)
-		});
-	}
+      )
+    });
+  }
 
-	componentDidMount() {
-		//const tableContent = 0;
-		const { classes } = this.props;
-		const id = this.props.Id;
+  componentDidMount() {
+    //const tableContent = 0;
+    const { classes } = this.props;
+    const id = this.props.Id;
 
-		axios.get(`${API}/users/getUpcommingAppointments`).then((response) => {
-			//console.log(response.data.QueryRes);
-			// this.setState({ appointments: response.data.QueryRes });
-			// this.setState({Appointments : dsa});
+    axios.get(`${API}/users/getUpcommingAppointments`).then((response) => {
+      //console.log(response.data.QueryRes);
+      // this.setState({ appointments: response.data.QueryRes });
+      // this.setState({Appointments : dsa});
 
-			// console.log('response upcomming', response.data);
+      // console.log('response upcomming', response.data);
 
       response.data.map(appointment => {
         const fillButtons = [
@@ -553,23 +551,23 @@ class Upcomming extends React.Component {
       });
 
 
-			// -----------------------------
-			// console.log(response.data.QueryRes);
-			// response.data.QueryRes.map((appointment, i) => {
-			// 	const fillButtons = [
-			// 		{ color: 'info', icon: Person, function: this.showbusiness.bind(this, appointment.business_id) },
-			// 		{ color: 'success', icon: Edit, function: this.editAppointment.bind(this, appointment._id) },
-			// 		{ color: 'danger', icon: Close, function: this.deleteAppointment.bind(this, appointment._id) }
-			// 	].map((prop, key) => {
-			// 		return (
-			// 			<Button color={prop.color} className={classes.actionButton} key={key} onClick={prop.function}>
-			// 				<prop.icon className={classes.icon} />
-			// 			</Button>
-			// 		);
-			// 	});
-			// });
-		});
-	}
+      // -----------------------------
+      // console.log(response.data.QueryRes);
+      // response.data.QueryRes.map((appointment, i) => {
+      // 	const fillButtons = [
+      // 		{ color: 'info', icon: Person, function: this.showbusiness.bind(this, appointment.business_id) },
+      // 		{ color: 'success', icon: Edit, function: this.editAppointment.bind(this, appointment._id) },
+      // 		{ color: 'danger', icon: Close, function: this.deleteAppointment.bind(this, appointment._id) }
+      // 	].map((prop, key) => {
+      // 		return (
+      // 			<Button color={prop.color} className={classes.actionButton} key={key} onClick={prop.function}>
+      // 				<prop.icon className={classes.icon} />
+      // 			</Button>
+      // 		);
+      // 	});
+      // });
+    });
+  }
 
   render() {
     //console.log('tableContent', this.state.tableContent);
