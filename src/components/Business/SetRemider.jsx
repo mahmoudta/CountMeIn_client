@@ -18,6 +18,8 @@ import Success from "../Interface/Typography/Success"
 import Warning from "../Interface/Typography/Warning"
 import loginPageStyle from '../Interface/Assets/loginPageStyle';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { Grid } from '@material-ui/core';
+
 
 
 
@@ -26,7 +28,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import makeAnimated from 'react-select/lib/animated';
 import isEmpty from 'lodash/isEmpty';
 import GridContainer from '../Interface/Grid/GridContainer';
-
 
 
 
@@ -155,8 +156,9 @@ class SetRemider extends Component {
         const { classes } = this.props;
         return (
             <div className={classes.container}>
-                <GridContainer justify="center" alignItems="center"><GridItem xs={12} sm={6} md={5} lg={5} > <Card login className={classes[this.state.cardAnimaton]}> <CardHeader className={`${classes.cardHeader} ${classes.textCenter}`}><h3 className={`${classes.cardTitle} text-muted`}>Set reminder</h3></CardHeader> <CardBody>
+                <GridContainer justify="center" alignItems="center"><GridItem xs={12} sm={6} md={5} lg={5} > <Card login > <CardHeader className={`${classes.cardHeader} ${classes.textCenter}`}><h3 className={`${classes.cardTitle} text-muted`}>Set reminder</h3></CardHeader> <CardBody>
                     <GridItem xs={12}>
+
                         <small className={"text-muted"}>Services:</small>
                         <SelectServices values={this.state} handleSelectChange={this.handleSelectChange} />
                         <small className={"text-muted"}>Remind me in :</small>
@@ -183,11 +185,13 @@ class SetRemider extends Component {
                         <small className={"text-muted"}>Repeat reminder</small>
 
                     </GridItem>
-                    {(this.state.allFilled) ? <Card><GridItem>    <Button color="success" simple size="lg" onClick={() => this.setReminder()}>Set Reminder</Button>
-                    </GridItem></Card> : <GridItem container justify="center" >
-                            <Success >By setting reminder , we will be able to suggest to you the correct appointment with the most ideal time for you ,</Success>
+
+                    {(this.state.allFilled) ? <Grid container direction="row" justify="center">    <Button color="success" size="md" onClick={() => this.setReminder()}>Set Reminder</Button>
+                    </Grid> : <Grid container direction="row" justify="center" >
                             <Warning>Please fields above to continue</Warning>
-                        </GridItem>}
+                            <Success >By setting reminder , we will be able to suggest to you the correct appointment with the most ideal time for you ,</Success>
+
+                        </Grid>}
                 </CardBody></Card></GridItem></GridContainer></div>)
 
     }
@@ -198,7 +202,8 @@ const mapStatetoProps = state => ({
     business: state.business.business
 });
 SetRemider.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    setFlashMessage: PropTypes.func.isRequired
 };
 
 export default connect(
