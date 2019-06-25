@@ -80,7 +80,7 @@ class Upcomming extends React.Component {
   }
 
   hideAlert() {
-    console.log("HideAlert")
+    //console.log("HideAlert")
     this.setState({
       alert: null
     });
@@ -136,16 +136,16 @@ class Upcomming extends React.Component {
     const timescope = await e.currentTarget.dataset.timescope
 
     const Services = this.state.selectedOptions.map(service => { return service.value })
-    console.log(
-      "businessId",
-      appointment[0],
-      "servicesArr",
-      Services,
-      "customerId",
-      this.props.Id,
-      "timeScop",
-      timescope
-    );
+    // console.log(
+    //   "businessId",
+    //   appointment[0],
+    //   "servicesArr",
+    //   Services,
+    //   "customerId",
+    //   this.props.Id,
+    //   "timeScop",
+    //   timescope
+    // );
 
     axios
       .post(`${API}/algorithms/smart`, {
@@ -156,7 +156,7 @@ class Upcomming extends React.Component {
       })
       .then(response => {
         this.setState({ Smartdata: response.data });
-        console.log(this.state);
+        // console.log(this.state);
       })
       .then(() => {
         this.editAppointmentStep3();
@@ -211,11 +211,9 @@ class Upcomming extends React.Component {
     axios
       .get(`${API}/business/services/${appointment[0]}`)
       .then(response => {
-        console.log('response', response)
         const Opt = response.data.ids.map(service => {
           return { label: service.title, value: service.id, time: service.time, cost: service.cost };
         })
-        console.log(Opt)
         this.setState({ Options: Opt })
       })
       .catch(err => {
@@ -226,7 +224,6 @@ class Upcomming extends React.Component {
         axios
           .get(`${API}/appointments/CheckEdit/${appointment[1]}`)
           .then(response => {
-            console.log("r", response);
             const hoursBeforeTmp = Math.floor(response.data.FreeTimeBefore / 60);
             const minutesBeforeTmp = response.data.FreeTimeBefore % 60;
 
@@ -241,7 +238,6 @@ class Upcomming extends React.Component {
   }
   handleChange = (selectedOptions) => {
     this.setState({ selectedOptions }, () => { this.editAppointmentStep2(this.state.selectedAppointment) });
-    console.log(`Option selected:`, selectedOptions);
   }
   handleButtons = () => {
     this.setState({ twoButtons: false }, () => { this.editAppointmentStep2() });
@@ -249,7 +245,7 @@ class Upcomming extends React.Component {
 
   editAppointmentStep2(appointment) {
     const { selectedOptions } = this.state;
-    this.setState({ selectedAppointment: appointment }, () => { console.log("appointment", this.state.selectedAppointment) });
+    this.setState({ selectedAppointment: appointment });//here
 
     var sumTime = 0;
     var sumCost = 0;
@@ -340,7 +336,7 @@ class Upcomming extends React.Component {
     const sminute = e.currentTarget.getAttribute("sminute");
     const ehour = e.currentTarget.getAttribute("ehour");
     const eminute = e.currentTarget.getAttribute("emminute");
-    console.log(shour, date, sminute, ehour, eminute, Services);
+    //console.log(shour, date, sminute, ehour, eminute, Services);
     axios
       .post(`${API}/appointments/setAppointmentAndDelete/`, {
         businessId: this.state.selectedAppointment[0],
@@ -352,10 +348,6 @@ class Upcomming extends React.Component {
         ehour: ehour,
         eminute: eminute,
         appointmentId: this.state.selectedAppointment[1],
-      })
-      .then(response => {
-        //	this.setState({ dates: response.data });
-        console.log(response);
       })
       .then(() => {
 
@@ -455,7 +447,6 @@ class Upcomming extends React.Component {
       })
       .then(response => {
         //	this.setState({ dates: response.data });
-        console.log(response);
       })
       .catch(err => {
         console.log(err);
@@ -588,7 +579,7 @@ class Upcomming extends React.Component {
     //console.log('tableContent', this.state.tableContent);
     //console.log(this.props.Id);
     const { classes } = this.props;
-    console.log(this.state.tableContent);
+    //console.log(this.state.tableContent);
     return (
       <div>
         {this.state.alert}
@@ -642,7 +633,6 @@ const mapStateToProps = state => ({
 
 Upcomming.propTypes = {
   classes: PropTypes.object.isRequired,
-  setFlashMessage: PropTypes.func.isRequired
 
 };
 

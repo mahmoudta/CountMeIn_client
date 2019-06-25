@@ -8,9 +8,9 @@ export default class BusinessListContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			fallowedArr       : [],
-			fallowedComponent : null,
-			refresh           : false
+			fallowedArr: [],
+			fallowedComponent: null,
+			refresh: false
 		};
 	}
 
@@ -26,8 +26,8 @@ export default class BusinessListContainer extends Component {
 	}
 
 	render() {
-		const PrintIt = this.state.fallowedArr.map((i) => {
-			return <BusinessList business={i} />;
+		const PrintIt = this.state.fallowedArr.map((i, m) => {
+			return <BusinessList key={i} business={i} />;
 		});
 		return <GridContainer>{PrintIt}</GridContainer>;
 	}
