@@ -18,31 +18,47 @@ class NewAppointment extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			step          : 1,
-			pickedService : 'NULL',
-			date_from     : '',
-			date_until    : '',
-			services      : [ 0 ],
-			onBusiness    : { profile: { services: [] } },
-			Dates         : '',
-			date          : '',
-			shour         : '',
-			sminute       : '',
-			ehour         : '', //{free._start}
-			eminute       : '', //{free._end}
-			Smartdata     : []
+			step            : 1,
+			pickedService   : 'NULL',
+			date_from       : '',
+			date_until      : '',
+			services        : [ 0 ],
+			onBusiness      : { profile: { services: [] } },
+			Dates           : '',
+			date            : '',
+			shour           : '',
+			sminute         : '',
+			ehour           : '', //{free._start}
+			eminute         : '', //{free._end}
+			Smartdata       : [],
+			Options         : [],
+			selectedOptions : []
 		};
 		this.nextStep = this.nextStep.bind(this);
 		this.prevStep = this.prevStep.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handlePickedService = this.handlePickedService.bind(this);
+		//this.fillServices = this.fillServices.bind(this);
 	}
 
 	componentDidMount() {
 		console.log('componentdidmount');
 		const id = this.props.match.params.id;
 		this.props.getBusinessById(id);
+
+		//const { business } = this.props;
+
+		const Opt = this.props.business.services.map((service) => {
+			return { label: service.service_id.title, value: service._id, time: service.time, cost: service.cost };
+		});
+		this.setState({ Options: Opt }, () => {
+			console.log(this.state.Options);
+		});
 	}
+
+	// fillServices() {
+
+	// }
 
 	nextStep = () => {
 		const { step } = this.state;
@@ -194,6 +210,7 @@ class NewAppointment extends Component {
 						toSmart={this.toSmart}
 						handleChange={this.handleChange}
 						handlePickedService={this.handlePickedService}
+						fillServices={this.fillServices}
 						values={this.state}
 					/>
 				);

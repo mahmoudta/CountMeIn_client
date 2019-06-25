@@ -546,6 +546,11 @@ const buttonStyle = {
 				color: successColor[0]
 			}
 		},
+		'&$CMI': {
+			'&,&:focus,&:hover,&:visited': {
+				color: grayColor[6]
+			}
+		},
 		'&$warning': {
 			'&,&:focus,&:hover,&:visited': {
 				color: warningColor[0]

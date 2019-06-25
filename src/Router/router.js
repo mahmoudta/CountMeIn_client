@@ -24,10 +24,12 @@ import ReviewsMain from '../components/Reviews/ReviewsMain';
 import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 
 import SignUpForm from '../components/Landing/SignUpForm/SignUpForm';
-import ReviewForm from '../components/globalComponents/ReviewForm';
 
 // import ClientView from '../components/Business/ClientView';
 // import HeatmapChart from '../components/Business/Statistics/AppointmentsStatsMain';
+import ReviewForm from '../components/globalComponents/ReviewForm.jsx';
+import NewAppointmentContainer from '../components/Business/NewAppointment/NewAppointmentContainer';
+import SetRemider from '../components/Business/SetRemider';
 
 const ReactRouter = () => {
 	return (
@@ -58,6 +60,8 @@ const ReactRouter = () => {
 									path="/business/advanced/smart-algorithms-settings"
 									component={requireAuth(SmartSettings)}
 								/>
+
+								<Route path="/business/setreminder/:id" component={requireAuth(SetRemider)} />
 								<Route
 									path="/business/appointment-review/:appointment_id-:page"
 									component={requireAuth(BappointmentReview)}
@@ -67,6 +71,16 @@ const ReactRouter = () => {
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
+								<Route
+									path="/business/new/new-appointment/:id"
+									component={requireAuth(NewAppointmentContainer)}
+								/>
+								<Route path="/SignUp" component={SignUpForm} />
+								<Route
+									exact
+									path="/sms/CustomerReview/:appointment_id"
+									component={requireAuth(ReviewForm)}
+								/>
 								<Route path="/ReviewForm" component={ReviewForm} />
 
 								{/* Statistics */}
