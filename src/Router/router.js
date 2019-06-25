@@ -10,7 +10,6 @@ import Dashboard from '../components/Dashboard/Dashboard';
 import requireAuth from '../utils/requireAuth';
 import CreateCategory from '../components/Dashboard/AdminView/CreateCategory';
 // import CreateBusiness from '../components/Business/CreateBusiness';
-import ClientView from '../components/Business/ClientView';
 import Schedule from '../components/Business/Schedule/Schedule';
 import NewAppointment from '../components/Business/NewAppointment';
 
@@ -25,7 +24,10 @@ import ReviewsMain from '../components/Reviews/ReviewsMain';
 import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 
 import SignUpForm from '../components/Landing/SignUpForm/SignUpForm';
-import ReviewForm from '../components/globalComponents/ReviewForm.jsx';
+import ReviewForm from '../components/globalComponents/ReviewForm';
+
+// import ClientView from '../components/Business/ClientView';
+// import HeatmapChart from '../components/Business/Statistics/AppointmentsStatsMain';
 
 const ReactRouter = () => {
 	return (
@@ -45,17 +47,17 @@ const ReactRouter = () => {
 
 								{/* <Route exact path="/" render=({}})=>{ */}
 
-								<Route path="/dashboard" component={requireAuth(Dashboard)} />
+								<Route exact path="/dashboard" component={requireAuth(Dashboard)} />
 								<Route path="/businesses" component={requireAuth(Businesses)} />
 								<Route path="/appointments-review" component={requireAuth(ReviewsMain)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
-								<Route exact path="/business/pages/create" component={requireAuth(BusinessCD)} />
+								<Route path="/business/pages/create" component={requireAuth(BusinessCD)} />
 								<Route exact path="/business/view/:id" component={requireAuth(BusinessProfile)} />
 								<Route
+									exact
 									path="/business/advanced/smart-algorithms-settings"
 									component={requireAuth(SmartSettings)}
 								/>
-								<Route path="/insights" component={requireAuth(StatisticsMain)} />
 								<Route
 									path="/business/appointment-review/:appointment_id-:page"
 									component={requireAuth(BappointmentReview)}
@@ -66,6 +68,9 @@ const ReactRouter = () => {
 								{/* route related to new appointment button on client view */}
 								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
 								<Route path="/ReviewForm" component={ReviewForm} />
+
+								{/* Statistics */}
+								<Route path="/insights" component={requireAuth(StatisticsMain)} />
 							</section>
 						</section>
 					</section>

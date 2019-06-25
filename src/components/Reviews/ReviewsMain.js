@@ -31,7 +31,7 @@ class ReviewsMain extends Component {
 								<li className="nav-item">
 									<NavLink
 										to="#"
-										className={`nav-link text-uppercase ${this.state.page == 'customer'
+										className={`nav-link text-uppercase ${this.state.page === 'customer'
 											? 'active'
 											: ''}`}
 										onClick={(e) => {
@@ -45,7 +45,7 @@ class ReviewsMain extends Component {
 								<li className="nav-item">
 									<NavLink
 										to="#"
-										className={`nav-link text-uppercase ${this.state.page == 'business'
+										className={`nav-link text-uppercase ${this.state.page === 'business'
 											? 'active'
 											: ''}`}
 										onClick={(e) => {

@@ -8,9 +8,6 @@ import { FaBusinessTime } from 'react-icons/fa';
 import isEmpty from 'lodash/isEmpty';
 
 class ServicesForm extends Component {
-	constructor(props) {
-		super(props);
-	}
 	render() {
 		const { values, categories } = this.props;
 		/* converting category  */

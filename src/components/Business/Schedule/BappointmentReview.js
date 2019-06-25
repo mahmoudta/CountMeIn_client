@@ -116,7 +116,6 @@ class BappointmentReview extends Component {
 																starHoverColor="#F8CE28"
 																starDimension="26px"
 																starSpacing="1px"
-																changeRating={true}
 																numberOfStars={5}
 																name="communication"
 																changeRating={this.handleChange}

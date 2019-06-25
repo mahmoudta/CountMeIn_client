@@ -7,7 +7,7 @@ import { logout } from '../../actions/authActions';
 
 import { FaSignOutAlt, FaBell } from 'react-icons/fa';
 import logo from '../../images/logo.png';
-import appointmentReducer from '../../reducers/appointmentReducer';
+// import appointmentReducer from '../../reducers/appointmentReducer';
 
 // import './global.css';
 

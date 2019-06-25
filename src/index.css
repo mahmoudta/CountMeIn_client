@@ -241,31 +241,32 @@ aside a.active {
 .hide {
 	display: none;
 }
-/* .aside-md .menu-toggler{
-	border: #38354a;
-	b
-} */
-/* aside {
-	min-width: 250px;
-	max-width: 250px;
-} */
-
-/* aside.active {
-	margin-left: -250px;
-} */
-
-/* .logo {
-	max-height: 50px;
-	width: auto;
-} */
 
 /* end of layout style*/
 
-.scrollable {
-	overflow-x: hidden;
-	overflow-y: auto;
-}
 @media (min-width: 768px) {
+	.scrollable {
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+	#sidebar {
+		background-color: #38354a;
+		height: 100%;
+		position: relative;
+	}
+	.nav-xs {
+		width: 57px;
+		-webkit-transition: width 0.3s;
+		transition: width 0.3s;
+	}
+	.nav-footer {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		top: auto;
+		z-index: 1000;
+		border-top: 1px solid #374b5e;
+	}
 	.vbox {
 		display: table;
 		border-spacing: 0;
@@ -315,6 +316,45 @@ aside a.active {
 		-webkit-transition: width 0.3s;
 		transition: width 0.3s;
 	}
+
+	.nav-xs aside .icon {
+		-webkit-font-smoothing: antialiased;
+		margin: 0;
+		line-height: 55px;
+		width: auto;
+		float: none;
+		margin-right: 0;
+		font-size: 24px;
+		border-right: 0;
+		text-align: center;
+		position: relative;
+		overflow: unset;
+	}
+	.nav-xs aside a {
+		padding: 0 0;
+		line-height: 55px;
+		text-align: center;
+	}
+
+	.nav-xs aside span {
+		display: none;
+		word-wrap: break-word;
+		font-size: 8px;
+	}
+	.nav-xs a.active span,
+	.nav-xs a:hover span {
+		display: block;
+	}
+	.nav-xs a.active .icon,
+	.nav-xs a:hover .icon {
+		display: none;
+	}
+}
+
+@media (max-width: 767px) {
+	.nav-footer {
+		display: none;
+	}
 }
 
 h1,
@@ -334,25 +374,6 @@ h6,
 	font-weight: 600;
 	line-height: 1.1;
 	color: inherit;
-}
-
-#sidebar {
-	background-color: #38354a;
-	height: 100%;
-	position: relative;
-}
-.nav-xs {
-	width: 57px;
-	-webkit-transition: width 0.3s;
-	transition: width 0.3s;
-}
-.nav-footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	top: auto;
-	z-index: 1000;
-	border-top: 1px solid #374b5e;
 }
 
 .btn-custom {
@@ -563,6 +584,36 @@ h6,
 
 .icon {
 	vertical-align: middle;
+}
+
+.value-up {
+	color: #42b72a;
+}
+
+.value-up::before {
+	display: inline-block;
+	margin-left: 0.255em;
+	vertical-align: middle;
+	content: "";
+	border-top: 0;
+	border-right: 0.3em solid transparent;
+	border-bottom: 0.3em solid;
+	border-left: 0.3em solid transparent;
+}
+
+.value-down {
+	color: #fa3e3e;
+}
+
+.value-down::before {
+	display: inline-block;
+	margin-left: 0.255em;
+	vertical-align: middle;
+	content: "";
+	border-top: 0.3em solid;
+	border-right: 0.3em solid transparent;
+	border-bottom: 0;
+	border-left: 0.3em solid transparent;
 }
 
 /* styles*/

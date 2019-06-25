@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { localSignIn } from '../../actions/authActions';
 import logo from '../../images/logo.png';
-
+import isEmpty from 'lodash.isempty';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -58,9 +58,11 @@ class LoginForm extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 		const { email, password } = this.state;
+		const param = window.location.search.split('=')[1];
+
 		this.props.localSignIn({ email, password }).then((result) => {
 			const { error } = this.props;
-			if (error === '') {
+			if (error === 'param') {
 				this.context.router.history.push('/dashboard');
 			} else {
 				this.setState({ error });

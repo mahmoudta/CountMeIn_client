@@ -8,7 +8,7 @@ import { deleteFlashMessage } from '../../actions/flashMessageActions';
 import { unFollowBusiness } from '../../actions/businessActions';
 import { appointmentCheck } from '../../actions/appointmentsAction';
 
-import { Redirect } from 'react-router';
+// import { Redirect } from 'react-router';
 class FlashMessage extends Component {
 	constructor(props) {
 		super(props);
@@ -16,7 +16,6 @@ class FlashMessage extends Component {
 	}
 
 	makeAction = (action, value = true) => {
-		// const action = this.props.flashMessage[0].action;
 		switch (action.next) {
 			case 'UNFOLLOW_BUSINESS':
 				this.props.unFollowBusiness(action.business_id);

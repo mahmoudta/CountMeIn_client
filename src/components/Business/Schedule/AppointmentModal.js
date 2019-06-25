@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import isEmpty from 'lodash/isEmpty';
-import { FaBusinessTime, FaShekelSign } from 'react-icons/fa';
+// import { FaBusinessTime, FaShekelSign } from 'react-icons/fa';
 import moment from 'moment';
 import { NavLink } from 'react-router-dom';
 

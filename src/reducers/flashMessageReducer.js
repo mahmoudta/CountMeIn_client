@@ -1,5 +1,4 @@
 import { SET_FLASH_MESSAGE, DELETE_FLASH_MESSAGE } from '../actions/types';
-import shortid from 'shortid';
 
 export default function(state = [], action) {
 	switch (action.type) {
@@ -8,9 +7,9 @@ export default function(state = [], action) {
 				...state,
 				// id: shortid.generate(),
 				{
-					type: action.message.type,
-					text: action.message.text,
-					action: action.message.action ? action.message.action : {}
+					type   : action.message.type,
+					text   : action.message.text,
+					action : action.message.action ? action.message.action : {}
 				}
 			];
 		case DELETE_FLASH_MESSAGE:
