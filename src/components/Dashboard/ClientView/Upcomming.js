@@ -9,11 +9,15 @@ import { convertToUtcTime } from "../../../utils/date";
 import Typography from "@material-ui/core/Typography";
 import { zeroPad } from "../../../utils/padding";
 import { setFlashMessage } from "../../../actions/flashMessageActions";
+import Loading from "../../globalComponents/LoadingSmall";
+
 
 
 // core components
 import withStyles from '@material-ui/core/styles/withStyles';
 //import grey from '@material-ui/core/colors/grey';
+import { Grid } from '@material-ui/core';
+
 
 import GridContainer from "../../Interface/Grid/GridContainer.jsx";
 import GridItem from "../../Interface/Grid/GridItem.jsx";
@@ -32,6 +36,7 @@ import avatar from "../../Interface/marc.jpg";
 import dashboardStyle from "../../Interface/Assets/dashboardStyle";
 import Success from "../../Interface/Typography/Success"
 import Warning from "../../Interface/Typography/Warning"
+import Danger from "../../Interface/Typography/Danger"
 import CustomDropdown from '../../Interface/CustomDropdown/CustomDropdown.jsx';
 
 
@@ -75,7 +80,7 @@ class Upcomming extends React.Component {
   }
 
   hideAlert() {
-    console.log("HideAlert")
+    //console.log("HideAlert")
     this.setState({
       alert: null
     });
@@ -131,16 +136,16 @@ class Upcomming extends React.Component {
     const timescope = await e.currentTarget.dataset.timescope
 
     const Services = this.state.selectedOptions.map(service => { return service.value })
-    console.log(
-      "businessId",
-      appointment[0],
-      "servicesArr",
-      Services,
-      "customerId",
-      this.props.Id,
-      "timeScop",
-      timescope
-    );
+    // console.log(
+    //   "businessId",
+    //   appointment[0],
+    //   "servicesArr",
+    //   Services,
+    //   "customerId",
+    //   this.props.Id,
+    //   "timeScop",
+    //   timescope
+    // );
 
     axios
       .post(`${API}/algorithms/smart`, {
@@ -151,7 +156,7 @@ class Upcomming extends React.Component {
       })
       .then(response => {
         this.setState({ Smartdata: response.data });
-        console.log(this.state);
+        // console.log(this.state);
       })
       .then(() => {
         this.editAppointmentStep3();
@@ -183,7 +188,7 @@ class Upcomming extends React.Component {
             onConfirm={() => this.hideAlert()}
             onCancel={() => this.hideAlert()}
             confirmBtnCssClass={
-              this.props.classes.button + " " + this.props.classes.success
+              this.props.classes.button + " " + this.props.classes.danger
             }
             cancelBtnCssClass={
               this.props.classes.button + " " + this.props.classes.danger
@@ -191,7 +196,7 @@ class Upcomming extends React.Component {
             confirmBtnText="Close"
           >
             <GridItem xs={12} sm={12} md={12}>
-              LOADING...
+              <Loading></Loading>
             </GridItem>
           </SweetAlert>
         </GridContainer>
@@ -206,11 +211,9 @@ class Upcomming extends React.Component {
     axios
       .get(`${API}/business/services/${appointment[0]}`)
       .then(response => {
-        console.log('response', response)
         const Opt = response.data.ids.map(service => {
           return { label: service.title, value: service.id, time: service.time, cost: service.cost };
         })
-        console.log(Opt)
         this.setState({ Options: Opt })
       })
       .catch(err => {
@@ -221,7 +224,6 @@ class Upcomming extends React.Component {
         axios
           .get(`${API}/appointments/CheckEdit/${appointment[1]}`)
           .then(response => {
-            console.log("r", response);
             const hoursBeforeTmp = Math.floor(response.data.FreeTimeBefore / 60);
             const minutesBeforeTmp = response.data.FreeTimeBefore % 60;
 
@@ -236,7 +238,6 @@ class Upcomming extends React.Component {
   }
   handleChange = (selectedOptions) => {
     this.setState({ selectedOptions }, () => { this.editAppointmentStep2(this.state.selectedAppointment) });
-    console.log(`Option selected:`, selectedOptions);
   }
   handleButtons = () => {
     this.setState({ twoButtons: false }, () => { this.editAppointmentStep2() });
@@ -244,7 +245,7 @@ class Upcomming extends React.Component {
 
   editAppointmentStep2(appointment) {
     const { selectedOptions } = this.state;
-    this.setState({ selectedAppointment: appointment }, () => { console.log("appointment", this.state.selectedAppointment) });
+    this.setState({ selectedAppointment: appointment });//here
 
     var sumTime = 0;
     var sumCost = 0;
@@ -264,7 +265,6 @@ class Upcomming extends React.Component {
               marginTop: "-230px",
               paddingTop: " 30px",
               overflow: 'visible',
-
             }}
             title=""
             onConfirm={() => this.hideAlert()}
@@ -275,7 +275,9 @@ class Upcomming extends React.Component {
             cancelBtnCssClass={
               this.props.classes.button + " " + this.props.classes.danger
             }
-            confirmBtnText="Cancel!"
+            showConfirm={false}
+          // disableButtons
+          //confirmBtnText="Cancel!"
 
 
 
@@ -287,12 +289,16 @@ class Upcomming extends React.Component {
               <div className="col-12 my-3">
 
                 {(sumTime < this.state.FreeTimeAfter) ?
-                  <Success>Time Needed:{sumTime} Minutes</Success> :
+                  <Grid container justify="center"><Success>Time Needed:{sumTime} Minutes</Success> </Grid> :
                   (sumTime < this.state.Allowedtime) ?
-                    <Warning>No enough time ,<Success>fortunately you can come {this.state.hoursBefore}hours and {this.state.minutesBefore} Minutes earlier  <br /> Or rescudule {ChangeTime} <Button color="success">{this.state.FreeTimeBefore - this.state.oldNeededTime} Minutes earlier  </Button></Success></Warning> :
+                    <Grid container justify="center"> <Danger>Time Needed : {sumTime} Minutes</Danger>
+                      <Warning>No enough time ,<Success>fortunately you can come {this.state.hoursBefore}hours and
+                       {this.state.minutesBefore} Minutes earlier  <br /> Or rescudule {ChangeTime}
+                        <Button color="success">{this.state.FreeTimeBefore - this.state.oldNeededTime} Minutes
+                        earlier  </Button></Success></Warning> </Grid> :
                     <Warning>Unfortunately we dont have time , would yout like to rescudule?<br /> {ChangeTime} </Warning>}
 
-                Price : {sumCost} ₪<br />
+
 
                 <label className="text-uppercase" htmlFor="purposes">
                   Modify Services
@@ -308,6 +314,11 @@ class Upcomming extends React.Component {
                   onChange={this.handleChange}
                 />
                 <br />
+                Price : {sumCost} ₪<br />
+                {(sumTime < this.state.FreeTimeAfter) ?
+                  <Grid container justify="center"><Success>Button</Success> </Grid> :
+                  <Grid container justify="center"> NoButton</Grid>}
+
               </div>
             </GridItem>
           </SweetAlert>
@@ -325,7 +336,7 @@ class Upcomming extends React.Component {
     const sminute = e.currentTarget.getAttribute("sminute");
     const ehour = e.currentTarget.getAttribute("ehour");
     const eminute = e.currentTarget.getAttribute("emminute");
-    console.log(shour, date, sminute, ehour, eminute, Services);
+    //console.log(shour, date, sminute, ehour, eminute, Services);
     axios
       .post(`${API}/appointments/setAppointmentAndDelete/`, {
         businessId: this.state.selectedAppointment[0],
@@ -337,10 +348,6 @@ class Upcomming extends React.Component {
         ehour: ehour,
         eminute: eminute,
         appointmentId: this.state.selectedAppointment[1],
-      })
-      .then(response => {
-        //	this.setState({ dates: response.data });
-        console.log(response);
       })
       .then(() => {
 
@@ -440,7 +447,6 @@ class Upcomming extends React.Component {
       })
       .then(response => {
         //	this.setState({ dates: response.data });
-        console.log(response);
       })
       .catch(err => {
         console.log(err);
@@ -573,7 +579,7 @@ class Upcomming extends React.Component {
     //console.log('tableContent', this.state.tableContent);
     //console.log(this.props.Id);
     const { classes } = this.props;
-    console.log(this.state.tableContent);
+    //console.log(this.state.tableContent);
     return (
       <div>
         {this.state.alert}
@@ -627,7 +633,6 @@ const mapStateToProps = state => ({
 
 Upcomming.propTypes = {
   classes: PropTypes.object.isRequired,
-  setFlashMessage: PropTypes.func.isRequired
 
 };
 
