@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import GridContainer from "../Interface/Grid/GridContainer";
 import GridItem from "../Interface/Grid/GridItem.jsx";
 import Button from "../Interface/CustomButtons/Button.jsx";
-import Loading from "../globalComponents/Loading";
+import Loading from "../globalComponents/LoadingSmall";
 import Checkbox from '@material-ui/core/Checkbox';
 import Card from "../Interface/Card/Card.jsx"
 import CardBody from "../Interface/Card/CardBody.jsx"
