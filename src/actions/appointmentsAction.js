@@ -138,11 +138,6 @@ export const getReviewsByBusiness = (business_id) => (dispatch) => {
 				type    : GET_REVIEW_BY_BUSINESS,
 				payload : []
 			});
-
-			// dispatch({
-			// 	type    : SET_FLASH_MESSAGE,
-			// 	message : { type: 'error', text: 'No Reviews found' }
-			// });
 		});
 };
 

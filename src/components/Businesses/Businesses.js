@@ -21,31 +21,31 @@ import CustomInput from '../Interface/CustomInput/CustomInput.jsx';
 import GridItem from '../Interface/Grid/GridItem';
 
 const styles = (theme) => ({
-	root: {
-		display: 'flex',
-		flexWrap: 'wrap'
+	root        : {
+		display  : 'flex',
+		flexWrap : 'wrap'
 	},
-	formControl: {
-		margin: theme.spacing.unit,
-		minWidth: '80%',
-		maxWidth: '100%'
+	formControl : {
+		margin   : theme.spacing.unit,
+		minWidth : '80%',
+		maxWidth : '100%'
 	},
-	chips: {
-		display: 'flex',
-		flexWrap: 'wrap'
+	chips       : {
+		display  : 'flex',
+		flexWrap : 'wrap'
 	},
-	chip: {
-		margin: theme.spacing.unit / 4
+	chip        : {
+		margin : theme.spacing.unit / 4
 	},
-	noLabel: {
-		marginTop: theme.spacing.unit * 3
+	noLabel     : {
+		marginTop : theme.spacing.unit * 3
 	},
-	select: {
-		'&:before': {
+	select      : {
+		'&:before' : {
 			//borderColor: color,
 		},
-		'&:after': {
-			borderColor: '#353A40'
+		'&:after'  : {
+			borderColor : '#353A40'
 		}
 	}
 });
@@ -53,17 +53,17 @@ const styles = (theme) => ({
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
-	PaperProps: {
-		style: {
-			maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-			width: 250
+	PaperProps : {
+		style : {
+			maxHeight : ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+			width     : 250
 		}
 	}
 };
 
 function getStyles(name, that) {
 	return {
-		fontWeight:
+		fontWeight :
 			that.state.name.indexOf(name) === -1
 				? that.props.theme.typography.fontWeightRegular
 				: that.props.theme.typography.fontWeightMedium
@@ -72,15 +72,15 @@ function getStyles(name, that) {
 
 class Businesses extends Component {
 	state = {
-		name: [],
-		value: [],
-		names: [],
-		values: [],
-		businesses: [],
-		allBusinesses: [],
-		search: '',
-		filteredBusinesses: [],
-		catCount: 0
+		name               : [],
+		value              : [],
+		names              : [],
+		values             : [],
+		businesses         : [],
+		allBusinesses      : [],
+		search             : '',
+		filteredBusinesses : [],
+		catCount           : 0
 	};
 
 	componentWillMount() {
@@ -90,7 +90,7 @@ class Businesses extends Component {
 				//	this.setState({ dates: response.data });
 				response.data.businesses.map((businessProfile) => {
 					this.setState({
-						allBusinesses: [...this.state.allBusinesses, { Name: 'all', businessProfile }]
+						allBusinesses : [ ...this.state.allBusinesses, { Name: 'all', businessProfile } ]
 					});
 				});
 			})
@@ -113,7 +113,7 @@ class Businesses extends Component {
 				//const tmpaa = response.data.business.filter(business_ => business_.profile.name.toLowerCase().includes(this.state.search))
 				response.data.business.map((businessProfile) => {
 					this.setState({
-						businesses: [...this.state.businesses, { Name, businessProfile }]
+						businesses : [ ...this.state.businesses, { Name, businessProfile } ]
 					});
 				});
 			})
@@ -157,13 +157,12 @@ class Businesses extends Component {
 			this.setState({ filteredBusinesses: tmpS });
 		}
 		if (LowerSearch === '') {
-			console.log('emoty');
 			if (this.state.catCount === 0) this.setState({ filteredBusinesses: [] });
 			if (this.state.catCount > 0) {
 				this.setState({ filteredBusinesses: this.state.businesses });
 			}
 		}
-		console.log(this.state.filteredBusinesses, 'FILTERED');
+		// console.log(this.state.filteredBusinesses, 'FILTERED');
 	};
 
 	handleChange = (event) => {
@@ -175,8 +174,8 @@ class Businesses extends Component {
 			const thisItem = item[item.length - 1];
 			this.SearchBusinesses(thisItem);
 			this.setState({
-				name: [...this.state.name, thisItem.title],
-				value: [...this.state.value, thisItem.values]
+				name  : [ ...this.state.name, thisItem.title ],
+				value : [ ...this.state.value, thisItem.values ]
 			});
 			return;
 		}
@@ -190,10 +189,10 @@ class Businesses extends Component {
 				return xwx.Name != 'all';
 			});
 			this.setState({
-				businesses: arrayfilter
+				businesses : arrayfilter
 			});
 			this.setState({
-				filteredBusinesses: arrayfilter2
+				filteredBusinesses : arrayfilter2
 			});
 			this.searchChange(null, 1);
 
@@ -211,7 +210,7 @@ class Businesses extends Component {
 	render() {
 		const { classes } = this.props;
 		const { categoriess } = this.props;
-		console.log('state array', this.state.businesses);
+		// console.log('state array', this.state.businesses);
 		// const distinctArray = [
 		//   ...new Set(this.state.businesses.map(item => item.businessProfile._id))
 		// ];
@@ -226,7 +225,7 @@ class Businesses extends Component {
 			output.push(this.state.filteredBusinesses[i]);
 		}
 
-		console.log('distinct', flags);
+		// console.log('distinct', flags);
 		const PrintIt = output.map((i) => {
 			return <BusinessList key={i + 22} business={i.businessProfile} />;
 		});
@@ -239,10 +238,10 @@ class Businesses extends Component {
 							labelText="Search"
 							id="float"
 							formControlProps={{
-								fullWidth: true
+								fullWidth : true
 							}}
 							inputProps={{
-								onChange: (event) => this.searchChange(event, 0)
+								onChange : (event) => this.searchChange(event, 0)
 							}}
 						/>
 					</GridItem>
@@ -286,13 +285,13 @@ class Businesses extends Component {
 	}
 }
 Businesses.propTypes = {
-	classes: PropTypes.object.isRequired,
-	categories: PropTypes.object.isRequired,
-	getAllCategories: PropTypes.func.isRequired
+	classes          : PropTypes.object.isRequired,
+	categories       : PropTypes.object.isRequired,
+	getAllCategories : PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth,
-	categoriess: state.category.categories
+	auth        : state.auth,
+	categoriess : state.category.categories
 	//loading: state.business.loading
 });
 

@@ -48,14 +48,18 @@ class BappointmentReview extends Component {
 		const { appointments } = this.props;
 		const appointment_id = this.props.match.params.appointment_id;
 		const page = this.props.match.params.page;
-		const selected = await appointments.find((appointment) => {
-			return appointment._id.toString() === appointment_id.toString();
-		});
-		if (!isEmpty(selected)) {
-			if (selected.review.business_review.isRated) {
-			} else {
-				this.setState({ loading: false, appointment: selected, page });
+		if (Number(page) === 1) {
+			const selected = await appointments.find((appointment) => {
+				return appointment._id.toString() === appointment_id.toString();
+			});
+			if (!isEmpty(selected)) {
+				if (selected.review.business_review.isRated) {
+				} else {
+					this.setState({ loading: false, appointment: selected, page });
+				}
 			}
+		} else {
+			//TODO NO MATTER FROM WHERE ARE YOU COMING
 		}
 	}
 
@@ -221,14 +225,16 @@ class BappointmentReview extends Component {
 }
 BappointmentReview.propTypes = {
 	appointments      : PropTypes.array.isRequired,
-	setBusinessReview : PropTypes.func.isRequired
+	setBusinessReview : PropTypes.func.isRequired,
+	reviews           : PropTypes.array.isRequired
 
 	// getBusinessCustomers: PropTypes.func.isRequired,
 	// getBusinessServices: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
 	myBusiness   : state.business.myBusiness,
-	appointments : state.appointment.appointments
+	appointments : state.appointment.appointments,
+	reviews      : state.appointment.reviews
 	// loading    : state.appointment.loading
 });
 export default connect(mapStatetoProps, { setBusinessReview })(BappointmentReview);

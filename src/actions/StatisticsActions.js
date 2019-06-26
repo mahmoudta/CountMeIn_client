@@ -15,11 +15,11 @@ import {
 export const getStatisticsHeader = (business_id) => (dispatch) => {
 	dispatch(setStatisticsLoading());
 	return axios
-		.get(`${API}/appointments/business/BusinessStatisticsHeader/${business_id}`)
+		.get(`${API}/business/statsHeader/${business_id}`)
 		.then((result) => {
 			return dispatch({
 				type    : GET_STATISTICS_HEADER,
-				payload : result.data.statistics
+				payload : result.data.header
 			});
 		})
 		.catch((err) => {

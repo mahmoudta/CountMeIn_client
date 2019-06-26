@@ -86,7 +86,10 @@ export default class ReviewBody extends Component {
 				</td>
 				<td>
 					{!review.review.business_review.isRated && (
-						<NavLink to="#" className="btn btn-secondary">
+						<NavLink
+							to={`/business/appointment-review/${review.review.appointment_id}-2`}
+							className="btn btn-secondary"
+						>
 							Leave Feedback
 						</NavLink>
 					)}

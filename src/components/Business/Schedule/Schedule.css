@@ -23,6 +23,12 @@
 .border-left-success {
 	border-left: .25rem solid #1cc88a !important;
 }
+.icon-bg {
+	position: absolute;
+	font-size: 40px;
+	right: 40px;
+	color: #e2e2e2;
+}
 
 .calendar-body {
 	overflow: hidden;

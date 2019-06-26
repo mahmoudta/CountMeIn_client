@@ -19,7 +19,12 @@ export function getDay(date) {
 		// return '';
 	}
 }
+export function calculatePercentage(current, past) {
+	if (past == 0) return current * 100;
+	// if (current == 0) return past * -100;
 
+	return (current / past - 1) * 100;
+}
 export function convertToUtcTime(date) {
 	console.log(date);
 	let splitter = date.split('-');

@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import { Chart } from 'react-google-charts';
+import { calculatePercentage } from '../../../utils/date';
 import moment from 'moment';
-const calculatePercentage = (current, past) => {
-	if (past == 0) return current * 100;
-	// if (current == 0) return past * -100;
 
-	return (current / past - 1) * 100;
-};
 export default class LineChartComponent extends Component {
 	render() {
 		const { title } = this.props;
