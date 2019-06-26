@@ -83,7 +83,7 @@ class Businesses extends Component {
 		catCount: 0
 	};
 
-	componentWillMount() {
+	componentDidMount() {
 		axios
 			.get(`${API}/business/getAllbusinesses`)
 			.then((response) => {

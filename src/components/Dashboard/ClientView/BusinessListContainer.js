@@ -10,11 +10,27 @@ export default class BusinessListContainer extends Component {
 		this.state = {
 			fallowedArr: [],
 			fallowedComponent: null,
-			refresh: false
+			refresh: false,
+			loading: false
 		};
+		this.Loading = this.Loading.bind(this);
+		this.getData = this.getData.bind(this);
+
 	}
 
-	async componentWillMount() {
+	Loading = (bool) => {
+		console.log(bool)
+		this.setState({ loading: bool })
+
+	}
+
+	async componentDidMount() {
+
+		this.getData()
+	}
+
+	getData() {
+		this.setState({ fallowedArr: [] })
 		axios
 			.get(`${API}/users/getFallowedBusinesses`, {})
 			.then((response) => {
@@ -25,10 +41,12 @@ export default class BusinessListContainer extends Component {
 			});
 	}
 
+
 	render() {
 		const PrintIt = this.state.fallowedArr.map((i, m) => {
-			return <BusinessList key={i} business={i} />;
+			return <BusinessList key={i} business={i} loading={this.Loading} getData={this.getData} />;
 		});
-		return <GridContainer>{PrintIt}</GridContainer>;
+		return (<GridContainer>{(this.state.loading) ? ' ' : PrintIt}
+		</GridContainer>);
 	}
 }

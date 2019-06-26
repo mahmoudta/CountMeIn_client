@@ -15,6 +15,7 @@ import Icon from '@material-ui/core/Icon';
 
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { IconButton } from '@material-ui/core';
 //import { addListener } from "cluster";
 //testestestest
 class BusinessList extends Component {
@@ -23,27 +24,31 @@ class BusinessList extends Component {
 		// this.refresh = this.refresh.bind(this);
 
 		this.state = {
-			business : {
-				_id     : null,
-				profile : {
-					name : 'loading'
+			business: {
+				_id: null,
+				profile: {
+					name: 'loading'
 				}
-			}
+			},
 		};
 	}
 
 	unfollowBusiness = (business_id) => {
-		this.setState({ loadingFollow: true });
+		this.props.loading(true)
 		axios
 			.put(`${API}/business/unfollow`, { business_id: business_id })
-			.then((response) => response.json())
 			.then((data) => {
-				// this.props.refresh();
+				this.props.getData()
+				this.props.loading(false)
+
 			})
 			.catch((err) => {
+				this.props.getData()
+				this.props.loading(false)
 				console.log(err);
 			});
 	};
+
 
 	render() {
 		const { classes } = this.props;
@@ -70,8 +75,11 @@ class BusinessList extends Component {
 							<Link to={`/business/new-appointment/${businesses._id}`}>
 								<Icon color="disabled">alarm_add</Icon>
 							</Link>
-							<Link to={'#'}>
-								<Icon color="disabled" onClick={() => this.unfollowBusiness(businesses._id)}>
+							<Link to={`#`} onClick={(e) => {
+								e.preventDefault();
+								this.unfollowBusiness(businesses._id)
+							}}>
+								<Icon color="disabled" >
 									person_add_disabled
 								</Icon>
 							</Link>
@@ -83,6 +91,6 @@ class BusinessList extends Component {
 	}
 }
 BusinessList.propTypes = {
-	classes : PropTypes.object.isRequired
+	classes: PropTypes.object.isRequired
 };
 export default withStyles(dashboardStyle)(BusinessList);

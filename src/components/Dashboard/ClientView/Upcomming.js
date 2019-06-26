@@ -5,8 +5,6 @@ import { API } from "../../../consts";
 import SweetAlert from "react-bootstrap-sweetalert";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { convertToUtcTime } from "../../../utils/date";
-import Typography from "@material-ui/core/Typography";
 import { zeroPad } from "../../../utils/padding";
 import { setFlashMessage } from "../../../actions/flashMessageActions";
 import Loading from "../../globalComponents/LoadingSmall";
@@ -31,8 +29,6 @@ import CardHeader from "../../Interface/Card/CardHeader.jsx";
 import extendedTablesStyle from "../../Interface/Assets/extendedTablesStyle";
 import sweetAlertStyle from "../../Interface/Assets/sweetAlertStyle.jsx";
 import userProfileStyles from "../../Interface/Assets/userProfileStyles";
-import CardAvatar from "../../Interface/Card/CardAvatar.jsx";
-import avatar from "../../Interface/marc.jpg";
 import dashboardStyle from "../../Interface/Assets/dashboardStyle";
 import Success from "../../Interface/Typography/Success"
 import Warning from "../../Interface/Typography/Warning"
@@ -90,45 +86,7 @@ class Upcomming extends React.Component {
   showbusiness(id, name) {
     const { classes } = this.props;
 
-    this.setState({
-      alert: (
-        <GridContainer>
-          <SweetAlert
-            style={{
-              display: 'block',
-              marginTop: '-230px',
-              paddingTop: ' 30px'
-            }}
-            title=""
-            onConfirm={() => this.hideAlert()}
-            onCancel={() => this.hideAlert()}
-            confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
-          >
-            <GridItem xs={12} sm={12} md={12}>
-              <Card profile>
-                <CardAvatar profile>
-                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    <img src={avatar} alt="..." />
-                  </a>
-                </CardAvatar>
-                <CardBody profile>
-                  <Button color="secondary" round>
-                    Follow
-									</Button>
-                  <h4 className={classes.cardTitle}>{name}</h4>
-                  <p>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio sunt veniam
-										libero ut iste? Inventore, aspernatur aut repellendus corporis voluptas
-										consequatur,
-									</p>
-                </CardBody>
-                <h6 className={classes.cardCategory}>{id}</h6>
-              </Card>
-            </GridItem>
-          </SweetAlert>
-        </GridContainer>
-      )
-    });
+    this.context.router.history.push(`/business/view/${id}`);
   }
 
   getSmart = async (e, appointment) => {
@@ -246,14 +204,19 @@ class Upcomming extends React.Component {
   editAppointmentStep2(appointment) {
     const { selectedOptions } = this.state;
     this.setState({ selectedAppointment: appointment });//here
-
+    const { classes } = this.props
     var sumTime = 0;
     var sumCost = 0;
+    var sumHours = 0;
+    var sumMinutes = 0;
     const ChangeTime = <div><Button onClick={e => this.getSmart(e, appointment)} data-timescope={0} >Morning</Button> <Button data-timescope={1} onClick={e => this.getSmart(e, appointment)}>Afternoon</Button> <Button data-timescope={2} onClick={e => this.getSmart(e, appointment)}>Evening</Button></div>
     //const YesNo = (!this.state.twoButtons) ? <div><Button onClick={this.getSmart} timeScope={0} >Yes Rescudule</Button> <Button onClick={this.handleButtons()}>No,Show more</Button></div> : <div> {ChangeTime}</div>
 
     selectedOptions.map(selectd => {
       sumTime = sumTime + selectd.time;
+      sumHours = Math.floor(sumTime / 60);
+      sumMinutes = sumTime % 60;
+
       sumCost = sumCost + selectd.cost;
     })
     this.setState({
@@ -283,21 +246,22 @@ class Upcomming extends React.Component {
 
 
           >
+
             <GridItem xs={12} sm={12} md={12} style={{
               minHeight: "200px",
             }}>
-              <div className="col-12 my-3">
+              <h3 className={`${classes.cardTitle} text-muted`}>Edit Appointment</h3>
+              <div className={`col-12 my-3`}>
 
                 {(sumTime < this.state.FreeTimeAfter) ?
-                  <Grid container justify="center"><Success>Time Needed:{sumTime} Minutes</Success> </Grid> :
+                  <Grid container justify="center"><Success>Time Needed:{sumHours}:{sumMinutes}</Success> </Grid> :
                   (sumTime < this.state.Allowedtime) ?
-                    <Grid container justify="center"> <Danger>Time Needed : {sumTime} Minutes</Danger>
-                      <Warning>No enough time ,<Success>fortunately you can come {this.state.hoursBefore}hours and
+                    <Grid container justify="center"> <Danger>Time Needed:{sumHours}:{sumMinutes}</Danger>
+                      <Warning>We dont have enough time to serve these services ,<Success>fortunately you can come {this.state.hoursBefore}hours and
                        {this.state.minutesBefore} Minutes earlier  <br /> Or rescudule {ChangeTime}
                         <Button color="success">{this.state.FreeTimeBefore - this.state.oldNeededTime} Minutes
                         earlier  </Button></Success></Warning> </Grid> :
                     <Warning>Unfortunately we dont have time , would yout like to rescudule?<br /> {ChangeTime} </Warning>}
-
 
 
                 <label className="text-uppercase" htmlFor="purposes">
@@ -316,8 +280,8 @@ class Upcomming extends React.Component {
                 <br />
                 Price : {sumCost} ₪<br />
                 {(sumTime < this.state.FreeTimeAfter) ?
-                  <Grid container justify="center"><Success>Button</Success> </Grid> :
-                  <Grid container justify="center"> NoButton</Grid>}
+                  <Grid container justify="center"><Button onClick={(e) => this.UpdateAppointment(e)} color="success"> Update Appointment </Button></Grid> :
+                  null}
 
               </div>
             </GridItem>
@@ -327,7 +291,6 @@ class Upcomming extends React.Component {
     });
   }
   setAppointment = e => {
-
     const Services = this.state.selectedOptions.map(service => {
       return service.value
     })
@@ -355,8 +318,65 @@ class Upcomming extends React.Component {
       .catch(err => {
         console.log(err);
       });
+
   }
+
+
+  UpdateAppointment = e => {
+    var totalTime = null;
+    const Services = this.state.selectedOptions.map(service => {
+      totalTime = totalTime + service.time;
+      return service.value
+    })
+
+    console.log("services", Services)
+    if (totalTime) {
+      axios
+        .post(`${API}/appointments/updateAppointmentTime/`, {
+          appointmentId: this.state.selectedAppointment[1],
+          newServices: Services,
+          duration: totalTime,
+          businessId: this.state.selectedAppointment[0]
+        })
+        .then((response) => {
+          this.setState({
+            alert: (
+              <SweetAlert
+                success
+                style={{ display: 'block', marginTop: '-100px' }}
+                title="Successfuly Updated"
+                onConfirm={() => this.hideAlert()}
+                onCancel={() => this.hideAlert()}
+                confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
+              >
+                Your appointment has been updated, dont worry about the business we will notify them for you
+				</SweetAlert>
+            )
+          })
+        })
+        .catch(err => {
+          this.setState({
+            alert: (
+              <SweetAlert
+                danger
+                style={{ display: 'block', marginTop: '-100px' }}
+                title="Error"
+                onConfirm={() => this.hideAlert()}
+                onCancel={() => this.hideAlert()}
+                confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
+              >
+                Error occured
+              </SweetAlert>
+            )
+          });
+          console.log(err);
+        });
+    }
+  }
+
+
   editAppointmentStep3() {
+    const { classes } = this.props;
     this.setState({
       alert: (
         <GridContainer>
@@ -367,9 +387,9 @@ class Upcomming extends React.Component {
               paddingTop: " 30px",
               overflow: 'visible'
             }}
-            title="what time fits your schedule best?"
             onConfirm={() => this.hideAlert()}
             onCancel={() => this.hideAlert()}
+            title=""
             confirmBtnCssClass={
               this.props.classes.button + " " + this.props.classes.danger
             }
@@ -379,6 +399,7 @@ class Upcomming extends React.Component {
             confirmBtnText="Cancel!"
           >
             <GridItem xs={12} sm={12} md={12}>
+              <h3 className={`${classes.cardTitle} text-muted`}>What time fits you the best ?</h3>
               {this.state.Smartdata.smartData.map((smart, m) => {
                 const Content = smart.Free.map((free, i) => {
                   return (
@@ -633,9 +654,10 @@ const mapStateToProps = state => ({
 
 Upcomming.propTypes = {
   classes: PropTypes.object.isRequired,
-
 };
-
+Upcomming.contextTypes = {
+  router: PropTypes.object.isRequired
+};
 export default connect(mapStateToProps)(
   withStyles(
     (theme) => ({
