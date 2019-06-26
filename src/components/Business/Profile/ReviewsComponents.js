@@ -119,7 +119,11 @@ class ReviewsComponents extends Component {
 							<div className="col-12">
 								<div className="row">
 									<div className="col-2 col-lg-1 mx-auto">
-										<img className="img-fluid" src={process.env.PUBLIC_URL + '/loading.gif'} />
+										<img
+											className="img-fluid"
+											alt="countMein_loading"
+											src={process.env.PUBLIC_URL + '/loading.gif'}
+										/>
 									</div>
 								</div>
 							</div>

@@ -3,7 +3,19 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getBusinessByOwner, UpdateSmartAlgorithmsSettings } from '../../../actions/businessActions';
 import Loading from '../../globalComponents/Loading';
+const convertToString = (obj) => {
+	return `${obj._hour > 9 ? `${obj._hour}` : `0${obj._hour}`}:${obj._minute > 9
+		? `${obj._minute}`
+		: `0${obj._minute}`}`;
+};
 
+const convertToObj = (time) => {
+	let tempTime = time.split(':');
+	return {
+		_hour   : Number(tempTime[0]),
+		_minute : Number(tempTime[1])
+	};
+};
 class SmartSettings extends Component {
 	constructor(props) {
 		super(props);
@@ -14,9 +26,42 @@ class SmartSettings extends Component {
 			distrbuted_time           : 1,
 			continuity                : 0,
 			experiance_rule           : 1,
-			customer_prefered_period  : 1
+			customer_prefered_period  : 1,
+			max_days_to_return        : 2,
+			morning                   : {
+				_start : {
+					_hour   : 1,
+					_minute : 9
+				},
+				_end   : {
+					_hour   : 1,
+					_minute : 9
+				}
+			},
+			afternoon                 : {
+				_start : {
+					_hour   : 1,
+					_minute : 9
+				},
+				_end   : {
+					_hour   : 1,
+					_minute : 9
+				}
+			},
+			evening                   : {
+				_start : {
+					_hour   : 1,
+					_minute : 9
+				},
+				_end   : {
+					_hour   : 1,
+					_minute : 9
+				}
+			}
 		};
 		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.changeTime = this.changeTime.bind(this);
 	}
 
 	handleChange = (e) => {
@@ -34,6 +79,14 @@ class SmartSettings extends Component {
 		this.props.UpdateSmartAlgorithmsSettings(this.state);
 	};
 
+	changeTime = (e, period) => {
+		const { name, value } = e.target;
+		let obj = this.state[name];
+		obj[period] = convertToObj(value);
+
+		this.setState({ [name]: obj });
+	};
+
 	componentDidMount() {
 		this.props.getBusinessByOwner(this.props.user.sub).then((result) => {
 			if (!result.payload.error) {
@@ -45,7 +98,11 @@ class SmartSettings extends Component {
 					distrbuted_time           : settings.distrbuted_time,
 					continuity                : settings.continuity,
 					experiance_rule           : settings.experiance_rule,
-					customer_prefered_period  : settings.customer_prefered_period
+					customer_prefered_period  : settings.customer_prefered_period,
+					max_days_to_return        : settings.max_days_to_return,
+					morning                   : settings.range_definition.morning,
+					afternoon                 : settings.range_definition.afternoon,
+					evening                   : settings.range_definition.evening
 				});
 			}
 		});
@@ -66,7 +123,7 @@ class SmartSettings extends Component {
 											Smart Algorithms Customaziation
 										</h4>
 										<div className="row">
-											<div className="col-12 col-md-6 ">
+											<div className="col-12 col-md-6 my-4">
 												<div className="form-group">
 													<label className="form-label">Customer experince</label>
 
@@ -89,7 +146,7 @@ class SmartSettings extends Component {
 												</div>
 											</div>
 
-											<div className="col-12 col-md-6">
+											<div className="col-12 col-md-6 my-4">
 												<div className="form-group">
 													<label className="form-label" htmlFor="experiance_rule">
 														{`experiance rule - ${this.state.experiance_rule}`}
@@ -112,7 +169,7 @@ class SmartSettings extends Component {
 												</div>
 											</div>
 
-											<div className="col-12 col-md-6">
+											<div className="col-12 col-lg-6 my-4 ">
 												<div className="form-group">
 													<label className="form-label" htmlFor="continuity">
 														{`Continuity - ${this.state.continuity}`}
@@ -135,7 +192,7 @@ class SmartSettings extends Component {
 												</div>
 											</div>
 
-											<div className="col-12 col-md-6">
+											<div className="col-12 col-lg-6 my-4">
 												<div className="form-group">
 													<label className="form-label" htmlFor="distrbuted_time">
 														{`Distrbuited Time - ${this.state.distrbuted_time}`}
@@ -159,7 +216,7 @@ class SmartSettings extends Component {
 												</div>
 											</div>
 
-											<div className="col-12 col-md-6">
+											<div className="col-12 col-lg-4 my-4">
 												<div className="form-group">
 													<label className="form-label" htmlFor="days_calculate_length">
 														{`Maximum Days for Bokking - ${this.state
@@ -181,8 +238,7 @@ class SmartSettings extends Component {
 													</small>
 												</div>
 											</div>
-
-											<div className="col-12 col-md-6">
+											<div className="col-12 col-lg-4 my-4">
 												<div className="form-group">
 													<label className="form-label" htmlFor="max_working_days_response">
 														{` Maxumim response days - ${this.state
@@ -205,8 +261,131 @@ class SmartSettings extends Component {
 													</small>
 												</div>
 											</div>
+											<div className="col-12 col-lg-4 my-4">
+												<div className="form-group">
+													<label className="form-label" htmlFor="max_days_to_return">
+														{`Max Days To return - ${this.state.max_days_to_return}`}
+													</label>
+													<input
+														type="range"
+														name="max_days_to_return"
+														min="1"
+														max="10"
+														step="1"
+														className="custom-range"
+														value={this.state.max_days_to_return}
+														onChange={this.handleChange}
+													/>
 
-											<div className="col-12 col-md-6">
+													<small className="form-text text-muted">
+														On a scale from 1 to 10 how much days you want the smart
+														algorithm to return to the client .
+													</small>
+												</div>
+											</div>
+
+											<div className="col-12 my-4">
+												<div className="form-group">
+													<label className="form-label mb-3" htmlFor="Range">
+														Range initial
+													</label>
+													<div className="row">
+														<div className="col-12 col-lg-4">
+															<label className="form-label text-muted" htmlFor="morning">
+																Morning
+															</label>
+															<div className="d-flex justify-content-between">
+																<input
+																	type="time"
+																	className="form-control form-control-sm"
+																	name="morning"
+																	value={convertToString(this.state.morning._start)}
+																	onChange={(e) => {
+																		this.changeTime(e, '_start');
+																	}}
+																/>
+
+																<span>{` : `}</span>
+																<input
+																	type="time"
+																	className="form-control form-control-sm"
+																	name="morning"
+																	value={convertToString(this.state.morning._end)}
+																	onChange={(e) => {
+																		this.changeTime(e, '_end');
+																	}}
+																/>
+															</div>
+														</div>
+
+														<div className="col-12 col-lg-4">
+															<label
+																className="form-label text-muted"
+																htmlFor="afternoon"
+															>
+																Afternoon
+															</label>
+															<div className="d-flex justify-content-between">
+																<input
+																	type="time"
+																	className="form-control form-control-sm"
+																	name="afternoon"
+																	value={convertToString(this.state.afternoon._start)}
+																	onChange={(e) => {
+																		this.changeTime(e, '_start');
+																	}}
+																/>
+
+																<span>{` : `}</span>
+																<input
+																	type="time"
+																	className="form-control form-control-sm"
+																	name="afternoon"
+																	value={convertToString(this.state.afternoon._end)}
+																	onChange={(e) => {
+																		this.changeTime(e, '_end');
+																	}}
+																/>
+															</div>
+														</div>
+
+														<div className="col-12 col-lg-4">
+															<label className="form-label text-muted" htmlFor="evening">
+																Evening
+															</label>
+															<div className="d-flex justify-content-between">
+																<input
+																	type="time"
+																	className="form-control form-control-sm"
+																	name="evening"
+																	value={convertToString(this.state.evening._start)}
+																	onChange={(e) => {
+																		this.changeTime(e, '_start');
+																	}}
+																/>
+
+																<span>{` : `}</span>
+																<input
+																	type="time"
+																	className="form-control form-control-sm"
+																	name="evening"
+																	value={convertToString(this.state.evening._end)}
+																	onChange={(e) => {
+																		this.changeTime(e, '_end');
+																	}}
+																/>
+															</div>
+														</div>
+													</div>
+
+													<small className="form-text text-muted">
+														On a scale from 1 to 9 how much importantace you want the smart
+														algorithm to put on the customer prefered period.
+													</small>
+												</div>
+											</div>
+
+											<div className="col-12 col-lg-6">
 												<div className="form-group">
 													<label className="form-label" htmlFor="customer_prefered_period">
 														{`customer prefered period - ${this.state
@@ -222,7 +401,6 @@ class SmartSettings extends Component {
 														value={this.state.customer_prefered_period}
 														onChange={this.handleChange}
 													/>
-
 													<small className="form-text text-muted">
 														On a scale from 1 to 9 how much importantace you want the smart
 														algorithm to put on the customer prefered period.

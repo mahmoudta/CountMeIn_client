@@ -15,10 +15,10 @@ class ClientView extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			business: false,
-			loading: false,
-			followed: false,
-			loadingFollow: false
+			business      : false,
+			loading       : false,
+			followed      : false,
+			loadingFollow : false
 			// style: {
 			// 	'.header': {
 			// 		background: 'green',
@@ -95,12 +95,12 @@ class ClientView extends Component {
 
 	unfollowBusiness = (business_id) => {
 		this.props.setFlashMessage({
-			type: 'warning',
-			text: 'Are You sure You want to UnFollow?',
-			action: {
-				CancelButton: true,
-				confirmText: 'Delete',
-				next: 'UNFOLLOW_BUSINESS',
+			type   : 'warning',
+			text   : 'Are You sure You want to UnFollow?',
+			action : {
+				CancelButton : true,
+				confirmText  : 'Delete',
+				next         : 'UNFOLLOW_BUSINESS',
 				business_id
 			}
 		});
@@ -198,17 +198,17 @@ class ClientView extends Component {
 }
 
 ClientView.propTypes = {
-	auth: PropTypes.object.isRequired,
-	business: PropTypes.object.isRequired,
-	getBusinessById: PropTypes.func.isRequired,
-	followBusiness: PropTypes.func.isRequired,
-	unFollowBusiness: PropTypes.func.isRequired,
-	setFlashMessage: PropTypes.func.isRequired
+	auth             : PropTypes.object.isRequired,
+	business         : PropTypes.object.isRequired,
+	getBusinessById  : PropTypes.func.isRequired,
+	followBusiness   : PropTypes.func.isRequired,
+	unFollowBusiness : PropTypes.func.isRequired,
+	setFlashMessage  : PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth,
-	business: state.business.business,
-	loading: state.business.loading
+	auth     : state.auth,
+	business : state.business.business,
+	loading  : state.business.loading
 });
 
 export default connect(mapStatetoProps, { getBusinessById, followBusiness, setFlashMessage, unFollowBusiness })(

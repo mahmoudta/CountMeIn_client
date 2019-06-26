@@ -9,7 +9,7 @@ import { FaPlusCircle } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
 // import { FaPlus } from 'react-icons/fa';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 class CategoryList extends Component {
 	constructor(props) {

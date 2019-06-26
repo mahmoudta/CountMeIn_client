@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import isEmpty from 'lodash/isEmpty';
+// import isEmpty from 'lodash/isEmpty';
 import { zeroPad } from '../../utils/padding';
 export default class SetThirdStep extends Component {
 	render() {

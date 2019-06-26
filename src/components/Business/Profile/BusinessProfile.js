@@ -23,7 +23,6 @@ import { GoThumbsup } from 'react-icons/go';
 import '../Business.css';
 import Loading from '../../globalComponents/Loading';
 import ReviewsComponents from './ReviewsComponents';
-import { throws } from 'assert';
 
 class BusinessProfile extends Component {
 	constructor(props) {
@@ -190,7 +189,7 @@ class BusinessProfile extends Component {
 														</div>
 													</div>
 													<div className="col-12 py-3 text-center text-lg-left">
-														{this.props.auth.user.business != business._id ? (
+														{this.props.auth.user.business !== business._id ? (
 															<NavLink
 																to={`/business/new-appointment/${this.props.business
 																	._id}`}

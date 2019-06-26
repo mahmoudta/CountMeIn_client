@@ -43,10 +43,11 @@ class Navbar extends Component {
 						<li className="">
 							<NavLink to="/dashboard" activeClassName="active">
 								<MdDashboard className="icon" />
+
 								<span>Dashboard</span>
 							</NavLink>
 						</li>
-						<li className="">
+						<li>
 							<NavLink to="/businesses" activeClassName="active" role="button">
 								<FaBriefcase className="icon" />
 								<span>Businesses</span>
@@ -96,7 +97,7 @@ class Navbar extends Component {
 									]
 								) : (
 									<li className="nav-item text-uppercase">
-										<NavLink to="/business/pages/create">
+										<NavLink to="/business/pages/create" activeClassName="active">
 											<FaAddressCard /> Create
 										</NavLink>
 									</li>
