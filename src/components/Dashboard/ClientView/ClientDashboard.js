@@ -4,6 +4,7 @@ import StatsPanel from "./StatsPanel";
 import BusinessList from "./BusinessList";
 
 import BusinessListContainer from "./BusinessListContainer";
+import TodayUpcoming from "./TodayUpcoming";
 
 export class ClientDashboard extends Component {
   render() {
