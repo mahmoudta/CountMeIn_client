@@ -153,7 +153,7 @@ class NewAppointmentContainer extends Component {
 
     render() {
         const { classes } = this.props;
-        return (<div className={classes.container}><GridItem xs={12} sm={6} md={5} lg={5}> <Card> <CardHeader className={`${classes.cardHeader} ${classes.textCenter}`} ><h3 className={`${classes.cardTitle} text-muted`}>Set appointment</h3></CardHeader> <CardBody>
+        return (<div className={classes.container}><GridContainer justify="center"><GridItem xs={12} sm={6} md={5} lg={5}> <Card> <CardHeader className={`${classes.cardHeader} ${classes.textCenter}`} ><h3 className={`${classes.cardTitle} text-muted`}>Set appointment</h3></CardHeader> <CardBody>
             {(() => {
                 switch (this.state.step) {
                     case 0:
@@ -188,7 +188,7 @@ class NewAppointmentContainer extends Component {
                         return (<GridItem xs={12}>"Default"</GridItem>)
                 }
             })()}
-        </CardBody></Card></GridItem></div>)
+        </CardBody></Card></GridItem></GridContainer></div>)
     }
 }
 
