@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 // import './global.css';
 import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } from 'react-icons/fa';
 
-import { MdDashboard } from 'react-icons/md';
+import { MdDashboard, MdSearch } from 'react-icons/md';
 import { FaBell, FaChartBar, FaStickyNote } from 'react-icons/fa';
 import { GiBrain } from 'react-icons/gi';
 
@@ -17,9 +17,9 @@ class Navbar extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			width       : 'aside-md',
-			loading     : false,
-			business_id : ''
+			width: 'aside-md',
+			loading: false,
+			business_id: ''
 		};
 		this.renderNav = this.renderNav.bind(this);
 		this.menuToggler = this.menuToggler.bind(this);
@@ -32,8 +32,8 @@ class Navbar extends Component {
 			this.setState({ width: 'aside-md' });
 		}
 	};
-	componentDidMount() {}
-	businessDropDown = () => {};
+	componentDidMount() { }
+	businessDropDown = () => { };
 	renderNav = () => {
 		const { user } = this.props.auth;
 		return (
@@ -47,8 +47,15 @@ class Navbar extends Component {
 								<span>Dashboard</span>
 							</NavLink>
 						</li>
+						<li className="">
+							<NavLink to="/Search" activeClassName="active">
+								<MdSearch className="icon" />
+
+								<span>Search</span>
+							</NavLink>
+						</li>
 						<li>
-							<NavLink to="/businesses" activeClassName="active" role="button">
+							<NavLink to="#" activeClassName="active" role="button">
 								<FaBriefcase className="icon" />
 								<span>Businesses</span>
 							</NavLink>
@@ -96,12 +103,12 @@ class Navbar extends Component {
 										</li>
 									]
 								) : (
-									<li className="nav-item text-uppercase">
-										<NavLink to="/business/pages/create" activeClassName="active">
-											<FaAddressCard /> Create
+										<li className="nav-item text-uppercase">
+											<NavLink to="/business/pages/create" activeClassName="active">
+												<FaAddressCard /> Create
 										</NavLink>
-									</li>
-								)}
+										</li>
+									)}
 							</ul>
 						</li>
 						<li className="">
@@ -131,7 +138,7 @@ class Navbar extends Component {
 				id="sidebar"
 				className={this.state.width}
 				style={{
-					display : this.props.auth.isAuthenticated ? 'table-cell' : 'none'
+					display: this.props.auth.isAuthenticated ? 'table-cell' : 'none'
 				}}
 			>
 				{this.props.auth.isAuthenticated ? this.renderNav() : ''}
@@ -141,13 +148,13 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-	auth : PropTypes.object.isRequired
+	auth: PropTypes.object.isRequired
 
 	// getBusinessCustomers: PropTypes.func.isRequired,
 	// getBusinessServices: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth : state.auth
+	auth: state.auth
 	// myBusiness: state.business.myBusiness
 });
 export default connect(mapStatetoProps, {})(Navbar);

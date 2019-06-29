@@ -29,18 +29,18 @@ class LoginForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			email        : '',
-			password     : '',
-			loading      : false,
-			error        : '',
-			cardAnimaton : 'cardHidden'
+			email: '',
+			password: '',
+			loading: false,
+			error: '',
+			cardAnimaton: 'cardHidden'
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 	componentDidMount() {
 		this.timeOutFunction = setTimeout(
-			function() {
+			function () {
 				this.setState({ cardAnimaton: '' });
 			}.bind(this),
 			700
@@ -83,7 +83,7 @@ class LoginForm extends Component {
 									<CardHeader className={`${classes.cardHeader} ${classes.textCenter}`} color="CMI">
 										<img src={logo} alt="" className="img-fluid" />
 										<h4 className={classes.cardTitle}>Log in</h4>
-										<div className={classes.socialLine}>
+										{/* <div className={classes.socialLine}>
 											{[
 												'fab fa-facebook-square',
 												'fab fa-twitter',
@@ -100,23 +100,23 @@ class LoginForm extends Component {
 													</Button>
 												);
 											})}
-										</div>
+										</div> */}
 									</CardHeader>
 									<CardBody>
 										{this.props.error ? (
 											<div className="alert alert-danger">{this.props.error}</div>
 										) : (
-											<div />
-										)}
+												<div />
+											)}
 										<CustomInput
 											labelText="Email..."
 											id="email"
 											formControlProps={{
-												fullWidth : true
+												fullWidth: true
 											}}
 											inputProps={{
-												onChange     : (event) => this.handleChange(event, 'email'),
-												endAdornment : (
+												onChange: (event) => this.handleChange(event, 'email'),
+												endAdornment: (
 													<InputAdornment position="end">
 														<Email className={classes.inputAdornmentIcon} />
 													</InputAdornment>
@@ -127,12 +127,12 @@ class LoginForm extends Component {
 											labelText="Password"
 											id="password"
 											formControlProps={{
-												fullWidth : true
+												fullWidth: true
 											}}
 											inputProps={{
-												type         : 'password',
-												onChange     : (event) => this.handleChange(event, 'password'),
-												endAdornment : (
+												type: 'password',
+												onChange: (event) => this.handleChange(event, 'password'),
+												endAdornment: (
 													<InputAdornment position="end">
 														<Icon className={classes.inputAdornmentIcon}>lock_outline</Icon>
 													</InputAdornment>
@@ -168,14 +168,14 @@ class LoginForm extends Component {
 	}
 }
 LoginForm.propTypes = {
-	localSignIn : PropTypes.func.isRequired
+	localSignIn: PropTypes.func.isRequired
 };
 LoginForm.contextTypes = {
-	router : PropTypes.object.isRequired
+	router: PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	error           : state.auth.error,
-	isAuthenticated : state.auth.isAuthenticated
+	error: state.auth.error,
+	isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStatetoProps, { localSignIn })(withStyles(loginPageStyle)(LoginForm));
