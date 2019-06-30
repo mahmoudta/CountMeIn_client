@@ -19,9 +19,8 @@ class UpComing extends Component {
 									<tr>
 										<th>Customer</th>
 										<th>Services</th>
-										<th>starts</th>
+										<th>time</th>
 										<th>status</th>
-										<th>Actions</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -35,15 +34,23 @@ class UpComing extends Component {
 													})}
 												</td>
 												<td>
-													{moment(appointment.time.date)
-														.set({
-															hour   : appointment.time.start._hour,
-															minute : appointment.time.start._minute
-														})
-														.fromNow()}
+													{appointment.status === 'inProgress' ? (
+														`ENDS ${moment(appointment.time.date)
+															.set({
+																hour   : appointment.time.end._hour,
+																minute : appointment.time.end._minute
+															})
+															.fromNow()}`
+													) : (
+														`STARTS ${moment(appointment.time.date)
+															.set({
+																hour   : appointment.time.start._hour,
+																minute : appointment.time.start._minute
+															})
+															.fromNow()}`
+													)}
 												</td>
 												<td>{appointment.status}</td>
-												<td />
 											</tr>
 										);
 									})}

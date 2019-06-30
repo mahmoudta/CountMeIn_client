@@ -5,7 +5,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 import { logout } from '../../actions/authActions';
 
-import { FaSignOutAlt, FaBell } from 'react-icons/fa';
+import { FaSignOutAlt, FaBell, FaBars } from 'react-icons/fa';
 import logo from '../../images/logo.png';
 // import appointmentReducer from '../../reducers/appointmentReducer';
 
@@ -15,12 +15,16 @@ class Header extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			open : false
+			open      : false,
+			navMobile : false
 		};
 		this.renderHeader = this.renderHeader.bind(this);
+		this.openMobileNav = this.openMobileNav.bind(this);
+
 		// this.openDropdown = this.openDropdown.bind(this);
 		// this.closeDropdown = this.closeDropdown.bind(this);
 	}
+
 	// openDropdown = (e) => {
 	// 	e.preventDefault();
 	// 	// const { open } = this.state;
@@ -41,12 +45,25 @@ class Header extends Component {
 		e.preventDefault();
 		this.props.logout();
 	};
+	openMobileNav = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		const { navMobile } = this.state;
+		this.setState({ navMobile: !navMobile });
+	};
 
 	componentDidMount() {}
 	renderHeader = () => {
 		return (
-			<header className="navbar p-0">
+			<header className={`navbar p-0 text-center`}>
 				<div className="container-fluid">
+					<button
+						className="d-block d-md-none navbar-toggler text-white"
+						type="button"
+						onClick={this.openMobileNav}
+					>
+						<FaBars />
+					</button>
 					<div className="header-logo">
 						<NavLink className="navbar-brand" to="/dashboard">
 							<img src={logo} alt="" />
@@ -54,8 +71,8 @@ class Header extends Component {
 					</div>
 
 					<ul className="nav ml-md-auto nav-user">
-						<li className="dropdown">
-							<a role="button" className="dropdown-toggle" data-toggle="dropdown">
+						<li className="dropdown d-none d-lg-block ">
+							<a role="button" className="" data-toggle="dropdown">
 								<FaBell />
 							</a>
 							<ul className="dropdown-menu notifications-menu ">
@@ -84,15 +101,17 @@ class Header extends Component {
 										className="rounded-circle"
 									/>
 								</span>
-								{this.props.user.profile.name.first + this.props.user.profile.name.last}{' '}
-								<b className="caret" />
+								<span className="d-none d-lg-inline-block">
+									{this.props.user.profile.name.first + this.props.user.profile.name.last}
+									<b className="caret" />
+								</span>
 							</a>
 							<ul className="dropdown-menu animated fadeInRight">
 								<li className=" text-white arrow top" />
-								<li className="dropdown-item">
+								{/* <li className="dropdown-item">
 									<a href="#">Settings</a>
-								</li>
-								<li className="dropdown-divider" />
+								</li> */}
+								{/* <li className="dropdown-divider" /> */}
 								<li className="dropdown-item">
 									<Link to="#" onClick={this.logOut}>
 										<FaSignOutAlt /> Log Out
@@ -107,7 +126,12 @@ class Header extends Component {
 	};
 
 	render() {
-		return <div> {this.props.auth.isAuthenticated ? this.renderHeader() : ''}</div>;
+		return (
+			<div className={`${this.state.navMobile ? 'mobileNavOpened' : ''}`}>
+				{' '}
+				{this.props.auth.isAuthenticated ? this.renderHeader() : ''}
+			</div>
+		);
 	}
 }
 Header.propTypes = {

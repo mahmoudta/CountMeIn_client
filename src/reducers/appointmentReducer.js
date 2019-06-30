@@ -7,7 +7,8 @@ import {
 	// NEXT_APPOINTMENT_ALERT,
 	APPOINTMENT_CHECK,
 	GET_REVIEW_BY_BUSINESS,
-	GET_REVIEW_AS_CUSTOMER
+	GET_REVIEW_AS_CUSTOMER,
+	GET_REVIEW_BY_APPOINTMENT
 } from '../actions/types';
 const initialState = {
 	appointments       : [],
@@ -15,6 +16,7 @@ const initialState = {
 	ready_appointments : [],
 	upComing           : [],
 	reviews            : [],
+	review             : {},
 	myReview           : [],
 	freeTime           : {},
 	loading            : false
@@ -50,6 +52,12 @@ export default function(state = initialState, action) {
 				...state,
 				upComing : action.payload
 			};
+		case GET_REVIEW_BY_APPOINTMENT:
+			return {
+				...state,
+				review  : action.payload,
+				loading : false
+			};
 		case APPOINTMENT_CHECK:
 			let newUpComing = state.upComing;
 			newUpComing.find((appointment, i) => {
@@ -74,6 +82,11 @@ export default function(state = initialState, action) {
 			return {
 				...state,
 				freeTime : action.payload
+			};
+		case APPOINTMENT_LOADING:
+			return {
+				...state,
+				loading : true
 			};
 		// case NEXT_APPOINTMENT_ALERT:
 		// 	console.log(action.payload.timeout);

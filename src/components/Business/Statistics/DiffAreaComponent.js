@@ -8,10 +8,16 @@ export default class DiffAreaComponent extends Component {
 				width={'100%'}
 				height={'300px'}
 				chartType="AreaChart"
-				loader={<div>Loading Chart</div>}
+				loader={
+					<div className="row justify-content-center align-items-center">
+						<div className="col-2 mx-auto">
+							<img className="img-fluid" src={process.env.PUBLIC_URL + '/loading.gif'} />
+						</div>
+					</div>
+				}
 				data={[ [ '', 'Follow', 'UnFollow' ], ...this.props.data ]}
 				options={{
-					title     : 'Company Performance',
+					// title     : 'Company Performance',
 					hAxis     : {
 						title            : 'Year',
 						titleTextStyle   : { color: '#fff' },

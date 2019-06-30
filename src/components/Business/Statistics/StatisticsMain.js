@@ -24,6 +24,8 @@ class StatisticsMain extends Component {
 		};
 		this.renderPage = this.renderPage.bind(this);
 		this.changePage = this.changePage.bind(this);
+		this.printRange = this.printRange.bind(this);
+		this.changeTimeRange = this.changeTimeRange.bind(this);
 	}
 	componentDidMount() {
 		this.props.getSumarryPage(this.props.user.business_id, this.state.range);
@@ -50,18 +52,27 @@ class StatisticsMain extends Component {
 		}
 		this.setState({ nav, title });
 	};
+	printRange = () => {
+		const { range } = this.state;
+		return `${moment(new Date()).subtract(range, 'days').format('DD MMM')} - ${moment(new Date())
+			.subtract(1, 'days')
+			.format('DD MMM')} `;
+	};
+	changeTimeRange = (e) => {
+		this.setState({ range: Number(e.target.value) });
+	};
 	renderPage = () => {
 		const { nav } = this.state;
 		switch (nav) {
 			case 'appointments':
-				return <AppointmentsStatsMain />;
+				return <AppointmentsStatsMain printRange={this.printRange} />;
 			case 'followers':
-				return <FollowersStatsMain />;
+				return <FollowersStatsMain printRange={this.printRange} />;
 			case 'services':
-				return <ServicesStatsMain />;
+				return <ServicesStatsMain printRange={this.printRange} />;
 
 			default:
-				return <Overview />;
+				return <Overview printRange={this.printRange} />;
 		}
 	};
 
@@ -103,7 +114,6 @@ class StatisticsMain extends Component {
 								className={`nav-link text-uppercase  ${this.state.nav === 'followers' ? 'active' : ''}`}
 								onClick={(e) => {
 									e.preventDefault();
-
 									this.changePage('followers');
 								}}
 							>
@@ -125,19 +135,27 @@ class StatisticsMain extends Component {
 					</ul>
 					<div className="row d-flex bg-white p-3 align-items-baseline ">
 						<h6 className=" mt-3 text-uppercase">{this.state.title}</h6>
-						<form action="">
-							<select className="form-control form-control-sm mx-4" name="range">
-								<option defaultChecked>last 7 days</option>
-								<option>last 28 days</option>
-							</select>
-						</form>
+						{/* {this.state.nav !== 'services' && (
+							<form action="">
+								<select
+									className="form-control form-control-sm mx-4"
+									name="range"
+									onClick={this.changeTimeRange}
+								>
+									<option defaultChecked value="7">
+										last 7 days
+									</option>
+									<option value="28">last 28 days</option>
+								</select>
+							</form>
+						)} */}
 					</div>
 					<div className="row bg-white border-top border-bottom">
 						<div className="col-lg-7 py-2">
-							<small className="d-block font-weight-bold">{`${moment().format('DD MMM')}`}</small>
+							<small className="d-block font-weight-bold">{this.printRange()}</small>
 							<small className="text-muted">
 								<strong>Note:</strong> Does not include today's data. Insights activity is reported in
-								the Pacific time zone. Ads activity is reported in the time zone of your ad account.
+								the Pacific time zone.
 							</small>
 						</div>
 					</div>
@@ -156,7 +174,10 @@ StatisticsMain.propTypes = {
 	getFollowersStats   : PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	user : state.auth.user
+	user    : state.auth.user,
+	global  : state.statistics.global,
+	loading : state.statistics.loading,
+	global  : PropTypes.object.isRequired
 });
 
 export default connect(mapStatetoProps, { getSumarryPage, getAppointmentStats, getServicesStats, getFollowersStats })(

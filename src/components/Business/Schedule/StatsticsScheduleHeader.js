@@ -35,21 +35,27 @@ class StatsticsScheduleHeader extends Component {
 												</small>
 											</div>
 											<div className="h5 mb-0 font-weight-bold text-gray-800">
-												{header.total_time / 60} Hrs
+												{header.total_time ? (
+													<span>{header.total_time / 60}Hrs</span>
+												) : (
+													<small class="text-muted">insufficient data to show.</small>
+												)}
 											</div>
 										</div>
 									</div>
 								</div>
-								<div className="card-footer bg-white">
-									<div
-										className={`h6 mb-0 font-weight-light ${valWork > 0
-											? 'value-up'
-											: 'value-down'}`}
-									>
-										{(valWork = calculatePercentage(header.total_time, header.l_total_time))}%
-										<small className="text-muted"> compared to previous week</small>
+								{header.total_time && (
+									<div className="card-footer bg-white">
+										<div
+											className={`h6 mb-0 font-weight-light ${valWork > 0
+												? 'value-up'
+												: 'value-down'}`}
+										>
+											{(valWork = calculatePercentage(header.total_time, header.l_total_time))}%
+											<small className="text-muted"> compared to previous week</small>
+										</div>
 									</div>
-								</div>
+								)}
 							</div>
 						</div>
 
@@ -70,26 +76,32 @@ class StatsticsScheduleHeader extends Component {
 												</small>
 											</div>
 											<div className="h5 mb-0 font-weight-bold text-gray-800">
-												{header.done_appointments}
+												{header.done_appointments ? (
+													<span>{header.done_appointments}</span>
+												) : (
+													<small class="text-muted">insufficient data to show.</small>
+												)}
 											</div>
 										</div>
 									</div>
 								</div>
-								<div className="card-footer bg-white">
-									<div
-										className={`h6 mb-0 font-weight-light ${valApp > 0
-											? 'value-up'
-											: 'value-down'}`}
-									>
-										{
-											(valApp = calculatePercentage(
-												header.done_appointments,
-												header.l_done_appointments
-											))
-										}%
-										<small className="text-muted"> compared to previous week</small>
+								{header.done_appointments && (
+									<div className="card-footer bg-white">
+										<div
+											className={`h6 mb-0 font-weight-light ${valApp > 0
+												? 'value-up'
+												: 'value-down'}`}
+										>
+											{
+												(valApp = calculatePercentage(
+													header.done_appointments,
+													header.l_done_appointments
+												))
+											}%
+											<small className="text-muted"> compared to previous week</small>
+										</div>
 									</div>
-								</div>
+								)}
 							</div>
 						</div>
 
@@ -110,26 +122,32 @@ class StatsticsScheduleHeader extends Component {
 												</small>
 											</div>
 											<div className="h5 mb-0 font-weight-bold text-gray-800">
-												{header.total_earnings} NIS
+												{header.total_earnings ? (
+													<span>{header.total_earnings} NIS</span>
+												) : (
+													<small class="text-muted">insufficient data to show.</small>
+												)}
 											</div>
 										</div>
 									</div>
 								</div>
-								<div className="card-footer bg-white">
-									<div
-										className={`h6 mb-0 font-weight-light ${valEarning > 0
-											? 'value-up'
-											: 'value-down'}`}
-									>
-										{
-											(valEarning = calculatePercentage(
-												header.total_earnings,
-												header.l_total_earnings
-											))
-										}%
-										<small className="text-muted"> compared to previous week</small>
+								{header.total_earnings && (
+									<div className="card-footer bg-white">
+										<div
+											className={`h6 mb-0 font-weight-light ${valEarning > 0
+												? 'value-up'
+												: 'value-down'}`}
+										>
+											{
+												(valEarning = calculatePercentage(
+													header.total_earnings,
+													header.l_total_earnings
+												))
+											}%
+											<small className="text-muted"> compared to previous week</small>
+										</div>
 									</div>
-								</div>
+								)}
 							</div>
 						</div>
 
