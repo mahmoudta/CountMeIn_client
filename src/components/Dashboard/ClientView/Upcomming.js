@@ -312,9 +312,36 @@ class Upcomming extends React.Component {
         appointmentId: this.state.selectedAppointment[1],
       })
       .then(() => {
-
+        this.setState({
+          alert: (
+            <SweetAlert
+              success
+              style={{ display: 'block', marginTop: '-100px' }}
+              title="Successfuly Updated"
+              onConfirm={() => this.hideAlert()}
+              onCancel={() => this.hideAlert()}
+              confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
+            >
+              Your appointment has been updated, dont worry about the business we will notify them for you
+      </SweetAlert>
+          )
+        })
       })
       .catch(err => {
+        this.setState({
+          alert: (
+            <SweetAlert
+              danger
+              style={{ display: 'block', marginTop: '-100px' }}
+              title="Error"
+              onConfirm={() => this.hideAlert()}
+              onCancel={() => this.hideAlert()}
+              confirmBtnCssClass={this.props.classes.button + ' ' + this.props.classes.success}
+            >
+              Error occured
+            </SweetAlert>
+          )
+        });
         console.log(err);
       });
 
