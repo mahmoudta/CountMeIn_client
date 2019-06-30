@@ -23,10 +23,6 @@ export const getStatisticsHeader = (business_id) => (dispatch) => {
 			});
 		})
 		.catch((err) => {
-			dispatch({
-				type    : SET_FLASH_MESSAGE,
-				message : { type: 'error', text: err.response.data.error }
-			});
 			return dispatch({
 				type    : GET_STATISTICS_HEADER,
 				payload : {}

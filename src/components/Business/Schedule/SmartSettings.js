@@ -113,7 +113,7 @@ class SmartSettings extends Component {
 				<div className="container">
 					<div className="row">
 						{!this.props.loading ? (
-							<div className="col-10 card border-0 mx-auto rounded bg-white shadow px-md-0 pb-3">
+							<div className="col-12 card border-0 mx-auto rounded bg-white shadow px-md-0 pb-3">
 								<div className="card-header border-0 pt-5">
 									<h2 className="d-block w-100 text-center">Advanced Scheduling Settings</h2>
 								</div>

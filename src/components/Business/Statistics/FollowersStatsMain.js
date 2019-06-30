@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import isEmpty from 'lodash/isEmpty';
+import NoData from './NoData';
 
 import DiffAreaComponent from './DiffAreaComponent';
 
@@ -9,7 +11,7 @@ class FollowersStatsMain extends Component {
 	render() {
 		return (
 			<div>
-				{!this.props.loading ? (
+				{!this.props.loading ? !isEmpty(this.props.followersStats) ? (
 					<div className="row">
 						<div className="col-12 col-lg-10 bg-white">
 							<DiffAreaComponent
@@ -22,14 +24,18 @@ class FollowersStatsMain extends Component {
 								})}
 							/>
 						</div>
-						<div className="d-none d-lg-block col-lg-2 border-left bg-white">
+						<div className="d-none d-lg-block col-lg-2 border-left bg-white py-5">
 							<p>
-								Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus necessitatibus dicta,
-								doloremque accusantium quod eius, corrupti placeat nisi tempore quam sunt sequi?
-								Exercitationem fuga tenetur quae ipsam amet magni tempore.
+								<strong className="w-100 d-block">Total Followers:</strong>
+								<span>{this.props.followersStats.pop().followers}</span>
 							</p>
+							<small className="text-muted">
+								<strong>Compare your Follows & UnFollows actions over this period.</strong>
+							</small>
 						</div>
 					</div>
+				) : (
+					<NoData />
 				) : (
 					<div className="row justofy-content-center bg-white">
 						<div className="col-2 mx-auto my-4">

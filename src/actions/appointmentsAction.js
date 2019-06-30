@@ -14,12 +14,19 @@ import {
 	GET_REVIEW_BY_BUSINESS,
 	// NEXT_APPOINTMENT_ALERT,
 	APPOINTMENT_CHECK,
-	GET_REVIEW_AS_CUSTOMER
+	GET_REVIEW_AS_CUSTOMER,
+	GET_REVIEW_BY_APPOINTMENT
 } from './types';
 
 export const getBusinessAppointmentsByDate = (business_id, date) => (dispatch) => {
 	dispatch(setAppointmentLoading());
+	dispatch(clearFreeTime());
+
 	// dispatch(getTodaysReadyAppointment(business_id));
+	let today = moment(new Date()).format('l');
+	let selectedDate = moment(date).format('l');
+	if (today === selectedDate) dispatch(getUpcomingAppointments(business_id));
+	console.log(date);
 	axios
 		.get(`${API}/appointments/getBusinessAppointmentsByDate/${business_id}/${date}`)
 		.then((result) => {
@@ -37,6 +44,7 @@ export const getBusinessAppointmentsByDate = (business_id, date) => (dispatch) =
 };
 
 export const getUpcomingAppointments = (business_id) => (dispatch) => {
+	dispatch(clearFreeTime());
 	axios
 		.get(`${API}/appointments/getTodayUpcomingAppointments/${business_id}`)
 		.then((result) => {
@@ -51,7 +59,7 @@ export const getUpcomingAppointments = (business_id) => (dispatch) => {
 					return e.status === 'ready';
 				});
 				if (!isEmpty(filtered)) {
-					new Date(time.setHours(filtered[0].time.start._hour, filtered[0].time.start._minute, 0, 0));
+					new Date(time.setHours(filtered[0].time.start._hour, filtered[0].time.start._minute, 0, 0, 0));
 
 					setTimeout(() => {
 						dispatch(
@@ -75,6 +83,8 @@ export const getUpcomingAppointments = (business_id) => (dispatch) => {
 		});
 };
 export const appointmentCheck = (data) => (dispatch) => {
+	dispatch(clearFreeTime());
+
 	return axios
 		.put(`${API}/appointments/appointmentCheck`, data)
 		.then((result) => {
@@ -103,16 +113,14 @@ export const setBusinessReview = (data) => (dispatch) => {
 	axios
 		.put(`${API}/appointments/setBusinessReview`, data)
 		.then((result) => {
-			if (page === 1) {
-				dispatch({
-					type    : SET_FLASH_MESSAGE,
-					message : {
-						type   : 'success',
-						text   : `Your Review successfully saved`,
-						action : { next: 'REDIRECT_TO_MYSCHEDULE' }
-					}
-				});
-			}
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : {
+					type   : 'success',
+					text   : `Your Review successfully saved`,
+					action : { next: page === 1 ? 'REDIRECT_TO_MYSCHEDULE' : 'REDIRECT_TO_DASHBOARD' }
+				}
+			});
 		})
 		.catch((err) => {
 			dispatch({
@@ -181,6 +189,12 @@ export const getFreeTime = (data) => (dispatch) => {
 			});
 		});
 };
+export const clearFreeTime = (data) => (dispatch) => {
+	dispatch({
+		type    : GET_FREE_TIME_SUGGESTION,
+		payload : {}
+	});
+};
 
 export const businessNewAppointment = (data) => (dispatch) => {
 	axios
@@ -203,7 +217,32 @@ export const businessNewAppointment = (data) => (dispatch) => {
 		});
 };
 
-export const setAppointmentLoading = () => (dispatch) => {
+export const getReviewByAppointment = (appointment_id) => (dispatch) => {
+	dispatch(setAppointmentLoading());
+	axios
+		.get(`${API}/appointments/business/getReviewByappointment/${appointment_id}`)
+		.then((result) => {
+			dispatch({
+				type    : GET_REVIEW_BY_APPOINTMENT,
+				payload : result.data.review
+			});
+		})
+		.catch((err) => {
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : {
+					type   : 'error',
+					text   : isEmpty(err.response.data.error) ? err.response.data.error : 'some Error accourd',
+					action : { next: 'REDIRECT_TO_DASHBOARD' }
+				}
+			});
+			dispatch({
+				type    : GET_REVIEW_BY_APPOINTMENT,
+				payload : {}
+			});
+		});
+};
+export const setAppointmentLoading = () => {
 	return {
 		type : APPOINTMENT_LOADING
 	};

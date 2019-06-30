@@ -71,6 +71,15 @@
 	transition: all 0.5s ease;
 }
 
+@media only screen and (max-width: 768px) {
+	.timeSlot-group {
+		min-width: 50px;
+	}
+	.appointment-event {
+		left: 65px;
+	}
+}
+
 /* appointment status style */
 
 .ready {

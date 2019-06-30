@@ -69,6 +69,8 @@ class AppointmentsStatsMain extends Component {
 						</div>
 						<div className="col-12 py-3 my-3">
 							<div className="row col-12 col-lg-4 bg-white shadow-sm">
+								<h6 className="py-3 text-muted w-100">Appointments by time of day</h6>
+								<small className="text-muted">The number of appointments per hours of the day. </small>
 								<HeatmapChart data={this.props.traffic} />
 							</div>
 						</div>

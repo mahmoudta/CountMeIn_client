@@ -14,7 +14,8 @@ import { getCurrentDate } from '../../../utils/date';
 import {
 	getBusinessAppointmentsByDate,
 	getFreeTime,
-	businessNewAppointment
+	businessNewAppointment,
+	clearFreeTime
 } from '../../../actions/appointmentsAction';
 import { getBusinessByOwner } from '../../../actions/businessActions';
 import { getStatisticsHeader } from '../../../actions/StatisticsActions';
@@ -96,13 +97,16 @@ class Schedule extends Component {
 		};
 		this.props.businessNewAppointment(data);
 	}
+	componentWillUnmount() {
+		this.props.clearFreeTime();
+	}
 	render() {
 		const { myBusiness } = this.props;
 
 		return (
 			<section key={'mainSchedule'} className="my-5">
-				<StatsticsScheduleHeader />
 				<div className="container">
+					<StatsticsScheduleHeader />
 					<div className="row">
 						<div className="col-12 col-lg-8">
 							<UpComing />
@@ -205,7 +209,8 @@ Schedule.propTypes = {
 	businessNewAppointment        : PropTypes.func.isRequired,
 	// services: PropTypes.array.isRequired,
 	getBusinessAppointmentsByDate : PropTypes.func.isRequired,
-	getStatisticsHeader           : PropTypes.func.isRequired
+	getStatisticsHeader           : PropTypes.func.isRequired,
+	clearFreeTime                 : PropTypes.func.isRequired
 };
 Schedule.contextTypes = {
 	router : PropTypes.object.isRequired
@@ -221,5 +226,6 @@ export default connect(mapStatetoProps, {
 	getBusinessByOwner,
 	getFreeTime,
 	businessNewAppointment,
-	getStatisticsHeader
+	getStatisticsHeader,
+	clearFreeTime
 })(Schedule);

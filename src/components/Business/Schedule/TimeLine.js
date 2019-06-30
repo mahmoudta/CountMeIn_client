@@ -10,6 +10,7 @@ import { getBusinessTime, getAppointmentTime, objectTimeToString } from '../../.
 import { appointmentCheck } from '../../../actions/appointmentsAction';
 import AppointmentModal from './AppointmentModal';
 import moment from 'moment';
+import Loading from '../../globalComponents/Loading';
 import { GiConsoleController } from 'react-icons/gi';
 
 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -181,81 +182,78 @@ class TimeLine extends Component {
 					appointmentCheck={this.appointmentCheck}
 				/>
 				<div className="container">
-					<div className="col-12 bg-white shadow-sm calendar-content pt-md-3">
-						{/* <div className="col-12 claendar-Tools clear-fix my-2">
-							<Link
-								to="/business/mySchedule/new-appointment"
-								props={this.props.handleNewAppointmentForm}
-								className="btn btn-primary btn-sm"
-							>
-								New Appointment
-							</Link>
-						</div> */}
-						<div className="col-12 calendar-header">
-							<div className="row">
-								<div className="col-12 col-md-4 mx-auto">
-									<form>
-										<div className="form-group">
-											<label
-												className="w-100 text-capitalize text-center text-secondary h2 font-weight-light"
-												htmlFor="date"
-											>
-												{new Date(date).toLocaleDateString('en-US', options)}
-											</label>
-											<input
-												className="w-md-75 mx-md-auto form-control form-control-sm"
-												type="date"
-												name="date"
-												value={date}
-												onChange={(e) => this.props.changeDate(e)}
-											/>
+					{!this.props.loading ? (
+						<div className="row">
+							<div className="col-12 bg-white shadow-sm calendar-content pt-md-3">
+								<div className="col-12 calendar-header">
+									<div className="row">
+										<div className="col-12 col-md-4 mx-auto">
+											<form>
+												<div className="form-group">
+													<label
+														className="w-100 text-capitalize text-center text-secondary h2 font-weight-light"
+														htmlFor="date"
+													>
+														{new Date(date).toLocaleDateString('en-US', options)}
+													</label>
+													<input
+														className="w-md-75 mx-md-auto form-control form-control-sm"
+														type="date"
+														name="date"
+														value={date}
+														onChange={(e) => this.props.changeDate(e)}
+													/>
+												</div>
+											</form>
 										</div>
-									</form>
+									</div>
+								</div>
+								<div className="col-12 calendar-body border-top mt-3 p-md-0">
+									<div className="calendar-content ">
+										{!isEmpty(freeTime) ? (
+											freeTime.Free.map((suggest) =>
+												this.eachAppointmentSuggest(suggest, startTime, myBusiness.break_time)
+											)
+										) : (
+											''
+										)}
+										{!appointment.loading ? (
+											appointment.appointments.map((appointment) =>
+												this.eachAppointment(appointment, startTime, myBusiness.break_time)
+											)
+										) : (
+											<div
+												className="spinner-border text-primary"
+												style={{ height: '20px', width: '20px' }}
+												role="status"
+											>
+												<span className="sr-only">Loading...</span>
+											</div>
+										)}
+
+										{!isEmpty(times) ? (
+											times.map((time) => {
+												return (
+													<div key={time} className="d-flex">
+														<div className="calendar-time ">
+															<p key={`time:${time}`} className="timeSlot-group m-0">
+																{time}
+															</p>
+														</div>
+														<div className="event-space flex-grow-1 border-bottom" />
+													</div>
+												);
+											})
+										) : (
+											''
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
-						<div className="col-12 calendar-body border-top mt-3 p-md-0">
-							<div className="calendar-content ">
-								{!isEmpty(freeTime) ? (
-									freeTime.Free.map((suggest) =>
-										this.eachAppointmentSuggest(suggest, startTime, myBusiness.break_time)
-									)
-								) : (
-									''
-								)}
-								{!appointment.loading ? (
-									appointment.appointments.map((appointment) =>
-										this.eachAppointment(appointment, startTime, myBusiness.break_time)
-									)
-								) : (
-									<div
-										className="spinner-border text-primary"
-										style={{ height: '20px', width: '20px' }}
-										role="status"
-									>
-										<span className="sr-only">Loading...</span>
-									</div>
-								)}
-
-								{!isEmpty(times) ? (
-									times.map((time) => {
-										return (
-											<div key={time} className="d-flex">
-												<div className="calendar-time ">
-													<p key={`time:${time}`} className="timeSlot-group m-0">
-														{time}
-													</p>
-												</div>
-												<div className="event-space flex-grow-1 border-bottom" />
-											</div>
-										);
-									})
-								) : (
-									''
-								)}
-							</div>
-						</div>
-					</div>
+					) : (
+						<Loading />
+					)}
 				</div>
 			</section>
 		);
@@ -278,7 +276,8 @@ const mapStatetoProps = (state) => ({
 	auth        : state.auth,
 	myBusiness  : state.business.myBusiness,
 	appointment : state.appointment,
-	freeTime    : state.appointment.freeTime
+	freeTime    : state.appointment.freeTime,
+	loading     : state.appointment.loading
 
 	// customers: state.business.customers,
 	// services: state.business.businessServices
