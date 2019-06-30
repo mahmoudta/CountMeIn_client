@@ -46,7 +46,8 @@ export default class BusinessListContainer extends Component {
 		const PrintIt = this.state.fallowedArr.map((i, m) => {
 			return <BusinessList key={i} business={i} loading={this.Loading} getData={this.getData} />;
 		});
-		return (<GridContainer>{(this.state.loading) ? ' ' : PrintIt}
+		return (<GridContainer>
+			{(this.state.loading) ? ' ' : PrintIt}
 		</GridContainer>);
 	}
 }
