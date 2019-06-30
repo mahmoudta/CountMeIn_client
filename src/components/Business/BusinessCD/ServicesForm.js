@@ -17,16 +17,18 @@ class ServicesForm extends Component {
 		if (!isEmpty(categories)) {
 			categoriesOptions = categories
 				.map((category) => {
-					return { label: category.name, value: category._id, services: category.services };
+					return {
+						label    : category.name,
+						value    : category._id,
+						services : category.services.map((service) => {
+							return { value: service._id, label: service.title, time: service.time, cost: service.cost };
+						})
+					};
 				})
 				.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
-
-			servicesOptions = categoriesOptions.map((category) => {
-				return category.services
-					.map((service) => {
-						return { value: service._id, label: service.title, time: service.time, cost: service.cost };
-					}, [])
-					.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
+			console.log(values.cat);
+			servicesOptions = values.categories.map((category) => {
+				return category.services.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
 			});
 		}
 

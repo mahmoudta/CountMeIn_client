@@ -257,10 +257,8 @@ class Upcomming extends React.Component {
                   <Grid container justify="center"><Success>Time Needed:{sumHours}:{sumMinutes}</Success> </Grid> :
                   (sumTime < this.state.Allowedtime) ?
                     <Grid container justify="center"> <Danger>Time Needed:{sumHours}:{sumMinutes}</Danger>
-                      <Warning>We dont have enough time to serve these services ,<Success>fortunately you can come {this.state.hoursBefore}hours and
-                       {this.state.minutesBefore} Minutes earlier  <br /> Or rescudule {ChangeTime}
-                        <Button color="success">{this.state.FreeTimeBefore - this.state.oldNeededTime} Minutes
-                        earlier  </Button></Success></Warning> </Grid> :
+                      <Warning>We dont have enough time to serve these services ,<Success>fortunately you can rescudule {ChangeTime}
+                      </Success></Warning> </Grid> :
                     <Warning>Unfortunately we dont have time , would yout like to rescudule?<br /> {ChangeTime} </Warning>}
 
 
@@ -601,12 +599,16 @@ class Upcomming extends React.Component {
     //console.log(this.props.Id);
     const { classes } = this.props;
     //console.log(this.state.tableContent);
+    if (isEmpty(this.state.tableContent)) {
+      return <Loading></Loading>
+    }
+
     return (
       <div>
         {this.state.alert}
         <GridContainer>
           <GridItem xs={12}>
-            <Card>
+            <Card >
               <CardHeader color="success" icon>
                 <CardIcon color="success">
                   <Assignment />

@@ -185,15 +185,6 @@ class TimeLine extends Component {
 					{!this.props.loading ? (
 						<div className="row">
 							<div className="col-12 bg-white shadow-sm calendar-content pt-md-3">
-								{/* <div className="col-12 claendar-Tools clear-fix my-2">
-							<Link
-								to="/business/mySchedule/new-appointment"
-								props={this.props.handleNewAppointmentForm}
-								className="btn btn-primary btn-sm"
-							>
-								New Appointment
-							</Link>
-						</div> */}
 								<div className="col-12 calendar-header">
 									<div className="row">
 										<div className="col-12 col-md-4 mx-auto">

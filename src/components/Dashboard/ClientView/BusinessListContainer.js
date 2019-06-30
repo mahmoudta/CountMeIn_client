@@ -3,6 +3,7 @@ import BusinessList from './BusinessList';
 import axios from 'axios';
 import { API } from '../../../consts';
 import GridContainer from '../../Interface/Grid/GridContainer.jsx';
+import Loading from '../../globalComponents/LoadingSmall';
 
 export default class BusinessListContainer extends Component {
 	constructor(props) {
@@ -44,9 +45,14 @@ export default class BusinessListContainer extends Component {
 
 	render() {
 		const PrintIt = this.state.fallowedArr.map((i, m) => {
-			return <BusinessList key={i} business={i} loading={this.Loading} getData={this.getData} />;
+			return <BusinessList key={m} business={i} loading={this.Loading} getData={this.getData} />;
 		});
-		return (<GridContainer>{(this.state.loading) ? ' ' : PrintIt}
+		return (<GridContainer style={{
+			maxHeight: '175px',
+			overflowX: 'scroll',
+			overflowY: 'none'
+		}}>
+			{(this.state.loading) ? <Loading /> : PrintIt}
 		</GridContainer>);
 	}
 }

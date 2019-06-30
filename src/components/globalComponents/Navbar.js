@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 // import './global.css';
 import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } from 'react-icons/fa';
 
-import { MdDashboard } from 'react-icons/md';
+import { MdDashboard, MdSearch } from 'react-icons/md';
 import { FaBell, FaChartBar, FaStickyNote, FaBars } from 'react-icons/fa';
 import { GiBrain } from 'react-icons/gi';
 
@@ -54,6 +54,13 @@ class Navbar extends Component {
 								<MdDashboard className="icon" />
 
 								<span>Dashboard</span>
+							</NavLink>
+						</li>
+						<li className="">
+							<NavLink to="/Search" activeClassName="active">
+								<MdSearch className="icon" />
+
+								<span>Search</span>
 							</NavLink>
 						</li>
 						<li className="aside-dropdown">

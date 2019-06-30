@@ -35,16 +35,16 @@ class StatsticsScheduleHeader extends Component {
 												</small>
 											</div>
 											<div className="h5 mb-0 font-weight-bold text-gray-800">
-												{header.total_time ? (
+												{header.total_time >= 0 ? (
 													<span>{header.total_time / 60}Hrs</span>
 												) : (
-													<small class="text-muted">insufficient data to show.</small>
+													<small className="text-muted">insufficient data to show.</small>
 												)}
 											</div>
 										</div>
 									</div>
 								</div>
-								{header.total_time && (
+								{header.total_time >= 0 && (
 									<div className="card-footer bg-white">
 										<div
 											className={`h6 mb-0 font-weight-light ${valWork > 0
@@ -76,16 +76,16 @@ class StatsticsScheduleHeader extends Component {
 												</small>
 											</div>
 											<div className="h5 mb-0 font-weight-bold text-gray-800">
-												{header.done_appointments ? (
+												{header.done_appointments >= 0 ? (
 													<span>{header.done_appointments}</span>
 												) : (
-													<small class="text-muted">insufficient data to show.</small>
+													<small className="text-muted">insufficient data to show.</small>
 												)}
 											</div>
 										</div>
 									</div>
 								</div>
-								{header.done_appointments && (
+								{header.done_appointments >= 0 && (
 									<div className="card-footer bg-white">
 										<div
 											className={`h6 mb-0 font-weight-light ${valApp > 0
@@ -122,16 +122,16 @@ class StatsticsScheduleHeader extends Component {
 												</small>
 											</div>
 											<div className="h5 mb-0 font-weight-bold text-gray-800">
-												{header.total_earnings ? (
+												{header.total_earnings >= 0 ? (
 													<span>{header.total_earnings} NIS</span>
 												) : (
-													<small class="text-muted">insufficient data to show.</small>
+													<small className="text-muted">insufficient data to show.</small>
 												)}
 											</div>
 										</div>
 									</div>
 								</div>
-								{header.total_earnings && (
+								{header.total_earnings >= 0 && (
 									<div className="card-footer bg-white">
 										<div
 											className={`h6 mb-0 font-weight-light ${valEarning > 0
@@ -150,22 +150,6 @@ class StatsticsScheduleHeader extends Component {
 								)}
 							</div>
 						</div>
-
-						{/* 
-						<div className="col-12 col-md-6 col-lg-3 mb-md-4">
-							<div className="card border-left-warning shadow py-2">
-								<div className="card-body">
-									<div className="row no-gutters align-items-center">
-										<div className="col mr-2">
-											<div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
-												Earnings (Monthly)
-											</div>
-											<div className="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div> */}
 					</div>
 				</div>
 			</section>

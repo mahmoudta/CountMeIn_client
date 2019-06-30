@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import AddReminder from '@material-ui/icons/AddAlert'
+import AddReminder from '@material-ui/icons/AddAlert';
 import { connect } from 'react-redux';
 
 import {
@@ -28,12 +28,12 @@ class BusinessProfile extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			review_page: 1,
+			review_page   : 1,
 
-			business: false,
-			loading: false,
+			business      : false,
+			loading       : false,
 
-			loadingFollow: false
+			loadingFollow : false
 		};
 		this.showButtons = this.showButtons.bind(this);
 	}
@@ -69,10 +69,9 @@ class BusinessProfile extends Component {
 					{this.state.loading ? (
 						<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
 					) : (
-							'UnFollow'
-						)}
+						'UnFollow'
+					)}
 				</button>
-
 			);
 		}
 		return (
@@ -85,8 +84,8 @@ class BusinessProfile extends Component {
 				{this.state.loading ? (
 					<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
 				) : (
-						'Follow'
-					)}
+					'Follow'
+				)}
 			</button>
 		);
 	};
@@ -99,12 +98,12 @@ class BusinessProfile extends Component {
 
 	unfollowBusiness = (business_id) => {
 		this.props.setFlashMessage({
-			type: 'warning',
-			text: 'Are You sure You want to UnFollow?',
-			action: {
-				CancelButton: true,
-				confirmText: 'UnFollow',
-				next: 'UNFOLLOW_BUSINESS',
+			type   : 'warning',
+			text   : 'Are You sure You want to UnFollow?',
+			action : {
+				CancelButton : true,
+				confirmText  : 'UnFollow',
+				next         : 'UNFOLLOW_BUSINESS',
 				business_id
 			}
 		});
@@ -121,7 +120,7 @@ class BusinessProfile extends Component {
 				rating.rating_count > 0 ? (rating.recommendation_sum / rating.rating_count * 100).toFixed(2) : 0;
 			avg = rating.rating_count > 0 ? rating.rating_sum / rating.rating_count : 0;
 		}
-		// const buttons = this.showButtons();
+		const isOwner = business.owner_id === this.props.auth.user.sub;
 		return (
 			<section className="my-5">
 				{!loading ? (
@@ -147,8 +146,8 @@ class BusinessProfile extends Component {
 																		{avg.toFixed(2)}/<span className="font-weight-normal">5</span>
 																	</h6>
 																) : (
-																		''
-																	)}
+																	''
+																)}
 
 																<StarRatings
 																	rating={avg}
@@ -171,10 +170,10 @@ class BusinessProfile extends Component {
 																				{'% '} recommend
 																			</span>
 																		) : (
-																				''
-																			) : (
-																				'No recommendation'
-																			)}
+																			''
+																		) : (
+																			'No recommendation'
+																		)}
 																	</strong>
 																</h6>
 
@@ -189,7 +188,7 @@ class BusinessProfile extends Component {
 														</div>
 													</div>
 													<div className="col-12 py-3 text-center text-lg-left">
-														{this.props.auth.user.business !== business._id ? (
+														{!isOwner ? (
 															<NavLink
 																to={`/business/new-appointment/${this.props.business
 																	._id}`}
@@ -198,8 +197,8 @@ class BusinessProfile extends Component {
 																Set new Appointment
 															</NavLink>
 														) : (
-																''
-															)}
+															''
+														)}
 													</div>
 												</div>
 											</div>
@@ -241,14 +240,14 @@ class BusinessProfile extends Component {
 																							)}`}</span>
 																						</td>
 																					) : (
-																								<td>
-																									{`${dateToStringTime(
-																										day.from
-																									)} - ${dateToStringTime(
-																										day.until
-																									)}`}
-																								</td>
-																							)}
+																						<td>
+																							{`${dateToStringTime(
+																								day.from
+																							)} - ${dateToStringTime(
+																								day.until
+																							)}`}
+																						</td>
+																					)}
 																				</tr>
 																			);
 																		})}
@@ -256,13 +255,15 @@ class BusinessProfile extends Component {
 																</table>
 															</div>
 															<div className="col-12 border-top pt-2">
-																<NavLink
-																	to={`/business/new-appointment/${this.props.business
-																		._id}`}
-																	className="btn btn-sm btn-primary w-100"
-																>
-																	Set new Appointment
-																</NavLink>
+																{!isOwner && (
+																	<NavLink
+																		to={`/business/new-appointment/${this.props
+																			.business._id}`}
+																		className="btn btn-sm btn-primary w-100"
+																	>
+																		Set new Appointment
+																	</NavLink>
+																)}
 															</div>
 														</div>
 													</div>
@@ -329,29 +330,29 @@ class BusinessProfile extends Component {
 								</section>
 							]
 						) : (
-								<div>no business found</div>
-							)}
+							<div>no business found</div>
+						)}
 					</section>
 				) : (
-						<Loading />
-					)}
+					<Loading />
+				)}
 			</section>
 		);
 	}
 }
 BusinessProfile.propTypes = {
-	auth: PropTypes.object.isRequired,
-	business: PropTypes.object.isRequired,
-	getBusinessById: PropTypes.func.isRequired,
-	followBusiness: PropTypes.func.isRequired,
-	unFollowBusiness: PropTypes.func.isRequired,
-	setFlashMessage: PropTypes.func.isRequired,
-	getReviewsForProfilePage: PropTypes.func.isRequired
+	auth                     : PropTypes.object.isRequired,
+	business                 : PropTypes.object.isRequired,
+	getBusinessById          : PropTypes.func.isRequired,
+	followBusiness           : PropTypes.func.isRequired,
+	unFollowBusiness         : PropTypes.func.isRequired,
+	setFlashMessage          : PropTypes.func.isRequired,
+	getReviewsForProfilePage : PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth,
-	business: state.business.business,
-	loading: state.business.loading
+	auth     : state.auth,
+	business : state.business.business,
+	loading  : state.business.loading
 });
 
 export default connect(mapStatetoProps, {

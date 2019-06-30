@@ -166,7 +166,7 @@ export class StatsPanel extends Component {
 									</Button>
 								</Tooltip>
 							</div>
-							<h4 className={classes.cardTitle}>Waiting Time</h4>
+							<h4 className={classes.cardTitle}>Canceled Appointments</h4>
 							<p className={classes.cardCategory}>This chart shows how much you waited</p>
 						</CardBody>
 						<CardFooter chart>

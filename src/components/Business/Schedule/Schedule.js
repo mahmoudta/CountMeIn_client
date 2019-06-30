@@ -105,8 +105,8 @@ class Schedule extends Component {
 
 		return (
 			<section key={'mainSchedule'} className="my-5">
-				<StatsticsScheduleHeader />
 				<div className="container">
+					<StatsticsScheduleHeader />
 					<div className="row">
 						<div className="col-12 col-lg-8">
 							<UpComing />

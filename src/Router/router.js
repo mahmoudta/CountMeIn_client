@@ -70,11 +70,11 @@ const ReactRouter = () => {
 								<Route excat path="/business/pages/mySchedule" component={requireAuth(Schedule)} />
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
-								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointment)} />
-								<Route
+								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointmentContainer)} />
+								{/* <Route
 									path="/business/new/new-appointment/:id"
 									component={requireAuth(NewAppointmentContainer)}
-								/>
+								/> */}
 								<Route path="/SignUp" component={SignUpForm} />
 								<Route
 									exact
@@ -82,6 +82,8 @@ const ReactRouter = () => {
 									component={requireAuth(ReviewForm)}
 								/>
 								<Route path="/ReviewForm" component={ReviewForm} />
+								<Route path="/Search" component={Businesses} />
+
 
 								{/* Statistics */}
 								<Route path="/insights" component={requireAuth(StatisticsMain)} />
