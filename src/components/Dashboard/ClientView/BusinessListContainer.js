@@ -4,6 +4,8 @@ import axios from 'axios';
 import { API } from '../../../consts';
 import GridContainer from '../../Interface/Grid/GridContainer.jsx';
 import Loading from '../../globalComponents/LoadingSmall';
+import "./hideScroll.css"
+
 
 export default class BusinessListContainer extends Component {
 	constructor(props) {
@@ -47,12 +49,12 @@ export default class BusinessListContainer extends Component {
 		const PrintIt = this.state.fallowedArr.map((i, m) => {
 			return <BusinessList key={m} business={i} loading={this.Loading} getData={this.getData} />;
 		});
-		return (<GridContainer style={{
+		return (<GridContainer className="cont" style={{
 			maxHeight: '175px',
 			overflowX: 'scroll',
 			overflowY: 'none'
 		}}>
 			{(this.state.loading) ? <Loading /> : PrintIt}
-		</GridContainer>);
+		</GridContainer>)
 	}
 }
