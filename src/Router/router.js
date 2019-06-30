@@ -75,7 +75,6 @@ const ReactRouter = () => {
 									path="/business/new/new-appointment/:id"
 									component={requireAuth(NewAppointmentContainer)}
 								/> */}
-								<Route path="/SignUp" component={SignUpForm} />
 								<Route
 									exact
 									path="/sms/CustomerReview/:appointment_id"

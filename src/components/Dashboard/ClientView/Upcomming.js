@@ -63,6 +63,7 @@ class Upcomming extends React.Component {
       tableContent: [],
       alert: null,
       show: false,
+      loading: false,
       Options: [],
       selectedOptions: [],
       Allowedtime: 0,
@@ -510,6 +511,7 @@ class Upcomming extends React.Component {
     //const tableContent = 0;
     const { classes } = this.props;
     const id = this.props.Id;
+    this.setState({ loading: true })
 
     axios.get(`${API}/users/getUpcommingAppointments`).then((response) => {
       //console.log(response.data.QueryRes);
@@ -592,6 +594,7 @@ class Upcomming extends React.Component {
       // 	});
       // });
     });
+    this.setState({ loading: false })
   }
 
   render() {
@@ -599,7 +602,7 @@ class Upcomming extends React.Component {
     //console.log(this.props.Id);
     const { classes } = this.props;
     //console.log(this.state.tableContent);
-    if (isEmpty(this.state.tableContent)) {
+    if (this.state.loading) {
       return <Loading></Loading>
     }
 
