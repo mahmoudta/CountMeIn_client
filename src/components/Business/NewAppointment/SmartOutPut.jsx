@@ -21,12 +21,12 @@ export class SmartOutPut extends Component {
                 alignItems="center"
                 justify="center">
                 {values.Smartdata.smartData.map((smart, m) => {
-                    console.log("smart", smart)
                     if (isEmpty(smart.Free)) { return null }
                     const Content = smart.Free.map((free, i) => {
                         const thisKey = `${m.toString()}${i.toString()}`
                         return (
                             <Button
+                                className="w-100 d-block"
                                 color="CMI"
                                 simple
                                 block
@@ -47,11 +47,14 @@ export class SmartOutPut extends Component {
                     })
                     return (
                         <CustomDropdown
+
                             key={m}
                             buttonText={(new Date(smart.Date) + " ").slice(0, 15)}
                             dropdownList={Content}
                             buttonProps={{
-                                color: "success"
+                                color: "success",
+                                Padding: 0,
+
                             }}
                         />)
                 })}
