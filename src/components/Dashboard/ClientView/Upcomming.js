@@ -601,12 +601,16 @@ class Upcomming extends React.Component {
     //console.log(this.props.Id);
     const { classes } = this.props;
     //console.log(this.state.tableContent);
+    if (isEmpty(this.state.tableContent)) {
+      return <Loading></Loading>
+    }
+
     return (
       <div>
         {this.state.alert}
         <GridContainer>
           <GridItem xs={12}>
-            <Card>
+            <Card >
               <CardHeader color="success" icon>
                 <CardIcon color="success">
                   <Assignment />
