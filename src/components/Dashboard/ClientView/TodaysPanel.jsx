@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import { API } from "../../../consts";
 import Loading from "../../globalComponents/LoadingSmall";
+import "./hideScroll.css"
 
 
 
@@ -45,7 +46,11 @@ export class TodaysPanel extends Component {
         return (
             (PannelStats) ?
 
-                <GridContainer className="d-flex justify-content-between">
+                <GridContainer className="d-flex justify-content-between cont" style={{
+                    maxHeight: '175px',
+                    overflowX: 'auto',
+                    overflowY: 'none'
+                }}>
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-12 col-lg-4 mb-4">

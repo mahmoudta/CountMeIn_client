@@ -303,6 +303,7 @@ class Wizard extends React.Component {
                   {this.props.previousButtonText}
                 </Button>
               ) : null}
+              <br />
             </div>
             <div className={classes.right}>
               {this.state.nextButton ? (
@@ -314,12 +315,14 @@ class Wizard extends React.Component {
                   {this.props.nextButtonText}
                 </Button>
               ) : null}
+              <br />
               {this.state.finishButton ? (
                 null
               ) : null}
             </div>
             <div className={classes.clearfix} />
           </div>
+          <br />
         </Card>
       </div>
     );

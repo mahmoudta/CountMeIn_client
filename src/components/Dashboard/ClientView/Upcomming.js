@@ -676,7 +676,7 @@ class Upcomming extends React.Component {
           </GridItem>
         </GridContainer>
       </div>
-    );
+    )
   }
 }
 
