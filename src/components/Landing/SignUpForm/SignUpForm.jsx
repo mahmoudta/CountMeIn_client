@@ -15,8 +15,7 @@ class WizardView extends React.Component {
             <GridContainer justify="center" className="imgTitle" style={{
                 overflowY: 'scroll',
                 '-webkit-overflow-scrolling': 'touch'
-
-            }}> >
+            }}>
                 <GridItem xs={12} sm={8} style={{
                     overflowY: 'scroll',
                     overflowX: 'none'

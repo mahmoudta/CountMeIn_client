@@ -1,0 +1,9 @@
+.cont {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+    -webkit-overflow-scrolling: touch
+}
+.cont::-webkit-scrollbar { 
+    display: none;  
+    -webkit-overflow-scrolling: touch
+}
