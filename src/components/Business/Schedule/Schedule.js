@@ -31,7 +31,7 @@ class Schedule extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dateNow        : getCurrentDate(),
+			dateNow        : moment().format('YYYY-MM-DD'),
 			date           : '',
 
 			services       : [],

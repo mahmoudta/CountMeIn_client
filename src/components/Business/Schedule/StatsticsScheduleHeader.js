@@ -29,14 +29,14 @@ class StatsticsScheduleHeader extends Component {
 											<div className="text-sm font-weight-bold text-primary text-uppercase mb-1">
 												WORKED HOURS
 												<small className="text-muted w-100 d-block">
-													<span>{moment().subtract(7, 'days').format('DD MMM')}</span>
+													<span>{moment().subtract(8, 'days').format('DD MMM')}</span>
 													<span>{` - `}</span>
 													<span>{moment().subtract(1, 'day').format('DD MMM')}</span>
 												</small>
 											</div>
 											<div className="h5 mb-0 font-weight-bold text-gray-800">
 												{header.total_time >= 0 ? (
-													<span>{header.total_time / 60}Hrs</span>
+													<span>{(header.total_time / 60).toFixed(2)}Hrs</span>
 												) : (
 													<small className="text-muted">insufficient data to show.</small>
 												)}
@@ -47,11 +47,14 @@ class StatsticsScheduleHeader extends Component {
 								{header.total_time >= 0 && (
 									<div className="card-footer bg-white">
 										<div
-											className={`h6 mb-0 font-weight-light ${valWork > 0
+											className={`h6 mb-0 font-weight-light ${(valWork = calculatePercentage(
+												header.total_time,
+												header.l_total_time
+											)) > 0
 												? 'value-up'
 												: 'value-down'}`}
 										>
-											{(valWork = calculatePercentage(header.total_time, header.l_total_time))}%
+											{valWork}%
 											<small className="text-muted"> compared to previous week</small>
 										</div>
 									</div>
@@ -70,7 +73,7 @@ class StatsticsScheduleHeader extends Component {
 											<div className="text-sm font-weight-bold text-success text-uppercase mb-1">
 												DONE APPOINTMENTS
 												<small className="text-muted w-100 d-block">
-													<span>{moment().subtract(7, 'days').format('DD MMM')}</span>
+													<span>{moment().subtract(8, 'days').format('DD MMM')}</span>
 													<span>{` - `}</span>
 													<span>{moment().subtract(1, 'day').format('DD MMM')}</span>
 												</small>
@@ -88,16 +91,14 @@ class StatsticsScheduleHeader extends Component {
 								{header.done_appointments >= 0 && (
 									<div className="card-footer bg-white">
 										<div
-											className={`h6 mb-0 font-weight-light ${valApp > 0
+											className={`h6 mb-0 font-weight-light ${(valApp = calculatePercentage(
+												header.done_appointments,
+												header.l_done_appointments
+											)) > 0
 												? 'value-up'
 												: 'value-down'}`}
 										>
-											{
-												(valApp = calculatePercentage(
-													header.done_appointments,
-													header.l_done_appointments
-												))
-											}%
+											{valApp}%
 											<small className="text-muted"> compared to previous week</small>
 										</div>
 									</div>
@@ -134,16 +135,14 @@ class StatsticsScheduleHeader extends Component {
 								{header.total_earnings >= 0 && (
 									<div className="card-footer bg-white">
 										<div
-											className={`h6 mb-0 font-weight-light ${valEarning > 0
+											className={`h6 mb-0 font-weight-light ${(valEarning = calculatePercentage(
+												header.total_earnings,
+												header.l_total_earnings
+											)) > 0
 												? 'value-up'
 												: 'value-down'}`}
 										>
-											{
-												(valEarning = calculatePercentage(
-													header.total_earnings,
-													header.l_total_earnings
-												))
-											}%
+											{valEarning}%
 											<small className="text-muted"> compared to previous week</small>
 										</div>
 									</div>
