@@ -7,9 +7,6 @@ import { logout } from '../../actions/authActions';
 
 import { FaSignOutAlt, FaBell, FaBars } from 'react-icons/fa';
 import logo from '../../images/logo.png';
-// import appointmentReducer from '../../reducers/appointmentReducer';
-
-// import './global.css';
 
 class Header extends Component {
 	constructor(props) {
@@ -20,26 +17,7 @@ class Header extends Component {
 		};
 		this.renderHeader = this.renderHeader.bind(this);
 		this.openMobileNav = this.openMobileNav.bind(this);
-
-		// this.openDropdown = this.openDropdown.bind(this);
-		// this.closeDropdown = this.closeDropdown.bind(this);
 	}
-
-	// openDropdown = (e) => {
-	// 	e.preventDefault();
-	// 	// const { open } = this.state;
-	// 	this.setState({ open: true }, () => {
-	// 		document.addEventListener('click', this.closeDropdown);
-	// 	});
-	// };
-
-	// closeDropdown = (e) => {
-	// 	e.preventDefault();
-	// 	// const { open } = this.state;
-	// 	this.setState({ open: false }, () => {
-	// 		document.removeEventListener('click', this.closeDropdown);
-	// 	});
-	// };
 
 	logOut = (e) => {
 		e.preventDefault();
@@ -52,7 +30,6 @@ class Header extends Component {
 		this.setState({ navMobile: !navMobile });
 	};
 
-	componentDidMount() {}
 	renderHeader = () => {
 		return (
 			<header className={`navbar p-0 text-center`}>
@@ -87,9 +64,7 @@ class Header extends Component {
 										</li>
 									);
 								})}
-								{/* <li className="dropdown-item">
-									<p className="text-muted w-100 text-center">No notifications</p>
-								</li> */}
+
 							</ul>
 						</li>
 

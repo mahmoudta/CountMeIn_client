@@ -7,7 +7,6 @@ import makeAnimated from 'react-select/lib/animated';
 export class SelectServices extends Component {
     render() {
         const { values } = this.props;
-        console.log("values", values)
         return (
             <div>
                 <Select

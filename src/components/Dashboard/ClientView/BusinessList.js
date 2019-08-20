@@ -24,31 +24,28 @@ class BusinessList extends Component {
 		// this.refresh = this.refresh.bind(this);
 
 		this.state = {
-			business: {
-				_id: null,
-				profile: {
-					name: 'loading'
+			business : {
+				_id     : null,
+				profile : {
+					name : 'loading'
 				}
-			},
+			}
 		};
 	}
 
 	unfollowBusiness = (business_id) => {
-		this.props.loading(true)
+		this.props.loading(true);
 		axios
 			.put(`${API}/business/unfollow`, { business_id: business_id })
 			.then((data) => {
-				this.props.getData()
-				this.props.loading(false)
-
+				this.props.getData();
+				this.props.loading(false);
 			})
 			.catch((err) => {
-				this.props.getData()
-				this.props.loading(false)
-				console.log(err);
+				this.props.getData();
+				this.props.loading(false);
 			});
 	};
-
 
 	render() {
 		const { classes } = this.props;
@@ -75,13 +72,14 @@ class BusinessList extends Component {
 							<Link to={`/business/new-appointment/${businesses._id}`}>
 								<Icon color="disabled">alarm_add</Icon>
 							</Link>
-							<Link to={`#`} onClick={(e) => {
-								e.preventDefault();
-								this.unfollowBusiness(businesses._id)
-							}}>
-								<Icon color="disabled" >
-									person_add_disabled
-								</Icon>
+							<Link
+								to={`#`}
+								onClick={(e) => {
+									e.preventDefault();
+									this.unfollowBusiness(businesses._id);
+								}}
+							>
+								<Icon color="disabled">person_add_disabled</Icon>
 							</Link>
 						</div>
 					</CardFooter>
@@ -91,6 +89,6 @@ class BusinessList extends Component {
 	}
 }
 BusinessList.propTypes = {
-	classes: PropTypes.object.isRequired
+	classes : PropTypes.object.isRequired
 };
 export default withStyles(dashboardStyle)(BusinessList);

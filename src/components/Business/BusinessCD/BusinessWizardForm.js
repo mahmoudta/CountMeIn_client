@@ -185,9 +185,7 @@ class BusinessWizardForm extends Component {
 					return;
 				}
 			})
-			.catch((err) => {
-				console.log(err);
-			});
+			.catch((err) => {});
 		this.scheduleBuilder();
 	}
 	handleSubmit = async (e) => {

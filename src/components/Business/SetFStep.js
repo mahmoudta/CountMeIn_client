@@ -24,7 +24,6 @@ class SetFStep extends Component {
     //console.log(this.props);
     // console.log(values.onBusiness);
     const empty = isEmpty(values.Options);
-    console.log("Options", values.Options)
     // console.log("empty", values);
     return (
       <section className="mt-5">

@@ -26,7 +26,6 @@ export const getBusinessAppointmentsByDate = (business_id, date) => (dispatch) =
 	let today = moment(new Date()).format('l');
 	let selectedDate = moment(date).format('l');
 	if (today === selectedDate) dispatch(getUpcomingAppointments(business_id));
-	console.log(date);
 	axios
 		.get(`${API}/appointments/getBusinessAppointmentsByDate/${business_id}/${date}`)
 		.then((result) => {
