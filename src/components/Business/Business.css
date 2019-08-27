@@ -1,16 +1,8 @@
-.event {
-	height: 200px;
-	background-color: aquamarine;
-	padding: .5rem;
-	width: 14.2857%;
-}
 .timeLine-header {
 	padding: .5rem 0;
 	border-bottom: 1px solid #eeeeee;
 }
-.timeLine-events {
-	margin-top: 0.5rem;
-}
+
 .timeLine .icon {
 	font-size: 1.125rem;
 	cursor: pointer;
@@ -18,4 +10,74 @@
 }
 .timeLine .icon:hover {
 	filter: opacity(85%);
+}
+
+/* view style */
+
+.title-container {
+	display: flex;
+	justify-items: baseline;
+	flex-direction: row;
+	margin-bottom: 15px;
+}
+
+.title-container .h3 {
+	margin: 0;
+	padding: 0;
+}
+.title-container .title {
+	font-weight: 300;
+}
+
+.title-container button {
+	padding: 0 24px;
+	margin-left: 25px;
+}
+
+/* Wizard style */
+.wizard-steps .nav-item {
+	font-size: 14px;
+}
+.wizard-steps .nav-item.active {
+	font-weight: 700;
+	color: #fff;
+	background-color: #467fcf;
+	/* background-color:  */
+	font-size: 14px;
+}
+.wizard-steps .nav-item > span {
+	line-height: 20px;
+
+	position: relative;
+	display: block;
+	padding: 15px;
+	text-decoration: none;
+}
+.wizard-body {
+	min-height: 340px;
+	padding: 20px 15px;
+}
+.wizard-footer {
+	padding: 0 15px;
+}
+.wizard-footer .btn {
+	min-width: 140px;
+	font-weight: 400;
+	font-size: 12px;
+	padding: 0.5rem;
+	text-transform: uppercase;
+}
+
+.wizard-body label {
+	font-size: 13px;
+	line-height: 1.07143;
+	color: #6b7682;
+	font-weight: 400;
+}
+
+.working-hours {
+	padding-right: 2.1875rem;
+	width: 25rem;
+	height: 1px;
+	position: fixed;
 }

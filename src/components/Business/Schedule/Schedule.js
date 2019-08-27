@@ -1,153 +1,231 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Select from 'react-select';
+import makeAnimated from 'react-select/lib/animated';
 import isEmpty from 'lodash/isEmpty';
 
-import { getBusinessAppointmentsByDate } from '../../../actions/appointmentsAction';
-import { getCurrentDate, getDay, getTimeDifference, getTime, getWorkDay } from '../../../utils/date';
-
-import '../Business.css';
-
-import axios from 'axios';
-import { API } from '../../../consts';
+/* COMPONENTS */
+import StatsticsScheduleHeader from './StatsticsScheduleHeader';
 import TimeLine from './TimeLine';
+
+/* UTILS */
+import { getCurrentDate } from '../../../utils/date';
+import {
+	getBusinessAppointmentsByDate,
+	getFreeTime,
+	businessNewAppointment,
+	clearFreeTime
+} from '../../../actions/appointmentsAction';
+import { getBusinessByOwner } from '../../../actions/businessActions';
+import { getStatisticsHeader } from '../../../actions/StatisticsActions';
+
+import { FaAngleDown } from 'react-icons/fa';
+import moment from 'moment';
+
+/* STYLES */
+import './Schedule.css';
+import UpComing from './UpComing';
 
 class Schedule extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			authorized: false,
-			loading: false,
-			business_id: '',
-			appointments: [],
-			/* TimeLine */
-			date: '',
-			day: '',
-			working: {}
-		};
-		this.pickDate = this.pickDate.bind(this);
-	}
-	componentDidMount() {
-		const id = this.props.match.params.id;
-		const date = getCurrentDate('-');
-		const day = getDay(date);
+			dateNow        : moment().format('YYYY-MM-DD'),
+			date           : '',
 
-		this.setState({ business_id: id, date, day, loading: true });
-		this.props.getBusinessAppointmentsByDate(id, date).then((res) => {
-			this.setState({ loading: false });
+			services       : [],
+			customer       : '',
+			newAppointment : false
+		};
+		this.changeDate = this.changeDate.bind(this);
+		this.handleSelectChange = this.handleSelectChange.bind(this);
+		this.handleFreeTime = this.handleFreeTime.bind(this);
+		this.newAppointment = this.newAppointment.bind(this);
+	}
+
+	appointmentCheckIn;
+	handleFreeTime(e) {
+		e.preventDefault();
+		const valid = moment().format('YYYY-MM-DD') <= moment(this.state.date).format('YYYY-MM-DD');
+
+		if (!valid) return;
+
+		const services = this.state.services.map((service) => {
+			return service.value;
+		});
+
+		this.props.getFreeTime({
+			business    : this.props.myBusiness._id,
+			services    : services,
+			date_from   : this.state.date,
+			date_until  : this.state.date,
+			customer_id : this.state.customer.value
 		});
 	}
 
-	pickDate = (date) => {
-		console.log(date);
-		this.setState({ date, day: getDay(date) });
-		this.props.getBusinessAppointmentsByDate(this.state.business_id, date);
-	};
+	componentDidMount() {
+		const { dateNow } = this.state;
+		const { user } = this.props.auth;
+		this.props.getBusinessByOwner(user.sub);
+		this.props.getBusinessAppointmentsByDate(user.business_id, dateNow);
+		this.props.getStatisticsHeader(user.business_id);
+		this.setState({ date: dateNow });
+	}
+	handleSelectChange(value, action) {
+		const name = action.name;
 
+		this.setState({ [name]: value });
+	}
+	changeDate(e) {
+		const { name, value } = e.target;
+		const { user } = this.props.auth;
+		const { date } = this.state;
+		if (value !== date) {
+			this.props.getBusinessAppointmentsByDate(user.business_id, value);
+			this.setState({ [name]: value });
+		}
+	}
+	newAppointment(date, _start, _end) {
+		let data = {
+			client_id   : this.state.customer.value,
+			business_id : this.props.myBusiness._id,
+			services    : this.state.services,
+			date,
+			_start,
+			_end
+		};
+		this.props.businessNewAppointment(data);
+	}
+	componentWillUnmount() {
+		this.props.clearFreeTime();
+	}
 	render() {
 		const { myBusiness } = this.props;
-		var opened = true;
-		var working;
-		if (!isEmpty(myBusiness)) {
-			working = getWorkDay(myBusiness.profile.working_hours, this.state.day);
-			if (!isEmpty(working)) {
-				opened = working.opened;
-			} else {
-				opened = false;
-			}
-		}
 
 		return (
-			<section className="my-5">
+			<section key={'mainSchedule'} className="my-5">
 				<div className="container">
-					{!this.state.loading ? (
-						<section>
-							<NavLink to="/business/mySchedule/new-appointment" className="btn btn-sm btn-success">
-								new appointment
-							</NavLink>
-							<TimeLine
-								working={working}
-								date={this.state.date}
-								opened={opened}
-								pickDate={this.pickDate}
-							/>
-						</section>
-					) : (
-						<div className="mx-auto spinner-border" role="status">
-							<span className="sr-only">Loading...</span>
+					<StatsticsScheduleHeader />
+					<div className="row">
+						<div className="col-12 col-lg-8">
+							<UpComing />
 						</div>
-					)}
+
+						<div className="col-12 col-lg-4">
+							<div className="card border-0 shadow-sm">
+								<div className="card-header bg-primary">
+									<h6 className="card-title">New Appointment</h6>
+									<div className="card-options">
+										<button
+											className="btn btn-primary border-0"
+											onClick={() => {
+												this.setState({ newAppointment: !this.state.newAppointment });
+											}}
+										>
+											<FaAngleDown />
+										</button>
+									</div>
+								</div>
+								<div className={`card-body closed ${this.state.newAppointment ? 'opened' : ''} `}>
+									<form>
+										<div className="row">
+											<div className="col-12">
+												<div className="form-group">
+													<label className="form-label">Services</label>
+													<Select
+														options={
+															!isEmpty(myBusiness) ? (
+																myBusiness.services.map((service) => {
+																	return {
+																		value : service.service_id._id,
+																		label : service.service_id.title
+																	};
+																})
+															) : (
+																[]
+															)
+														}
+														name="services"
+														isMulti
+														value={this.state.services}
+														components={makeAnimated()}
+														onChange={this.handleSelectChange}
+													/>
+												</div>
+											</div>
+											<div className="col-12">
+												<div className="form-group">
+													<label className="form-label">Customer</label>
+													<Select
+														options={
+															!isEmpty(myBusiness) ? (
+																myBusiness.customers.map((customer) => {
+																	return {
+																		value : customer.customer_id._id,
+																		label : `${customer.customer_id.profile.name
+																			.first}`
+																	};
+																})
+															) : (
+																[]
+															)
+														}
+														name="customer"
+														value={this.state.customer}
+														components={makeAnimated()}
+														onChange={this.handleSelectChange}
+													/>
+												</div>
+											</div>
+											<div className="col-8 mx-auto col-lg-12">
+												<button className="btn btn-primary w-100" onClick={this.handleFreeTime}>
+													Search free time
+												</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
+				<TimeLine
+					date={this.state.date}
+					changeDate={this.changeDate}
+					newAppointment={this.newAppointment}
+					handleNewAppointmentForm={this.state.handleNewAppointmentForm}
+				/>
 			</section>
 		);
 	}
 }
-Schedule.propTypes = {
-	myBusiness: PropTypes.object.isRequired,
-	customers: PropTypes.array.isRequired,
-	getBusinessAppointmentsByDate: PropTypes.func.isRequired
 
-	// services: PropTypes.array.isRequired
+Schedule.propTypes = {
+	auth                          : PropTypes.object.isRequired,
+	getBusinessByOwner            : PropTypes.func.isRequired,
+	myBusiness                    : PropTypes.object.isRequired,
+	getFreeTime                   : PropTypes.func.isRequired,
+	businessNewAppointment        : PropTypes.func.isRequired,
+	// services: PropTypes.array.isRequired,
+	getBusinessAppointmentsByDate : PropTypes.func.isRequired,
+	getStatisticsHeader           : PropTypes.func.isRequired,
+	clearFreeTime                 : PropTypes.func.isRequired
 };
 Schedule.contextTypes = {
-	router: PropTypes.object.isRequired
+	router : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	auth: state.auth,
-	myBusiness: state.business.myBusiness,
-	customers: state.business.customers
+	auth       : state.auth,
+	myBusiness : state.business.myBusiness
+	// customers: state.business.customers,
 	// services: state.business.businessServices
 });
-export default connect(mapStatetoProps, { getBusinessAppointmentsByDate })(Schedule);
-
-// Garbage
-{
-	/* <div className="container">
-<div className="card">
-	<div className="card-header">
-		<h3 className="card-title">apoointments list</h3>
-		<div className="card-options">
-			<NavLink to="/business/mySchedule/new-appointment" className="btn btn-sm btn-success">
-				new appointment
-			</NavLink>
-		</div>
-	</div>
-	<div className="table-responsive">
-		<table className="table card-table mb-0 table-vcenter text-nowrap listTable">
-			<thead>
-				<tr>
-					<th>date</th>
-					<th>start</th>
-					<th>length</th>
-					<th>user</th>
-				</tr>
-			</thead>
-			<tbody>
-				{this.state.appointments.map((appointment) => {
-					return (
-						<tr key={appointment.date}>
-							<td key={appointment.time.date.slice(0, 10)}>
-								{appointment.time.date.slice(0, 10)}
-							</td>
-							<td key={appointment.time.date.slice(12, 16)}>
-								{appointment.time.date.slice(12, 16) + 'GMT'}
-							</td>
-							<td key={appointment.time.hours + appointment.client_id}>
-								{appointment.time.hours +
-									' hours :' +
-									appointment.time.minutes +
-									' minutes'}
-							</td>
-							<td key={appointment.client_id + appointment.time.minutes}>
-								{appointment.client_id}
-							</td>
-						</tr>
-					);
-				})}
-			</tbody>
-		</table>
-	</div>
-</div>
-</div> */
-}
+export default connect(mapStatetoProps, {
+	getBusinessAppointmentsByDate,
+	getBusinessByOwner,
+	getFreeTime,
+	businessNewAppointment,
+	getStatisticsHeader,
+	clearFreeTime
+})(Schedule);

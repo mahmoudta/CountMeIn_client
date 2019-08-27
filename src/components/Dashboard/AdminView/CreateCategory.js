@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 
-import { getAllCategories, createCategory, addSubCategory } from '../../../actions/categoryActions';
+import { getAllCategories, createCategory, addService } from '../../../actions/categoryActions';
 
 import { FaArrowLeft } from 'react-icons/fa';
 import { FaCheck } from 'react-icons/fa';
@@ -17,71 +17,44 @@ class CreateCategory extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: '',
-			parent_category: '',
-			time: '',
-			show_time: false,
-			loading: false,
-			alert: ''
+			name            : '',
+			parent_category : '',
+			time            : 10,
+			isService       : false,
+			loading         : false,
+			alert           : '',
+			cost            : 0
 		};
 		this.onChange = this.onChange.bind(this);
 		this.formSubmit = this.formSubmit.bind(this);
 	}
-	componentDidMount() {
-		if (isEmpty(this.props.categories)) {
-			this.props.getAllCategories();
-		}
-	}
+	componentDidMount() {}
 	onChange = (e) => {
 		const target = e.target;
-		var { show_time } = this.state;
+		var { isService } = this.state;
 		if (target.name === 'parent_category') {
 			if (!isEmpty(target.value)) {
-				show_time = true;
+				isService = true;
 			} else {
-				show_time = false;
+				isService = false;
 			}
 		}
 
-		this.setState({ [target.name]: target.value, show_time: show_time });
-	};
-
-	Alert = async (redirect, text) => {
-		Swal.fire({
-			title: redirect ? 'Success' : 'Error!',
-			text: text,
-			type: redirect ? 'success' : 'error',
-			focusConfirm: false,
-			confirmButtonText: redirect ? 'done' : 'back',
-			confirmButtonColor: redirect ? '#5eba00' : '#495057'
-		}).then((res) => {
-			if (redirect) this.context.router.history.push('/dashboard');
-		});
+		this.setState({ [target.name]: target.value, isService: isService });
 	};
 
 	formSubmit = (e) => {
 		e.preventDefault();
-		const { show_time, name, time, parent_category } = this.state;
+		const { isService, name, time, parent_category, cost } = this.state;
 		this.setState({ loading: true });
-		if (!show_time) {
-			this.props.createCategory({ name }).then((res) => {
-				const redirect = res.type === 'CREATE_CATEGORY' ? true : false;
-				this.setState({ loading: false });
-				this.Alert(redirect, res.payload);
-			});
+		if (!isService) {
+			this.props.createCategory({ name });
 		} else {
-			this.props.addSubCategory({ parent_category, name, time }).then((res) => {
-				const redirect = res.type === 'CREATE_CATEGORY' ? true : false;
-				this.setState({ loading: false });
-				this.Alert(redirect, res.payload);
-			});
+			this.props.addService({ parent_category, name, time, cost });
 		}
 	};
 
 	render() {
-		if (isEmpty(this.props.categories)) {
-			this.props.getAllCategories();
-		}
 		return (
 			<section className="mt-5">
 				<div className="container">
@@ -90,7 +63,7 @@ class CreateCategory extends Component {
 							<div className="card">
 								<div className="card-header">
 									<h3 className="card-title">
-										new category <span className="text-muted"> OR </span> sub category{' '}
+										new category <span className="text-muted"> AND </span> service
 									</h3>
 								</div>
 								<div className="card-body">
@@ -99,7 +72,7 @@ class CreateCategory extends Component {
 											<div className="col-md-6">
 												<div className="form-group">
 													<label className="form-label">
-														category name
+														{this.state.isService ? 'Service Name' : 'Category Name'}
 														<span className="form-required" />
 													</label>
 													<input
@@ -133,7 +106,7 @@ class CreateCategory extends Component {
 													</select>
 												</div>
 											</div>
-											<div className={this.state.show_time ? 'col-md-6' : 'hide'}>
+											<div className={this.state.isService ? 'col-md-4' : 'hide'}>
 												<div className="form-group">
 													<label className="form-label">
 														time
@@ -154,11 +127,12 @@ class CreateCategory extends Component {
 														</div>
 														<input
 															className="form-control"
+															type="number"
 															name="time"
 															placeholder="Ex: 20"
 															min="10"
 															max="120"
-															required={this.state.show_time}
+															required={this.state.isService}
 															value={this.state.time}
 															onChange={this.onChange}
 														/>
@@ -168,6 +142,34 @@ class CreateCategory extends Component {
 													</div>
 												</div>
 											</div>
+
+											<div className={this.state.isService ? 'col-md-4' : 'hide'}>
+												<div className="form-group">
+													<label className="form-label">cost</label>
+													{/* {!isEmpty(this.state.alert) ? (
+														<div class="alert alert-danger" role="alert">
+															{this.state.alert}
+														</div>
+													) : (
+														''
+													)} */}
+													<div className="input-group mb-2 mr-sm-2">
+														<div className="input-group-prepend">
+															<div className="input-group-text">&#8362;</div>
+														</div>
+														<input
+															className="form-control"
+															type="number"
+															name="cost"
+															placeholder="Ex: 50"
+															required={this.state.isService}
+															value={this.state.cost}
+															onChange={this.onChange}
+														/>
+													</div>
+												</div>
+											</div>
+
 											<hr className="my-4 w-100" />
 											<div className="col-12 clear-fix">
 												{!this.state.loading ? (
@@ -196,15 +198,15 @@ class CreateCategory extends Component {
 }
 
 CreateCategory.propTypes = {
-	categories: PropTypes.array.isRequired,
-	getAllCategories: PropTypes.func.isRequired,
-	createCategory: PropTypes.func.isRequired,
-	addSubCategory: PropTypes.func.isRequired
+	categories       : PropTypes.array.isRequired,
+	getAllCategories : PropTypes.func.isRequired,
+	createCategory   : PropTypes.func.isRequired,
+	addService       : PropTypes.func.isRequired
 };
 CreateCategory.contextTypes = {
-	router: PropTypes.object.isRequired
+	router : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
-	categories: state.category.categories
+	categories : state.category.categories
 });
-export default connect(mapStatetoProps, { getAllCategories, createCategory, addSubCategory })(CreateCategory);
+export default connect(mapStatetoProps, { getAllCategories, createCategory, addService })(CreateCategory);

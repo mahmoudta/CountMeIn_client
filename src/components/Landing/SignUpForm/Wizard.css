@@ -1,0 +1,9 @@
+.imgTitle {
+	height: 100vh;
+	display: flex;
+
+	align-items: center;
+	background: url('http://www.saltshots.com/wp-content/gallery/2017%20Cornwall%20Wave%20Calendar/cornwall-wave-calendar-2017-surf-3.jpg')
+		center no-repeat;
+	background-size: cover;
+}

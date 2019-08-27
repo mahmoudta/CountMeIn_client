@@ -2,15 +2,14 @@ import {
 	CREATE_CATEGORY,
 	CATEGORY_LOADING,
 	GET_ALL_CATEGORIES,
-	CREATE_CATEGORY_ERROR,
-	DELETE_CATEGORY
+	DELETE_CATEGORY,
+	DELETE_SERVICE
 } from '../actions/types';
 
 const initialState = {
-	category: {},
-	categories: [],
-	loading: false,
-	message: {}
+	categories : [],
+	loading    : false,
+	error      : ''
 };
 
 export default function(state = initialState, action) {
@@ -18,32 +17,34 @@ export default function(state = initialState, action) {
 		case CREATE_CATEGORY:
 			return {
 				...state,
-				success: ' category successfully added',
-				loading: false
+				loading : false
 			};
-		case CREATE_CATEGORY_ERROR: {
-			return {
-				...state,
-				error: action.payload,
-				loading: false
-			};
-		}
+
 		case DELETE_CATEGORY: {
-			return {
-				...state,
-				loading: false
-			};
+			return Object.assign({}, state, {
+				categories : [ ...state.categories.filter((category) => category._id !== action.payload._id) ],
+				loading    : false
+			});
+		}
+		case DELETE_SERVICE: {
+			return Object.assign({}, state, {
+				categories : [
+					...state.categories.filter((category) => category._id !== action.payload._id),
+					action.payload
+				],
+				loading    : false
+			});
 		}
 		case GET_ALL_CATEGORIES:
 			return {
 				...state,
-				categories: action.payload,
-				loading: false
+				categories : action.payload,
+				loading    : false
 			};
 		case CATEGORY_LOADING: {
 			return {
 				...state,
-				loading: true
+				loading : action.payload
 			};
 		}
 		default:

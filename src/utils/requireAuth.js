@@ -7,7 +7,7 @@ export default function(ComposedComponent) {
 	class Authenticate extends Component {
 		componentWillMount() {
 			if (!this.props.isAuthenticated) {
-				this.context.router.history.push('/');
+				this.context.router.history.push(`/${this.props.location.search ? this.props.location.search : ''}`);
 			}
 		}
 
@@ -17,22 +17,22 @@ export default function(ComposedComponent) {
 
 		componentWillUpdate(nextProps) {
 			if (!nextProps.isAuthenticated) {
-				this.context.router.history.push('/');
+				this.context.router.history.push(`/${this.props.location.search ? this.props.location.search : ''}`);
 			}
 		}
 	}
 
 	Authenticate.propTypes = {
-		isAuthenticated: PropTypes.bool.isRequired
+		isAuthenticated : PropTypes.bool.isRequired
 	};
 
 	Authenticate.contextTypes = {
-		router: PropTypes.object.isRequired
+		router : PropTypes.object.isRequired
 	};
 
 	function mapStateToProps(state) {
 		return {
-			isAuthenticated: state.auth.isAuthenticated
+			isAuthenticated : state.auth.isAuthenticated
 		};
 	}
 
