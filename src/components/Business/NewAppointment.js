@@ -42,7 +42,6 @@ class NewAppointment extends Component {
 	}
 
 	componentDidMount() {
-		console.log('componentdidmount');
 		const id = this.props.match.params.id;
 		this.props.getBusinessById(id);
 
@@ -51,9 +50,7 @@ class NewAppointment extends Component {
 		const Opt = this.props.business.services.map((service) => {
 			return { label: service.service_id.title, value: service._id, time: service.time, cost: service.cost };
 		});
-		this.setState({ Options: Opt }, () => {
-			console.log(this.state.Options);
-		});
+		this.setState({ Options: Opt }, () => {});
 	}
 
 	// fillServices() {
@@ -120,7 +117,6 @@ class NewAppointment extends Component {
 				});
 			})
 			.catch((err) => {
-				console.log(err);
 				this.props.setFlashMessage({
 					type   : 'error',
 					text   : 'Some error accured , Please try later',
@@ -134,16 +130,7 @@ class NewAppointment extends Component {
 		const timeScope = e.target.getAttribute('timeScope');
 		const { step } = this.state;
 		const { business } = this.props;
-		console.log(
-			'businessId',
-			business._id,
-			'servicesArr',
-			[ this.state.pickedService ],
-			'customerId',
-			this.props.auth.user.sub,
-			'timeScop',
-			Number(timeScope)
-		);
+
 		axios
 			.post(`${API}/algorithms/smart`, {
 				businessId  : business._id,
@@ -153,13 +140,11 @@ class NewAppointment extends Component {
 			})
 			.then((response) => {
 				this.setState({ Smartdata: response.data });
-				console.log(this.state);
 			})
 			.then(() => {
 				this.setState({ step: step + 1 });
 			})
 			.catch((err) => {
-				console.log(err);
 				this.props.setFlashMessage({
 					type   : 'error',
 					text   : 'Some error accured , Please try later',
@@ -180,10 +165,8 @@ class NewAppointment extends Component {
 			})
 			.then((response) => {
 				this.setState({ dates: response.data });
-				console.log(this.state);
 			})
 			.catch((err) => {
-				console.log(err);
 				this.props.setFlashMessage({
 					type   : 'error',
 					text   : 'Some error accured , Please try later',
@@ -197,7 +180,6 @@ class NewAppointment extends Component {
 
 	handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log('set appointment');
 	};
 
 	render() {

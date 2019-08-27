@@ -1,6 +1,6 @@
 module.exports = {
-	// API                 : 'https://count-me-in-prod.herokuapp.com',
-	API                 : 'http://localhost:8080',
+	API                 : 'https://count-me-in-prod.herokuapp.com',
+	// API                 : 'http://localhost:8080',
 	B_IMAGES            : 'https://s3-eu-west-1.amazonaws.com/countmeinfilesnew',
 	S3IMAGESCONFIG      : {
 		bucketName      : 'countmeinfilesnew',

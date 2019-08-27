@@ -40,7 +40,7 @@ class BusinessList extends Component {
 			.catch((err) => {
 				this.props.getData();
 				this.props.loading(false);
-				console.log(err);
+
 			});
 	};
 

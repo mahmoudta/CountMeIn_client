@@ -46,7 +46,6 @@ class TimeLine extends Component {
 			});
 			/* check the difference between check_in time and the real time */
 			let difference = moment.duration(appointment_time.diff(timeNow)).asMinutes();
-			console.log(difference);
 
 			if (difference <= -15) {
 				data['isLate'] = { late: true, minutes: difference };

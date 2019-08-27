@@ -26,7 +26,6 @@ class ServicesForm extends Component {
 					};
 				})
 				.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
-			console.log(values.cat);
 			servicesOptions = values.categories.map((category) => {
 				return category.services.sort((a, b) => (a.label !== b.label ? (a.label < b.label ? -1 : 1) : 0));
 			});
