@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
+import isEmpty from 'lodash.isempty';
 
 import { logout } from '../../actions/authActions';
 
 import { FaSignOutAlt, FaBell, FaBars } from 'react-icons/fa';
 import logo from '../../images/logo.png';
+import { B_IMAGES } from '../../consts';
 // import appointmentReducer from '../../reducers/appointmentReducer';
 
 // import './global.css';
@@ -54,6 +56,9 @@ class Header extends Component {
 
 	componentDidMount() {}
 	renderHeader = () => {
+		const userImg = !isEmpty(this.props.user.profile.imgUrl)
+			? `${B_IMAGES}/${this.props.user.profile.imgUrl}`
+			: `${process.env.PUBLIC_URL}/user.png`;
 		return (
 			<header className={`navbar p-0 text-center`}>
 				<div className="container-fluid">
@@ -96,10 +101,7 @@ class Header extends Component {
 						<li className="dropdown">
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 								<span className="thumb-sm avatar float-left">
-									<img
-										src="https://crm.megatam.net/resource/avatar/download.png"
-										className="rounded-circle"
-									/>
+									<img src={userImg} className="rounded-circle" />
 								</span>
 								<span className="d-none d-lg-inline-block">
 									{this.props.user.profile.name.first + this.props.user.profile.name.last}

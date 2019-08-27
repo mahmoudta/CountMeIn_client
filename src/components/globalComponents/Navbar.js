@@ -8,12 +8,10 @@ import { withRouter } from 'react-router';
 import { FaArrowLeft, FaBriefcase, FaCalendarAlt, FaAddressCard, FaPalette } from 'react-icons/fa';
 
 import { MdDashboard, MdSearch } from 'react-icons/md';
-import { FaBell, FaChartBar, FaStickyNote, FaBars } from 'react-icons/fa';
+import { FaChartBar, FaStickyNote } from 'react-icons/fa';
 import { GiBrain } from 'react-icons/gi';
 
-import isEmpty from 'lodash/isEmpty';
-
-// import { getBusinessByOwner, getBusinessCustomers, getBusinessServices } from '../../actions/businessActions';
+// import isEmpty from 'lodash/isEmpty';
 
 class Navbar extends Component {
 	constructor(props) {
@@ -126,20 +124,24 @@ class Navbar extends Component {
 										</li>
 									]
 								) : (
-									<li className="nav-item text-uppercase text-truncate">
-										<NavLink exact to="/business/pages/create" activeclassname={'active'}>
-											<FaAddressCard className="icon" /> <span>Create</span>
-										</NavLink>
-									</li>
+									!this.props.auth.user.isAdmin && (
+										<li className="nav-item text-uppercase text-truncate">
+											<NavLink exact to="/business/pages/create" activeclassname={'active'}>
+												<FaAddressCard className="icon" /> <span>Create</span>
+											</NavLink>
+										</li>
+									)
 								)}
 							</ul>
 						</li>
-						<li className="">
-							<NavLink exact to="/appointments-review" activeclassname={'active'}>
-								<FaStickyNote className="icon" />
-								<span>Reviews</span>
-							</NavLink>
-						</li>
+						{!this.props.auth.user.isAdmin && (
+							<li className="">
+								<NavLink exact to="/appointments-review" activeclassname={'active'}>
+									<FaStickyNote className="icon" />
+									<span>Reviews</span>
+								</NavLink>
+							</li>
+						)}
 					</ul>
 				</aside>
 				<div className="nav-footer">
@@ -169,12 +171,8 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
 	auth : PropTypes.object.isRequired
-
-	// getBusinessCustomers: PropTypes.func.isRequired,
-	// getBusinessServices: PropTypes.func.isRequired
 };
 const mapStatetoProps = (state) => ({
 	auth : state.auth
-	// myBusiness: state.business.myBusiness
 });
 export default connect(mapStatetoProps, {}, null, { pure: false })(withRouter(Navbar));

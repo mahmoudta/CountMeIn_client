@@ -10,7 +10,6 @@ import StatsticsScheduleHeader from './StatsticsScheduleHeader';
 import TimeLine from './TimeLine';
 
 /* UTILS */
-import { getCurrentDate } from '../../../utils/date';
 import {
 	getBusinessAppointmentsByDate,
 	getFreeTime,

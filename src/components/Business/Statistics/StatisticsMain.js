@@ -171,13 +171,13 @@ StatisticsMain.propTypes = {
 	getSumarryPage      : PropTypes.func.isRequired,
 	getAppointmentStats : PropTypes.func.isRequired,
 	getServicesStats    : PropTypes.func.isRequired,
-	getFollowersStats   : PropTypes.func.isRequired
+	getFollowersStats   : PropTypes.func.isRequired,
+	global              : PropTypes.object.isRequired
 };
 const mapStatetoProps = (state) => ({
 	user    : state.auth.user,
 	global  : state.statistics.global,
-	loading : state.statistics.loading,
-	global  : PropTypes.object.isRequired
+	loading : state.statistics.loading
 });
 
 export default connect(mapStatetoProps, { getSumarryPage, getAppointmentStats, getServicesStats, getFollowersStats })(
