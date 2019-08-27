@@ -6,7 +6,7 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { zeroPad } from "../../../utils/padding";
-import { setFlashMessage } from "../../../actions/flashMessageActions";
+// import { setFlashMessage } from "../../../actions/flashMessageActions";
 import Loading from "../../globalComponents/LoadingSmall";
 
 
@@ -50,7 +50,7 @@ import Close from '@material-ui/icons/Close';
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
-import isEmpty from 'lodash/isEmpty';
+// import isEmpty from 'lodash/isEmpty';
 
 
 //const grey1 = grey['700'];

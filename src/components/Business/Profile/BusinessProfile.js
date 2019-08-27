@@ -74,20 +74,22 @@ class BusinessProfile extends Component {
 				</button>
 			);
 		}
-		return (
-			<button
-				key={`follow${business._id}`}
-				className="btn btn-sm btn-primary"
-				disabled={loading}
-				onClick={() => this.followBusiness(business._id)}
-			>
-				{this.state.loading ? (
-					<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
-				) : (
-					'Follow'
-				)}
-			</button>
-		);
+		if (!this.props.auth.user.isAdmin) {
+			return (
+				<button
+					key={`follow${business._id}`}
+					className="btn btn-sm btn-primary"
+					disabled={loading}
+					onClick={() => this.followBusiness(business._id)}
+				>
+					{this.state.loading ? (
+						<span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" />
+					) : (
+						'Follow'
+					)}
+				</button>
+			);
+		}
 	};
 	followBusiness = (business_id) => {
 		this.setState({ loading: true });
@@ -110,6 +112,7 @@ class BusinessProfile extends Component {
 	};
 	render() {
 		const { business, loading } = this.props;
+		const admin = this.props.auth.user.isAdmin;
 		var recommend = 0,
 			avg = 0;
 
@@ -188,7 +191,7 @@ class BusinessProfile extends Component {
 														</div>
 													</div>
 													<div className="col-12 py-3 text-center text-lg-left">
-														{!isOwner ? (
+														{!isOwner && !admin ? (
 															<NavLink
 																to={`/business/new-appointment/${this.props.business
 																	._id}`}
@@ -255,7 +258,8 @@ class BusinessProfile extends Component {
 																</table>
 															</div>
 															<div className="col-12 border-top pt-2">
-																{!isOwner && (
+																{!isOwner &&
+																!admin && (
 																	<NavLink
 																		to={`/business/new-appointment/${this.props
 																			.business._id}`}

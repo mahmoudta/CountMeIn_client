@@ -5,12 +5,7 @@ import { connect } from 'react-redux';
 import HeatmapChart from './HeatMapComponent';
 import MultiLineComponent from './MultiLineComponent';
 
-// import { getAppointmentStats } from '../../../actions/StatisticsActions';
-
 class AppointmentsStatsMain extends Component {
-	// componentDidMount() {
-	// 	this.props.getAppointmentStats(this.props.user.business_id);
-	// }
 	render() {
 		return (
 			<div>

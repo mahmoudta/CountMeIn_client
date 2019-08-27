@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 export default function(ComposedComponent) {
 	class Authenticate extends Component {
-		componentWillMount() {
+		UNSAFE_componentWillMount() {
 			if (!this.props.isAuthenticated) {
 				this.context.router.history.push(`/${this.props.location.search ? this.props.location.search : ''}`);
 			}
@@ -15,7 +15,7 @@ export default function(ComposedComponent) {
 			return <ComposedComponent {...this.props} />;
 		}
 
-		componentWillUpdate(nextProps) {
+		UNSAFE_componentWillUpdate(nextProps) {
 			if (!nextProps.isAuthenticated) {
 				this.context.router.history.push(`/${this.props.location.search ? this.props.location.search : ''}`);
 			}

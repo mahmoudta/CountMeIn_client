@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getAllCategories, deleteCategory, deleteService } from '../../../actions/categoryActions';
+import { deleteCategory, deleteService } from '../../../actions/categoryActions';
 
 /* Icons */
 import { FaPlusCircle } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
-// import { FaPlus } from 'react-icons/fa';
-// import Swal from 'sweetalert2';
 
 class CategoryList extends Component {
 	constructor(props) {
@@ -20,10 +18,6 @@ class CategoryList extends Component {
 		this.eachCategory = this.eachCategory.bind(this);
 		this.eachService = this.eachService.bind(this);
 		this.handleDeleteCategory = this.handleDeleteCategory.bind(this);
-	}
-
-	componentDidMount() {
-		this.props.getAllCategories();
 	}
 
 	handleDeleteService = (e, service_id) => {
@@ -37,7 +31,7 @@ class CategoryList extends Component {
 		e.preventDefault();
 		this.props.deleteCategory(category_id);
 	};
-	eachService(parent, service, i) {
+	eachService({ parent_name, parent_id }, service, i) {
 		return (
 			<tr key={service._id}>
 				<td>
@@ -45,7 +39,7 @@ class CategoryList extends Component {
 				</td>
 				<td>
 					<span>
-						<strong>{parent}</strong>
+						<strong>{parent_name}</strong>
 					</span>
 				</td>
 				<td>
@@ -56,9 +50,23 @@ class CategoryList extends Component {
 					<button className="btn btn-sm btn-danger" onClick={(e) => this.handleDeleteService(e, service._id)}>
 						<FaTrashAlt />
 					</button>
-					<button name={service._id} className="btn btn-sm btn-primary mx-2">
+					<Link
+						to={{
+							pathname : '/category/edit-category',
+							state    : {
+								name            : service.title,
+								id              : service._id,
+								parent_category : parent_id,
+								time            : service.time,
+								isService       : true,
+								cost            : service.cost
+							}
+						}}
+						name={service._id}
+						className="btn btn-sm btn-primary mx-2"
+					>
 						<FaEdit />
-					</button>
+					</Link>
 				</td>
 			</tr>
 		);
@@ -83,15 +91,28 @@ class CategoryList extends Component {
 					>
 						<FaTrashAlt />
 					</button>
-					<button name={category._id} className="btn btn-sm btn-primary mx-2">
+
+					<Link
+						to={{
+							pathname : '/category/edit-category',
+							state    : {
+								name      : category.name,
+								id        : category._id,
+								isService : false
+							}
+						}}
+						name={category._id}
+						className="btn btn-sm btn-primary mx-2"
+					>
 						<FaEdit />
-					</button>
+					</Link>
 				</td>
 			</tr>
 		);
 	}
 	render() {
-		const { categories } = this.props;
+		const { filtered, categories } = this.props;
+		console.log(filtered);
 		return (
 			<div className="card">
 				<div className="card-header">
@@ -116,12 +137,16 @@ class CategoryList extends Component {
 						</thead>
 
 						{categories.length > 0 ? (
-							categories.map((category, i) => {
+							filtered.map((category, i) => {
 								return (
 									<tbody key={category._id} className="border-top-0 border-bottom">
 										{this.eachCategory(category, i)}
 										{category.services.map((service, i) => {
-											return this.eachService(category.name, service, i);
+											return this.eachService(
+												{ parent_name: category.name, parent_id: category._id },
+												service,
+												i
+											);
 										})}
 									</tbody>
 								);
@@ -141,9 +166,8 @@ class CategoryList extends Component {
 }
 
 CategoryList.propTypes = {
-	getAllCategories : PropTypes.func.isRequired,
-	deleteCategory   : PropTypes.func.isRequired,
-	categories       : PropTypes.array.isRequired
+	deleteCategory : PropTypes.func.isRequired,
+	categories     : PropTypes.array.isRequired
 };
 CategoryList.contextTypes = {
 	router : PropTypes.object.isRequired
@@ -152,4 +176,4 @@ const mapStatetoProps = (state) => ({
 	categories : state.category.categories,
 	loading    : state.category.loading
 });
-export default connect(mapStatetoProps, { getAllCategories, deleteCategory, deleteService })(CategoryList);
+export default connect(mapStatetoProps, { deleteCategory, deleteService })(CategoryList);

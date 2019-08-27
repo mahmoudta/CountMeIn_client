@@ -15,13 +15,9 @@ import Icon from '@material-ui/core/Icon';
 
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { IconButton } from '@material-ui/core';
-//import { addListener } from "cluster";
-//testestestest
 class BusinessList extends Component {
 	constructor(props) {
 		super(props);
-		// this.refresh = this.refresh.bind(this);
 
 		this.state = {
 			business : {
@@ -44,6 +40,7 @@ class BusinessList extends Component {
 			.catch((err) => {
 				this.props.getData();
 				this.props.loading(false);
+
 			});
 	};
 
@@ -56,7 +53,7 @@ class BusinessList extends Component {
 			<GridItem xs={12} sm={6} md={6} lg={3}>
 				<Card>
 					<CardHeader color="success" stats icon>
-						<img src={imgLink} className={classes.iconaa} />
+						<img src={imgLink} alt={businesses.profile.name} className={classes.iconaa} />
 
 						<Link to={`/business/view/${businesses._id}`}>
 							<p className={classes.cardCategory}>Visit Business</p>

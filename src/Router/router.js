@@ -9,9 +9,7 @@ import Dashboard from '../components/Dashboard/Dashboard';
 
 import requireAuth from '../utils/requireAuth';
 import CreateCategory from '../components/Dashboard/AdminView/CreateCategory';
-// import CreateBusiness from '../components/Business/CreateBusiness';
 import Schedule from '../components/Business/Schedule/Schedule';
-import NewAppointment from '../components/Business/NewAppointment';
 
 import BusinessCD from '../components/Business/BusinessCD/BusinessCD';
 
@@ -25,11 +23,10 @@ import StatisticsMain from '../components/Business/Statistics/StatisticsMain';
 
 import SignUpForm from '../components/Landing/SignUpForm/SignUpForm';
 
-// import ClientView from '../components/Business/ClientView';
-// import HeatmapChart from '../components/Business/Statistics/AppointmentsStatsMain';
 import ReviewForm from '../components/globalComponents/ReviewForm.jsx';
 import NewAppointmentContainer from '../components/Business/NewAppointment/NewAppointmentContainer';
 import SetRemider from '../components/Business/SetRemider';
+import EditCategory from '../components/Dashboard/AdminView/EditCategory';
 
 const ReactRouter = () => {
 	return (
@@ -53,6 +50,8 @@ const ReactRouter = () => {
 								<Route path="/businesses" component={requireAuth(Businesses)} />
 								<Route path="/appointments-review" component={requireAuth(ReviewsMain)} />
 								<Route path="/category/new-category" component={requireAuth(CreateCategory)} />
+								<Route path="/category/edit-category" component={requireAuth(EditCategory)} />
+
 								<Route path="/business/pages/create" component={requireAuth(BusinessCD)} />
 								<Route exact path="/business/view/:id" component={requireAuth(BusinessProfile)} />
 								<Route
@@ -70,11 +69,11 @@ const ReactRouter = () => {
 								<Route excat path="/business/pages/mySchedule" component={requireAuth(Schedule)} />
 								<Route path="/business/edit" component={requireAuth(BusinessCD)} />
 								{/* route related to new appointment button on client view */}
-								<Route path="/business/new-appointment/:id" component={requireAuth(NewAppointmentContainer)} />
-								{/* <Route
-									path="/business/new/new-appointment/:id"
+								<Route
+									path="/business/new-appointment/:id"
 									component={requireAuth(NewAppointmentContainer)}
-								/> */}
+								/>
+
 								<Route
 									exact
 									path="/sms/CustomerReview/:appointment_id"
@@ -82,7 +81,6 @@ const ReactRouter = () => {
 								/>
 								<Route path="/ReviewForm" component={ReviewForm} />
 								<Route path="/Search" component={Businesses} />
-
 
 								{/* Statistics */}
 								<Route path="/insights" component={requireAuth(StatisticsMain)} />
