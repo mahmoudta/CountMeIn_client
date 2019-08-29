@@ -3,7 +3,9 @@ import {
 	CATEGORY_LOADING,
 	GET_ALL_CATEGORIES,
 	DELETE_CATEGORY,
-	DELETE_SERVICE
+	DELETE_SERVICE,
+	UPDATE_CATEGORY,
+	UPDATE_SERVICE
 } from '../actions/types';
 
 const initialState = {
@@ -26,6 +28,16 @@ export default function(state = initialState, action) {
 				loading    : false
 			});
 		}
+		case UPDATE_CATEGORY:
+			return {
+				...state,
+				loading : false
+			};
+		case UPDATE_SERVICE:
+			return {
+				...state,
+				loading : false
+			};
 		case DELETE_SERVICE: {
 			return Object.assign({}, state, {
 				categories : [

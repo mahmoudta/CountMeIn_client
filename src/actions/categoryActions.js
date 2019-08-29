@@ -10,7 +10,9 @@ import {
 	// CREATE_CATEGORY_ERROR,
 	DELETE_CATEGORY,
 	SET_FLASH_MESSAGE,
-	DELETE_SERVICE
+	DELETE_SERVICE,
+	UPDATE_CATEGORY,
+	UPDATE_SERVICE
 } from './types';
 
 export const createCategory = (name) => (dispatch) => {
@@ -22,7 +24,7 @@ export const createCategory = (name) => (dispatch) => {
 				type    : SET_FLASH_MESSAGE,
 				message : {
 					type   : 'success',
-					text   : 'Successfully deleted',
+					text   : 'Successfully Created',
 					action : {
 						next : 'REDIRECT_TO_DASHBAORD'
 					}
@@ -98,6 +100,75 @@ export const getAllCategories = () => (dispatch) => {
 			return dispatch({
 				type    : GET_ALL_CATEGORIES,
 				payload : []
+			});
+		});
+};
+
+export const updateCategory = (id, name) => (dispatch) => {
+	dispatch(setCategoryLoading());
+	return axios
+		.put(`${API}/category/`, { id, name })
+		.then((result) => {
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : {
+					type   : 'success',
+					text   : 'Successfully Updated',
+					action : {
+						next : 'REDIRECT_TO_DASHBAORD'
+					}
+				}
+			});
+
+			return dispatch({
+				type    : UPDATE_CATEGORY,
+				payload : ''
+			});
+		})
+		.catch((err) => {
+			dispatch(setCategoryLoading(false));
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : {
+					type : 'error',
+					text : `${err.response.data.error} ? ${err.response.data
+						.error}: 'Some error accourd while updating'`
+				}
+			});
+		});
+};
+
+export const updateService = (edits) => (dispatch) => {
+	const { id, name, cost, time } = edits;
+	dispatch(setCategoryLoading());
+	return axios
+		.put(`${API}/category/service/`, { id, name, cost, time })
+		.then((result) => {
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : {
+					type   : 'success',
+					text   : 'Successfully Updated',
+					action : {
+						next : 'REDIRECT_TO_DASHBAORD'
+					}
+				}
+			});
+
+			return dispatch({
+				type    : UPDATE_SERVICE,
+				payload : ''
+			});
+		})
+		.catch((err) => {
+			dispatch(setCategoryLoading(false));
+			dispatch({
+				type    : SET_FLASH_MESSAGE,
+				message : {
+					type : 'error',
+					text : `${err.response.data.error} ? ${err.response.data
+						.error}: 'Some error accourd while updating'`
+				}
 			});
 		});
 };

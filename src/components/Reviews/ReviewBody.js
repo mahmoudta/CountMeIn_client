@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 export default class ReviewBody extends Component {
 	render() {
-		const { page, review } = this.props.children;
+		const { review } = this.props.children;
 
 		return (
 			<tr>

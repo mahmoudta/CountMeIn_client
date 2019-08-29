@@ -133,6 +133,7 @@ export default class AppointmentModal extends Component {
 							<div className="modal-footer">
 								{
 									{
+										//eslint-disable-next-line
 										['ready-']      : (
 											<button
 												type="button"
@@ -146,6 +147,7 @@ export default class AppointmentModal extends Component {
 												check in
 											</button>
 										),
+										//eslint-disable-next-line
 										['inProgress-'] : (
 											<button
 												type="button"
@@ -159,16 +161,12 @@ export default class AppointmentModal extends Component {
 												check out
 											</button>
 										),
+										//eslint-disable-next-line
 										['done-false']  : (
 											<NavLink
 												to={`/business/appointment-review/${appointment._id}-1`}
 												role="button"
 												className="btn btn-primary text-uppercase"
-												// onClick={(e) => {
-												// 	e.preventDefault();
-												// 	this.props.closeModal(e);
-												// 	this.props.appointmentCheck(appointment, 'out');
-												// }}
 											>
 												give your feedback
 											</NavLink>

@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
+import isEmpty from 'lodash.isempty';
 
 import { logout } from '../../actions/authActions';
 
 import { FaSignOutAlt, FaBell, FaBars } from 'react-icons/fa';
 import logo from '../../images/logo.png';
+import { B_IMAGES } from '../../consts';
 
 class Header extends Component {
 	constructor(props) {
@@ -31,6 +33,9 @@ class Header extends Component {
 	};
 
 	renderHeader = () => {
+		const userImg = !isEmpty(this.props.user.profile.imgUrl)
+			? `${B_IMAGES}/${this.props.user.profile.imgUrl}`
+			: `${process.env.PUBLIC_URL}/user.png`;
 		return (
 			<header className={`navbar p-0 text-center`}>
 				<div className="container-fluid">
@@ -48,33 +53,31 @@ class Header extends Component {
 					</div>
 
 					<ul className="nav ml-md-auto nav-user">
-						<li className="dropdown d-none d-lg-block ">
-							<a role="button" className="" data-toggle="dropdown">
-								<FaBell />
-							</a>
-							<ul className="dropdown-menu notifications-menu ">
-								<li className=" text-white arrow top" />
-								<h6 className="dropdown-header text-center">Notifications</h6>
-								{this.props.notifications.map((notification) => {
-									return (
-										<li className="dropdown-item">
-											<Link className="h6 font-weight-normal py-3" to="#">
-												{notification.title}
-											</Link>
-										</li>
-									);
-								})}
-
-							</ul>
-						</li>
+						{!this.props.auth.user.isAdmin && (
+							<li className="dropdown d-none d-lg-block ">
+								<a role="button" className="" data-toggle="dropdown">
+									<FaBell />
+								</a>
+								<ul className="dropdown-menu notifications-menu ">
+									<li className=" text-white arrow top" />
+									<h6 className="dropdown-header text-center">Notifications</h6>
+									{this.props.notifications.map((notification) => {
+										return (
+											<li className="dropdown-item">
+												<Link className="h6 font-weight-normal py-3" to="#">
+													{notification.title}
+												</Link>
+											</li>
+										);
+									})}
+								</ul>
+							</li>
+						)}
 
 						<li className="dropdown">
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 								<span className="thumb-sm avatar float-left">
-									<img
-										src="https://crm.megatam.net/resource/avatar/download.png"
-										className="rounded-circle"
-									/>
+									<img src={userImg} className="rounded-circle" />
 								</span>
 								<span className="d-none d-lg-inline-block">
 									{this.props.user.profile.name.first + this.props.user.profile.name.last}

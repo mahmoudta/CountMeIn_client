@@ -17,7 +17,8 @@ import GridContainer from '../../Interface/Grid/GridContainer';
 import GridItem from '../../Interface/Grid/GridItem';
 import Card from '../../Interface/Card/Card';
 import CardHeader from '../../Interface/Card/CardBody';
-import CardFooter from '../../Interface/Card/CardFooter';
+// import CardFooter from '../../Interface/Card/CardFooter';
+
 import CardBody from '../../Interface/Card/CardBody';
 import styles from '../../Interface/Assets/loginPageStyle';
 import Warning from '../../Interface/Typography/Warning';
@@ -57,11 +58,13 @@ class NewAppointmentContainer extends Component {
 			return service.value;
 		});
 
+
 		const shour = e.currentTarget.getAttribute('shour');
 		const date = e.currentTarget.getAttribute('date');
 		const sminute = e.currentTarget.getAttribute('sminute');
 		const ehour = e.currentTarget.getAttribute('ehour');
 		const eminute = e.currentTarget.getAttribute('emminute');
+
 		axios
 			.post(`${API}/appointments/setAppointment/`, {
 				businessId : business._id,

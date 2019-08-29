@@ -20,7 +20,7 @@ export function getDay(date) {
 	}
 }
 export function calculatePercentage(current, past) {
-	if (past == 0) return current * 100;
+	if (past === 0) return current * 100;
 	// if (current == 0) return past * -100;
 
 	return (current / past - 1) * 100;
