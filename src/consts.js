@@ -6,14 +6,14 @@ module.exports = {
 		bucketName      : 'countmeinfilesnew',
 		dirName         : 'businesses',
 		region          : 'eu-west-1',
-		accessKeyId     : 'AKIAZBR2KYB2MPQF4WWA',
-		secretAccessKey : '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'
+		accessKeyId     : 'AKIAZBR2KYB2MFDWXLOK',
+		secretAccessKey : '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'
 	},
 	S3IMAGESCONFIGUSERS : {
 		bucketName      : 'countmeinfilesnew',
 		dirName         : 'users',
 		region          : 'eu-west-1',
-		accessKeyId     : 'AKIAZBR2KYB2MPQF4WWA',
-		secretAccessKey : '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'
+		accessKeyId     : 'AKIAZBR2KYB2MFDWXLOK',
+		secretAccessKey : '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'
 	}
 };
