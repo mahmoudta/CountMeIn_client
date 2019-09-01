@@ -53,27 +53,6 @@ class Header extends Component {
 					</div>
 
 					<ul className="nav ml-md-auto nav-user">
-						{!this.props.auth.user.isAdmin && (
-							<li className="dropdown d-none d-lg-block ">
-								<a role="button" className="" data-toggle="dropdown">
-									<FaBell />
-								</a>
-								<ul className="dropdown-menu notifications-menu ">
-									<li className=" text-white arrow top" />
-									<h6 className="dropdown-header text-center">Notifications</h6>
-									{this.props.notifications.map((notification) => {
-										return (
-											<li className="dropdown-item">
-												<Link className="h6 font-weight-normal py-3" to="#">
-													{notification.title}
-												</Link>
-											</li>
-										);
-									})}
-								</ul>
-							</li>
-						)}
-
 						<li className="dropdown">
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 								<span className="thumb-sm avatar float-left">
@@ -86,10 +65,6 @@ class Header extends Component {
 							</a>
 							<ul className="dropdown-menu animated fadeInRight">
 								<li className=" text-white arrow top" />
-								{/* <li className="dropdown-item">
-									<a href="#">Settings</a>
-								</li> */}
-								{/* <li className="dropdown-divider" /> */}
 								<li className="dropdown-item">
 									<Link to="#" onClick={this.logOut}>
 										<FaSignOutAlt /> Log Out
